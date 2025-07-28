@@ -4,6 +4,7 @@
 #include <readline/history.h>
 #include "libft/libft.h"
 #include <fcntl.h>
+#include <sys/resource.h>
 
 char	*get_user(char **s)
 {
@@ -88,7 +89,7 @@ int main(int argc, char **argv, char **envp)
 	s = ft_strjoin(prompt, hostname);
 	free(prompt);
 	prompt = ft_strjoin(s, ":");
-	char	*pwd = get_pwd(envp, s);
+	char	*pwd = get_pwd(envp, user);
 	free(s);
 	s = ft_strjoin(prompt, pwd);
 	char	*shell = ft_strjoin(s, "$ ");
@@ -97,11 +98,17 @@ int main(int argc, char **argv, char **envp)
 	while (ft_strncmp(s, "exit", 5))
 	{
 		free(s);
-		s = NULL;
 		s = readline(shell);
+		if (!s)
+			break ;
+		add_history(s);
 		printf("%s\n", s);
+		// printf("%s\n", s);
+		// rl_on_new_line();
 	}
 	free(shell);
+	free(hostname);
 	rl_clear_history();
+	// getrusage();
 	return (0);
 }

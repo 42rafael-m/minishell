@@ -98,5 +98,7 @@ long		ft_atol(const char *s);
 int			ft_doubleptr_len(char **ptr);
 int			ft_find_in_matrix(char **m, char *to_find, int len);
 size_t		ft_abs(int n);
+int			ft_isspace(int c);
+char	*ft_trim_spaces(char *s);
 
 #endif

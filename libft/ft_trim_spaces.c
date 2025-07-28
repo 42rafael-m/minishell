@@ -1,0 +1,67 @@
+#include "libft.h"
+
+static size_t ft_one_space_len(char *s)
+{
+	size_t	i;
+	size_t	len;
+	size_t	len_s;
+
+	if (!s)
+		return (0);
+	len = 0;
+	i = 0;
+	len_s = ft_strlen(s);
+	while (ft_isspace(s[i]))
+		i++;
+	while (i < len_s)
+	{
+		while (ft_isspace(s[i]) && ((ft_isspace(s[i + 1])) || !s[i + 1]))
+		{
+			i++;
+			continue ;
+		}
+		len++;
+		i++;
+	}
+	return (++len);
+}
+
+char	*ft_trim_spaces(char *s)
+{
+	size_t	j;
+	size_t	len;
+	char	*r;
+
+	len = ft_one_space_len(s);
+	r = calloc(len, sizeof(char));
+	if (!s || !r)
+		return (free(r), NULL);
+	j = 0;
+	while (ft_isspace(*s))
+		s++;
+	while (j < len)
+	{
+		while (ft_isspace(*s) && (ft_isspace(*(s + 1)) || !*(s + 1)))
+		{
+			s++;
+			continue ;
+		}
+		if (ft_isspace(*s))
+			r[j++] = 32;
+		else
+			r[j++] = *s;
+		s++;
+	}
+	return (r);
+}
+
+// int	main()
+// {
+// 	char	*s = "     1 2  3		\n\n4\n5\v\v6\b\t\b7\t\t8 ";
+// 	char	*t = "  1 2  ";
+// 	char	*r;
+
+// 	printf("total len = %zu\n", ft_one_space_len(t));
+// 	r = ft_trim_spaces(s);
+// 	printf("r = \"%s\"\n", r);
+// }
