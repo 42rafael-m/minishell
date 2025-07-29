@@ -1,114 +1,20 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "libft/libft.h"
-#include <fcntl.h>
-#include <sys/resource.h>
+#include "minishell.h"
 
-char	*get_user(char **s)
+int	main(int argc, char **argv, char **envp)
 {
-	int	i = 0;
-	char	*r;
+	char	**arg;
+	char	**x;
 
-	if (!s)
-		return (NULL);
-	while (s[i])
-	{
-		if (strstr(s[i], "USERNAME"))
-		{
-			r = ft_strtrim(s[i], "USERNAME= ");
-			return (r);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-char	*get_pwd(char **s, char *user)
-{
-	int	i;
-	char	*r;
-	char	*t;
-	char	*home;
-
-	home = ft_strjoin("PWD=/home/", user);
-	i = 0;
-	while (s[i++])
-	{
-		if (strstr(s[i - 1], home))
-		{
-			r = ft_strtrim(s[i - 1], "PWD=home/");
-			t = ft_strtrim(r, user);
-			free(r);
-			r = ft_strjoin("~", t);
-			return (free(t), free(home), r);
-		}
-		if (strstr(s[i - 1], "PWD="))
-		{
-			r = ft_strtrim(s[i - 1], "PWD= ");
-			return (free(home), r);
-		}		
-	}
-	return (free(home), NULL);
-}
-
-char	*get_hostname(void)
-{
-	char	*r;
-	char	*buffer;
-	char	*t;
-	int	fd;
-
-	r = NULL;
-	fd = open("/etc/hostname", O_RDONLY);
-	buffer = ft_calloc(2, sizeof(char));
-	if (fd == -1 || ! buffer)
-		return (NULL);
-	read(fd, buffer, 1);
-	while (buffer[0] != '\n' && buffer[0] != EOF)
-	{
-		t = r;
-		r = ft_strjoin(r, buffer);
-		read(fd, buffer, 1);
-		free(t);
-	}
-	return (close(fd), r);
-}
-
-int main(int argc, char **argv, char **envp)
-{
-	char	*s;
-	char	*user;
-	char	*hostname;
-	char	*prompt;
-
-	hostname = get_hostname();
-	user = get_user(envp);
-	prompt = ft_strjoin(user, "@");
-	s = ft_strjoin(prompt, hostname);
-	free(prompt);
-	prompt = ft_strjoin(s, ":");
-	char	*pwd = get_pwd(envp, user);
-	free(s);
-	s = ft_strjoin(prompt, pwd);
-	char	*shell = ft_strjoin(s, "$ ");
-	free(user);
-	free(pwd);
-	while (ft_strncmp(s, "exit", 4))
-	{
-		free(s);
-		s = readline(shell);
-		if (!s)
-			break ;
-		add_history(s);
-		printf("%s\n", s);
-		// printf("%s\n", s);
-		// rl_on_new_line();
-	}
-	free(shell);
-	free(hostname);
-	rl_clear_history();
-	// getrusage();
-	return (0);
+	arg = (char **)ft_calloc(5, sizeof(char *));
+	arg[0] = ft_strdup("echo -n asdasd");
+	arg[1] = ft_strdup("hola");
+	arg[2] = ft_strdup("que");
+	arg[3] = ft_strdup("tal");
+	arg[4] = NULL;
+	x = (char **)ft_calloc(3, sizeof(char *));
+	x[0] = ft_strdup("echo");
+	x[1] = ft_strdup("HOLA");
+	x[2] = NULL;
+	int n = execve("/usr/bin/echo", arg, envp);
+	printf("%d\n",n);
 }

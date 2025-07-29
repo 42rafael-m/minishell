@@ -1,6 +1,6 @@
 NAME = minishell
 LIBFT_A = libft/libft.a
-SRC = minishell.c
+SRC = minishell.c lexing.c
 OBJ = $(SRC:.c=.o)
 CFLAGS += -g -Ilibft #-Wall -Wextra -Werror 
 

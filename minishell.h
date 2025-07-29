@@ -22,4 +22,13 @@ typedef struct s_cli
 	struct s_cli	*next;
 }	t_cli;
 
+char	*ft_prompt(char **envp);
+char	*get_hostname(void);
+char	*get_pwd(char *cwd);
+size_t	ft_spacelen(char *s);
+int	ft_spaces(char *str);
+char	*ft_load_line(char *cmd, int start, size_t len);
+char	**ft_load_argv(char **argv, char *cmd);
+char	**ft_argv(char *cmd);
+
 #endif

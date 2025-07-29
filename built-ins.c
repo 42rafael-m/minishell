@@ -1,10 +1,12 @@
-#include "libft/libft.h"
+#include "minishell.h"
 
-void	ft_echo(char *line, int option)
+void	ft_echo(t_cli *cli)
 {
 	char	*s;
+	int	n;
 
-	s = ft_trim_spaces(line);
+	if()
+	s = ft_trim_spaces(cli->args);
 	write(1, s, ft_strlen(s));
 	if (!option)
 		write(1, "\n", 1);

@@ -76,14 +76,27 @@ char	*ft_prompt(char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*cl;
+	char	**args;
 	char	*prompt;
+	int	i;
 
+	i = 0;
 	cl = ft_strdup("a");
+	if (!cl)
+		return (1);
 	while (ft_strncmp(cl, "exit", 4))
 	{
+		i = 0;
 		free(cl);
 		prompt = ft_prompt(envp);
 		cl = readline(prompt);
+		args = ft_argv(cl);
+		while (args[i])
+		{
+			write(1, args[i], ft_strlen(args[i]));
+			write(1, "\n", 1);
+			i++;
+		}
 		free(prompt);
 		add_history(cl);
 	}
