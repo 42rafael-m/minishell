@@ -30,27 +30,27 @@ char	*get_pwd(char **s, char *user)
 	int	i;
 	char	*r;
 	char	*t;
-	char	*x;
+	char	*home;
 
-	x = ft_strjoin("PWD=/home/", user);
+	home = ft_strjoin("PWD=/home/", user);
 	i = 0;
 	while (s[i++])
 	{
-		if (strstr(s[i - 1], x))
+		if (strstr(s[i - 1], home))
 		{
 			r = ft_strtrim(s[i - 1], "PWD=home/");
 			t = ft_strtrim(r, user);
 			free(r);
 			r = ft_strjoin("~", t);
-			return (free(t), free(x), r);
+			return (free(t), free(home), r);
 		}
 		if (strstr(s[i - 1], "PWD="))
 		{
 			r = ft_strtrim(s[i - 1], "PWD= ");
-			return (free(x), r);
+			return (free(home), r);
 		}		
 	}
-	return (free(x), NULL);
+	return (free(home), NULL);
 }
 
 char	*get_hostname(void)
@@ -95,7 +95,7 @@ int main(int argc, char **argv, char **envp)
 	char	*shell = ft_strjoin(s, "$ ");
 	free(user);
 	free(pwd);
-	while (ft_strncmp(s, "exit", 5))
+	while (ft_strncmp(s, "exit", 4))
 	{
 		free(s);
 		s = readline(shell);

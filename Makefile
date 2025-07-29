@@ -1,6 +1,6 @@
 NAME = minishell
 LIBFT_A = libft/libft.a
-SRC = prueba.c
+SRC = minishell.c
 OBJ = $(SRC:.c=.o)
 CFLAGS += -g -Ilibft #-Wall -Wextra -Werror 
 

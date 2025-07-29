@@ -29,17 +29,15 @@ static size_t ft_one_space_len(char *s)
 char	*ft_trim_spaces(char *s)
 {
 	size_t	j;
-	size_t	len;
 	char	*r;
 
-	len = ft_one_space_len(s);
-	r = calloc(len, sizeof(char));
+	r = calloc(ft_one_space_len(s), sizeof(char));
 	if (!s || !r)
 		return (free(r), NULL);
 	j = 0;
 	while (ft_isspace(*s))
 		s++;
-	while (j < len)
+	while (*s)
 	{
 		while (ft_isspace(*s) && (ft_isspace(*(s + 1)) || !*(s + 1)))
 		{
@@ -55,13 +53,13 @@ char	*ft_trim_spaces(char *s)
 	return (r);
 }
 
-// int	main()
-// {
-// 	char	*s = "     1 2  3		\n\n4\n5\v\v6\b\t\b7\t\t8 ";
-// 	char	*t = "  1 2  ";
-// 	char	*r;
+int	main()
+{
+	char	*s = "     1 2  3		\n\n4\n5\v\v6\b\t\b7\t\t8 ";
+	char	*t = "  1 2  ";
+	char	*r;
 
-// 	printf("total len = %zu\n", ft_one_space_len(t));
-// 	r = ft_trim_spaces(s);
-// 	printf("r = \"%s\"\n", r);
-// }
+	printf("total len = %zu\n", ft_one_space_len(t));
+	r = ft_trim_spaces(s);
+	printf("r = \"%s\"\n", r);
+}
