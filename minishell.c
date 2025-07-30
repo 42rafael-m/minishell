@@ -76,15 +76,17 @@ char	*ft_prompt(char **envp)
 int	ft_exec_shell(struct sigaction *sa, char **envp)
 {
 	char	*cl;
-	char	**args;
+	char	**tokens;
 	char	*prompt;
 	int	i;
 
+	prompt = NULL;
 	cl = NULL;
 	while (1)
 	{
 		i = 0;
 		free(cl);
+		free(prompt);
 		prompt = ft_prompt(envp);
 		cl = readline(prompt);
 		if (!cl || !ft_strncmp(cl, "exit", 4))
@@ -94,18 +96,16 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 			sigint_received = 0;
 			continue ;
 		}
-		args = ft_argv(cl);
-		while (args && args[i])
+		tokens = ft_tokens(cl);
+		while (tokens && tokens[i])
 		{
-			write(1, args[i], ft_strlen(args[i]));
+			write(1, tokens[i], ft_strlen(tokens[i]));
 			write(1, "\n", 1);
 			i++;
 		}
-		free(prompt);
-		prompt = NULL;
 		add_history(cl);
 	}
-	return (free(prompt), rl_clear_history(), 0);
+	return (free(prompt), free(cl), rl_clear_history(), 0);
 }
 
 int	main(int argc, char **argv, char **envp)

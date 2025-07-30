@@ -63,5 +63,6 @@
     "libft.h": "c",
     "limits.h": "c",
     "minishell.h": "c"
-  }
+  },
+  "C_Cpp.errorSquiggles": "disabled"
 }

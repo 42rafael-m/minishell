@@ -22,7 +22,7 @@ void	ft_free_d(char	**ptr)
 	while (ptr[i])
 	{
 		free (ptr[i]);
-		*ptr = NULL;
+		ptr[i] = NULL;
 		i++;
 	}
 	free (ptr);

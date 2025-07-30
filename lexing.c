@@ -1,112 +1,102 @@
 #include "minishell.h"
 
-size_t	ft_spacelen(char *s)
+int	ft_tokenlen(char *cl)
 {
 	int	i;
+	int	len;
+	char	sep;
 
+	if (!cl)
+		return (0);
 	i = 0;
-	while (s[i] && (s[i] != ' '))
+	while (cl[i] == ' ')
 		i++;
-	return (i);
-}
-
-int	ft_spaces(char *str)
-{
-	int	i;
-	int	space;
-	int	block;
-
-	i = 0;
-	space = 0;
-	block = 0;
-	if (!str)
-		return (-1);
-	while (str[i])
-	{
-		if (str[i] == 123 || str[i] == 34 || str[i] == 39)
-			block = 1;
-		if (str[i] == 125 || str[i] == 34 || str[i] == 39)
-			block = 0;
-		if (str[i] == 32 && !block)
-			space++;
-		i++;
-	}
-	return (space);
-}
-
-char	*ft_load_line(char *cmd, int start, size_t len)
-{
-	char	*t;
-	char	*argv;
-
-	if (!cmd)
-		return (NULL);
-	if (cmd[0] == 34)
-		argv = ft_esc_char(cmd);
+	len = 0;
+	if (cl[i] == ' ' || cl[i] == '\'' || cl[i] == '\"')
+		sep = cl[i++];
 	else
-		argv = ft_substr(cmd, start, len);
-	if (!argv)
-		return (NULL);
-	if (ft_strchr(argv, '\'') || ft_strchr(argv, '"'))
+		sep = ' ';
+	while (cl[i])
 	{
-		t = argv;
-		argv = ft_strtrim(t, "\"' ");
-		free (t);
-		if (!argv)
-			return (NULL);
+		if (cl[i] == sep)
+			return (len);
+		if (sep != ' ' && !cl[i + 1])
+			return (-1);
+		i++;
+		len++;
 	}
-	return (argv);
+	return (len);
 }
 
-char	**ft_load_argv(char **argv, char *cmd)
+int	ft_num_token(char *cl)
 {
-	int	j;
-	int	block;
-	int	start;
 	int	i;
+	int	len;
+	int	token_num;
+	char	sep;
 
+	if (!cl)
+		return (0);
 	i = 0;
-	j = 1;
-	start = 0;
-	while (cmd[i])
+	token_num = 0;
+	while (cl[i] == ' ')
+		i++;
+	if (ft_tokenlen(cl + i) == 0)
+		return (0);
+	else
+		token_num++;
+	while (cl[i])
 	{
-		if (block && (cmd[i] == 34 || cmd[i] == 39))
-			block = 0;
-		if (!block && (cmd[i] == 34 || cmd[i] == 39))
-			block = 1;
-		if ((cmd[i] == ' ' && !block) || !cmd[i + 1])
+		len =  ft_tokenlen(cl + i);
+		if (len == -1) /* Este error hay que manejarlo bien, asegurarse que se muestra un nuevo prompt */
+			return (write(2, "Syntax error: quotes not closed\n", 33), -1);
+		if ((cl[i] == ' ' || cl[i] == '\'' || cl[i] == '\"') && len > 0)
 		{
-			argv[j] = ft_load_line(cmd, start, i);
-			if (!argv[j])
-				return (ft_free_d(argv), NULL);
-			start = i + 1;
-			j++;
+			token_num++;
+			i += len;
 		}
 		i++;
 	}
-	return (argv[i] = NULL, argv);
+	return (token_num);
 }
 
-char	**ft_argv(char *cmd)
+char	**ft_tokens(char *cl)
 {
-	char	**argv;
-	int		space;
-	int		i;
+	int	i;
+	int	j;
+	int	len;
+	char	**tokens;
 
-	if (!cmd)
+	if (!cl)
 		return (NULL);
-	i = ft_spacelen(cmd) + 1;
-	if (i < 0)
+	i = 0;
+	j = 0;
+	tokens = (char **)ft_calloc(ft_num_token(cl), sizeof(char *));
+	if (!tokens)
 		return (NULL);
-	space = ft_spaces(cmd);
-	if (!ft_strchr(cmd, 34) && !ft_strchr(cmd, 39) && !ft_strchr(cmd, 123))
-		return (ft_split(cmd, ' '));
-	argv = (char **)ft_calloc(space + 2, sizeof(char *));
-	if (!argv)
-		return (NULL);
-	argv[0] = ft_substr(cmd, 0, ft_spacelen(cmd));
-	if (!argv[0])
-		return (NULL);
-	argv = ft_load_argv(argv, cmd + i);
-	return (argv);
+	while (cl[i] == ' ')
+		i++;
+	len = ft_tokenlen(cl + i);
+	tokens[j++] =  ft_strndup(cl + i, len + 1);
+	i += len;
+	printf("%s\n", tokens[j - 1]);
+	if (!tokens)
+		return(NULL); /* igual no hay que hacer esta comprobación, o mantener j para añadir el siguiente token en esta posición */
+	while (cl[i])
+	{
+		/* Mirar si sustituir ' ' por ft_isspace en todas las funciones, también es posible que valga la pena un macro con ' ', \t, \n, ", '... */
+		while (ft_isspace(cl[i]) && (cl[i + 1] == ' ' || cl[i + 1] == '\"' || cl[i + 1] == '\''))
+			i++;
+		if (cl[i] == '\'' || (cl[i] == '\'') || ft_isspace(cl[i]))
+		{
+			len = ft_tokenlen(cl + i);
+			tokens[j] = ft_strndup(cl + i, len + 1);
+			if (!tokens[j++])
+				return (NULL); /* Manejar igual que el error de antes */
+			printf("%s\n", tokens[j - 1]);
+			i += len;
+		}
+		i++;
+	}
+	return (tokens[j] = NULL, tokens);
 }

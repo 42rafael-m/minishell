@@ -33,11 +33,9 @@ typedef struct s_cli
 char	*ft_prompt(char **envp);
 char	*get_hostname(void);
 char	*get_pwd(char *cwd);
-char	*ft_load_line(char *cmd, int start, size_t len);
-char	**ft_load_argv(char **argv, char *cmd);
-char	**ft_argv(char *cmd);
-size_t	ft_spacelen(char *s);
-int	ft_spaces(char *str);
+int	ft_tokenlen(char *cl);
+int	ft_num_token(char	*cl);
+char	**ft_tokens(char *cl);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
 int	ft_exec_shell(struct sigaction *sa, char **envp);
