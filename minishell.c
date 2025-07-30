@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#include "minishell.h"
+volatile sig_atomic_t sigint_received = 0;
 
 char	*get_pwd(char *cwd)
 {
@@ -73,34 +73,48 @@ char	*ft_prompt(char **envp)
 	return (free(t), free(pwd), prompt);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	ft_exec_shell(struct sigaction *sa, char **envp)
 {
 	char	*cl;
 	char	**args;
 	char	*prompt;
 	int	i;
 
-	i = 0;
-	cl = ft_strdup("a");
-	if (!cl)
-		return (1);
-	while (ft_strncmp(cl, "exit", 4))
+	sa->sa_handler = ft_sig_handler;
+    sa->sa_flags = SA_RESTART;
+	sigaction(SIGINT, sa, NULL);
+	while (1)
 	{
 		i = 0;
 		free(cl);
 		prompt = ft_prompt(envp);
 		cl = readline(prompt);
+		if (!cl || !ft_strncmp(cl, "exit", 4))
+			break ;
+		if (sigint_received)
+		{
+			sigint_received = 0;
+			continue ;
+		}
 		args = ft_argv(cl);
-		while (args[i])
+		while (args && args[i])
 		{
 			write(1, args[i], ft_strlen(args[i]));
 			write(1, "\n", 1);
 			i++;
 		}
 		free(prompt);
+		prompt = NULL;
 		add_history(cl);
 	}
-	free(cl);
-	rl_clear_history();
+	return (free(prompt), rl_clear_history(), 0);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	struct sigaction sa;
+
+	ft_set_sig(IGNORE);
+	ft_exec_shell(&sa, envp);
 	return (0);
 }

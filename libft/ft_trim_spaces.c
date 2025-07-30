@@ -53,13 +53,13 @@ char	*ft_trim_spaces(char *s)
 	return (r);
 }
 
-int	main()
-{
-	char	*s = "     1 2  3		\n\n4\n5\v\v6\b\t\b7\t\t8 ";
-	char	*t = "  1 2  ";
-	char	*r;
+// int	main()
+// {
+// 	char	*s = "     1 2  3		\n\n4\n5\v\v6\b\t\b7\t\t8 ";
+// 	char	*t = "  1 2  ";
+// 	char	*r;
 
-	printf("total len = %zu\n", ft_one_space_len(t));
-	r = ft_trim_spaces(s);
-	printf("r = \"%s\"\n", r);
-}
+// 	printf("total len = %zu\n", ft_one_space_len(t));
+// 	r = ft_trim_spaces(s);
+// 	printf("r = \"%s\"\n", r);
+// }
