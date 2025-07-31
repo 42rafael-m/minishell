@@ -25,6 +25,7 @@ int	ft_tokenlen(char *cl)
 		i++;
 		len++;
 	}
+	printf("tokenlen = %d\n", len);
 	return (len);
 }
 
@@ -42,8 +43,6 @@ int	ft_num_token(char *cl)
 	while (cl[i] == ' '  && ft_strchr(SEP_STR, cl[i + 1]))
 		i++;
 	len = ft_tokenlen(cl + i);
-	printf("%s\n", cl + i);
-	printf("len = %d\n", len);
 	if (len == 0)
 		return (0);
 	else
@@ -51,7 +50,7 @@ int	ft_num_token(char *cl)
 		i += len;
 		token_num++;
 	}
-	while (cl[i])
+	while (i < ft_strlen(cl))
 	{
 		while (cl[i] == ' ' && ft_strchr(SEP_STR, cl[i + 1]))
 			i++;
@@ -59,13 +58,13 @@ int	ft_num_token(char *cl)
 		len =  ft_tokenlen(cl + i);
 		if (len == -1) /* Este error hay que manejarlo bien, asegurarse que se muestra un nuevo prompt */
 			return (write(2, "Syntax error: quotes not closed\n", 33), -1);
-		if (/*(cl[i] == ' ' || cl[i] == '\'' || cl[i] == '\"') && */len > 0)
+		if (len > 0)
 		{
 			token_num++;
 			i += len;
 		}
 		i++;
-		if (!ft_isspace(cl[i]) && ft_strchr(SEP_STR, cl[i]))
+		if (i <= ft_strlen(cl) && !ft_isspace(cl[i]) && ft_strchr(SEP_STR, cl[i]))
 			i++;
 	}
 	return (token_num);
@@ -82,28 +81,36 @@ char	**ft_tokens(char *cl)
 		return (NULL);
 	i = 0;
 	j = 0;
-	tokens = (char **)ft_calloc(ft_num_token(cl), sizeof(char *));
+	len = ft_num_token(cl);
+	if (len == -1)
+		return (NULL);
+	tokens = (char **)ft_calloc(len + 1, sizeof(char *));
 	if (!tokens)
 		return (NULL);
+	tokens[len] = NULL;
 	while (cl[i] == ' ')
 		i++;
 	len = ft_tokenlen(cl + i);
+	printf("tokenlen = %d\n", len);
 	tokens[j++] =  ft_strndup(cl + i, len);
 	i += len;
+	printf("i = %d, len_cl = %d\n\n", i, ft_strlen(cl));
+	if(i >= ft_strlen(cl) || ft_tokenlen(cl + i) <= 0)
+		return (tokens);
 	if (!tokens)
-		return(NULL); /* igual no hay que hacer esta comprobación, o mantener j para añadir el siguiente token en esta posición */
-	while (cl[i])
+		return(NULL);
+	while (i < ft_strlen(cl))
 	{
-		/* Mirar si sustituir ' ' por ft_isspace en todas las funciones, también es posible que valga la pena un macro con ' ', \t, \n, ", '... */
 		if (ft_strchr(SEP_STR, cl[i]) && !ft_strchr(SEP_STR, cl[i + 1]))
 		{
 			len = ft_tokenlen(cl + i);
-			tokens[j] = ft_strndup(cl + i + 1, len);
+			printf("tokenlen = %d\n", len);
+			tokens[j] = ft_strndup(cl + i, len + 2);
 			if (!tokens[j++])
-				return (NULL); /* Manejar igual que el error de antes */
+				return (NULL);
 			i += len;
 		}
 		i++;
 	}
-	return (tokens[j] = NULL, tokens);
+	return (tokens);
 }

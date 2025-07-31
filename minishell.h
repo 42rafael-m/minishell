@@ -29,16 +29,21 @@ typedef struct s_cli
 	char	*heredoc;
 	int	is_builtin;
 	struct s_cli	*next;
+	// char	**envp;
 }	t_cli;
 
 char	*ft_prompt(char **envp);
 char	*get_hostname(void);
 char	*get_pwd(char *cwd);
+char	*ft_final_token(char *token, char **envp);
+char	**ft_tokens(char *cl);
+char	*ft_expand_token(char *token, char **envp);
+char	*ft_expand_var(char	*token, int start, int end, char **envp);
+char	*ft_get_var(char *var_call, char **envp);
 int	ft_tokenlen(char *cl);
 int	ft_num_token(char	*cl);
-char	**ft_tokens(char *cl);
+int	ft_exec_shell(struct sigaction *sa, char **envp);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
-int	ft_exec_shell(struct sigaction *sa, char **envp);
 
 #endif
