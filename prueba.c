@@ -13,11 +13,13 @@ int	main(int argc, char **argv, char **envp)
 	while (argv[i])
 	{
 		// printf("argv[i] = %s\n", argv[i]);
+		// printf("%d\n", ft_tokenlen(argv[i]));
 		char	*t = ft_strjoin(s, argv[i]);
 		free(s);
 		s = ft_strjoin(t, " ");
 		free(t);
 		i++;
 	}
+	// printf("cl = %s\n", s);
 	ft_tokens(s);
 }
