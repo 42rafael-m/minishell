@@ -16,6 +16,7 @@
 # define IGNORE 1
 # define DEFAULT 0
 # define SEP_STR " \"\'"
+# define NO_VAL_VAR " !\"#$%&'()*+,-./:;<=>?@[]^`{|}~ "
 
 extern volatile sig_atomic_t sigint_received;
 

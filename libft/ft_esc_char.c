@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#define ESC_CHARS "\\\'\"\?abfnrtv"
 
 static int	ft_len(char *s)
 {

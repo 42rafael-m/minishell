@@ -25,7 +25,6 @@ int	ft_tokenlen(char *cl)
 		i++;
 		len++;
 	}
-	printf("tokenlen = %d\n", len);
 	return (len);
 }
 
@@ -91,10 +90,8 @@ char	**ft_tokens(char *cl)
 	while (cl[i] == ' ')
 		i++;
 	len = ft_tokenlen(cl + i);
-	printf("tokenlen = %d\n", len);
 	tokens[j++] =  ft_strndup(cl + i, len);
 	i += len;
-	printf("i = %d, len_cl = %d\n\n", i, ft_strlen(cl));
 	if(i >= ft_strlen(cl) || ft_tokenlen(cl + i) <= 0)
 		return (tokens);
 	if (!tokens)
@@ -104,7 +101,6 @@ char	**ft_tokens(char *cl)
 		if (ft_strchr(SEP_STR, cl[i]) && !ft_strchr(SEP_STR, cl[i + 1]))
 		{
 			len = ft_tokenlen(cl + i);
-			printf("tokenlen = %d\n", len);
 			tokens[j] = ft_strndup(cl + i, len + 2);
 			if (!tokens[j++])
 				return (NULL);

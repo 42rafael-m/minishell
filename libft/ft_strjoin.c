@@ -28,7 +28,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		lgs1;
 	int		i;
 
-	if (!s1)
+	if (!s1 && s2)
 		return (ft_strdup(s2));
 	if (!s2)
 		return (ft_strdup(s1));
