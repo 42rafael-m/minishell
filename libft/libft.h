@@ -19,7 +19,8 @@
 # include <stdlib.h>
 # include <limits.h>
 
-# define ESC_CHARS "\\\'\"\?abfnrtv$"
+# define ESC_CHARS1 "\\\'\"\?abfnrtv$"
+# define ESC_CHARS2 "\\\'\"\?abfnrtv"
 
 int			ft_atoi(const char *str);
 void		*ft_bzero(void *s, size_t n);
@@ -94,13 +95,14 @@ void		ft_putnbr(int n);
 char		*ft_strndup(const char *src, size_t n);
 void		ft_free_d(char **ptr);
 char		*ft_strnchr(const char *s, int c, unsigned int n);
-char		*ft_esc_char(char *s);
+char		*ft_esc_char(char *s, char *esc_char);
 void		ft_free_prev_d(char **s, int pos);
 long		ft_atol(const char *s);
-int			ft_doubleptr_len(char **ptr);
+int			ft_doubleptr_len(void **ptr);
 int			ft_find_in_matrix(char **m, char *to_find, int len);
 size_t		ft_abs(int n);
 int			ft_isspace(int c);
-char	*ft_trim_spaces(char *s);
+char		*ft_trim_spaces(char *s);
+void		**ft_add_ptr(void **dptr, void *ptr, int pos);
 
 #endif

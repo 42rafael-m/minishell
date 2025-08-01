@@ -1,46 +1,60 @@
 #include "minishell.h"
 
+char	**ft_test_quoted_tokens(char *line)
+{
+	int	i;
+	int	len;
+	char	**q_tokens;
+
+	i = 0;
+	while (i < ft_strlen(line))
+	{
+		len = ft_quoted_len(line + i);
+		printf("q_len = %d\n", len);
+		if (len == -1)
+			return (q_tokens);
+		i += len;
+		i++;
+	}
+	len = ft_num_q_tokens(line);
+	printf("q_num = %d\n", len);
+	q_tokens = ft_token_quotes(line);
+	i = 0;
+	while (i < len)
+	{
+		printf("q_token[i] = 8%s8\n", q_tokens[i]);
+		free(q_tokens[i]);
+		i++;
+	}
+	free(q_tokens[i]);
+	free(q_tokens);
+	return (q_tokens);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 
-	int	i = 0;
+	int	i = 1;
 	char	*s = NULL;
+	char	**q_tokens;
+	char	*t;
 
-	char *u = ft_expand_token(ft_strtrim(argv[1], " "), envp);
-	printf("expand_token = 8%s8\n", u);
-	free(u);
-	// while (argv[i])
-	// {
+	while (argv[i])
+	{
 
-	// 	char	*t = ft_strjoin(s, argv[i]);
-	// 	free(s);
-	// 	s = ft_strjoin(t, " ");
-	// 	free(t);
-	// 	i++;
-	// }
-	// printf("s = 8%s8\n", s);
-	// int n = ft_num_token(s);
-	// printf("num_token = %d\n", n);
-	// char	**r = ft_tokens(s);
-	// free(s);
-	// i = 0;
-	// printf("d_len = %d\n", ft_doubleptr_len(r));
-	// while (i < ft_doubleptr_len(r))
-	// {
-	// 	printf("8%s8\n", r[i]);
-	// 	free(r[i]);
-	// 	i++;
-	// }
-	// free(r[i]);
-	// free(r);
-	// i = 0;
-	// char	**x = (char **)ft_calloc(5, sizeof(char *));
-	// x[4] = NULL;
-	// while (i < 5)
-	// {
-	// 	x[i] = ft_final_token(r[i], envp);
-	// 	if (x[i])
-	// 		printf("$%s$\n", x[i]);
-	// 	i++;
-	// }
+		t = ft_strjoin(s, argv[i]);
+		free(s);
+		s = ft_strjoin(t, " ");
+		free(t);
+		i++;
+	}
+	t = ft_strtrim(s, " ");
+	free(s);
+	printf("argv = 8%s8\n", t);
+	q_tokens = ft_test_quoted_tokens(t);
+	// if (ft_strstr(argv[1], "quoted") || ft_strstr(argv[1], "all"))
+	// 	q_tokens = ft_test_quoted_tokens(t);
+	// else
+	// 	q_tokens = ft_token_quotes(t);
+	
 }

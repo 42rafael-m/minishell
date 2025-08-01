@@ -15,8 +15,12 @@
 
 # define IGNORE 1
 # define DEFAULT 0
-# define SEP_STR " \"\'"
+# define APPEND 1
+# define WRITE 0
+# define SEP_STR " <>\"\'"
+# define REDIR_S "<>"
 # define NO_VAL_VAR " !\"#$%&'()*+,-./:;<=>?@[]^`{|}~ "
+# define ERR_OPEN_Q "minishell: syntax error: quotes not closed\n"
 
 extern volatile sig_atomic_t sigint_received;
 
@@ -27,24 +31,26 @@ typedef struct s_cli
 	char	**args;
 	int	fdin;
 	int	fdout;
-	char	*heredoc;
+	char	*delim;
 	int	is_builtin;
 	struct s_cli	*next;
-	// char	**envp;
+	int	r_mode;
 }	t_cli;
 
 char	*ft_prompt(char **envp);
 char	*get_hostname(void);
 char	*get_pwd(char *cwd);
-char	*ft_final_token(char *token, char **envp);
-char	**ft_tokens(char *cl);
-char	*ft_expand_token(char *token, char **envp);
-char	*ft_expand_var(char	*token, int start, int end, char **envp);
+char	*ft_expand_token(char *token);
+char	*ft_expand_var(char	*token, int start, int end);
 char	*ft_get_var(char *var_call, char **envp);
-int	ft_tokenlen(char *cl);
-int	ft_num_token(char	*cl);
-int	ft_exec_shell(struct sigaction *sa, char **envp);
+char	**ft_token_quotes(char *line);
+char	**ft_tokens(char *line);
+int		ft_num_q_tokens(char *line);
+int		ft_quoted_len(char *line);
+int		ft_exec_shell(struct sigaction *sa, char **envp);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
+void	ft_init_list(t_cli *cli);
+t_cli	*ft_parse(char	*line);
 
 #endif

@@ -12,15 +12,16 @@ int	ft_tokenlen(char *cl)
 	while (cl[i] == ' '  && ft_strchr(SEP_STR, cl[i + 1]))
 		i++;
 	len = 0;
-	if (cl[i] == ' ' || cl[i] == '\'' || cl[i] == '\"')
+	if (ft_strchr(SEP_STR, cl[i]))
 		sep = cl[i++];
 	else
 		sep = ' ';
+	// printf("sep  = %c\n", sep);
 	while (cl[i])
 	{
-		if (cl[i] == sep)
+		if (cl[i] == sep || ft_strchr(SEP_STR, cl[i]) && (ft_strchr(REDIR_S, cl[i]) || i + 1 >= ft_strlen(cl)))
 			return (len);
-		if (sep != ' ' && !cl[i + 1])
+		if (sep != ' ' && !ft_strchr(REDIR_S, sep) && !cl[i + 1])
 			return (-1);
 		i++;
 		len++;
@@ -55,8 +56,8 @@ int	ft_num_token(char *cl)
 			i++;
 		sep = cl[i];
 		len =  ft_tokenlen(cl + i);
-		if (len == -1) /* Este error hay que manejarlo bien, asegurarse que se muestra un nuevo prompt */
-			return (write(2, "Syntax error: quotes not closed\n", 33), -1);
+		if (len == -1)
+			return (write(2, ERR_OPEN_Q, 44), -1);
 		if (len > 0)
 		{
 			token_num++;

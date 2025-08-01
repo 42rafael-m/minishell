@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_doubleptr_len(char **dptr)
+int	ft_doubleptr_len(void **dptr)
 {
 	int	i;
 
