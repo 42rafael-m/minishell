@@ -14,7 +14,8 @@ char	**ft_test_quoted_tokens(char *line)
 		if (len == -1)
 			return (q_tokens);
 		i += len;
-		i++;
+		if (!line[i + 1])
+			break ;
 	}
 	len = ft_num_q_tokens(line);
 	printf("q_num = %d\n", len);

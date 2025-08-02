@@ -12,7 +12,11 @@ int	ft_quoted_len(char *line)
 	while (line[i])
 	{
 		if ((line[i] == '\"' || line[i] == '\''))
-			return (++i);
+		{
+			if (line[0] == '\"' || line[0] == '\'')
+				return (i + 1);
+			return (i);
+		}
 		if ((line[0] == '\"' || line[0] == '\'') && !line[i + 1])
 			return (-1);
 		i++;
@@ -38,7 +42,8 @@ int	ft_num_q_tokens(char *line)
 			return (write(2, ERR_OPEN_Q, 44), -1);
 		i += len;
 		token_num++;
-		i++;
+		if (!line[i + 1])
+			break ;
 	}
 	return (token_num);
 }
@@ -46,6 +51,7 @@ int	ft_num_q_tokens(char *line)
 char	**ft_token_quotes(char *line)
 {
 	int	i;
+	int	j;
 	int	len;
 	char	**tokens;
 
@@ -58,15 +64,17 @@ char	**ft_token_quotes(char *line)
 	if (!tokens)
 		return (NULL);
 	i = 0;
+	j = 0;
 	while (line[i])
 	{
 		len = ft_quoted_len(line + i);
-		tokens[i] = ft_strndup(line + i, len);
-		printf("", tokens[i]);
+		tokens[j++] = ft_strndup(line + i, len);
 		i += len;
-		i++;
+		if (!line[i + 1])
+			break ;
 	}
-	return (tokens[i] = NULL, tokens);
+	tokens[j] = NULL;
+	return (tokens);
 }
 
 char	**ft_tokens(char *line)
