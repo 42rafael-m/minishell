@@ -1,1 +1,18 @@
-
+argv = 8123 456123 7908
+q_len = 14
+q_num = 1
+q_token[i] = 8123 456123 7908
+q_tokens len = 1
+line = 8123 456123 7908
+spac_len = 3
+spac_len = 7
+spac_len = 4
+num s_tokens = 3
+spaced_token = 81238
+spaced_token = 8 4561238
+spaced_token = 8 7908
+t = 0x4a4b840, t[0] = 0x4a4b8b0
+inserted_tokens = 81238
+inserted_tokens = 8 4561238
+inserted_tokens = 8 7908
+0x4a4b840

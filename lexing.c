@@ -1,113 +1,98 @@
 #include "minishell.h"
 
-int	ft_tokenlen(char *cl)
+int	ft_quoted_len(char *line)
 {
 	int	i;
-	int	len;
-	char	sep;
 
-	if (!cl || !cl[0])
+	if (!line)
 		return (0);
 	i = 0;
-	while (cl[i] == ' '  && ft_strchr(SEP_STR, cl[i + 1]))
+	if ((line[0] == '\"' || line[0] == '\''))
 		i++;
-	len = 0;
-	if (ft_strchr(SEP_STR, cl[i]))
-		sep = cl[i++];
-	else
-		sep = ' ';
-	// printf("sep  = %c\n", sep);
-	while (cl[i])
+	while (line[i])
 	{
-		if (cl[i] == sep || ft_strchr(SEP_STR, cl[i]) && (ft_strchr(REDIR_S, cl[i]) || i + 1 >= ft_strlen(cl)))
-			return (len);
-		if (sep != ' ' && !ft_strchr(REDIR_S, sep) && !cl[i + 1])
+		if ((line[i] == '\"' || line[i] == '\''))
+		{
+			if (line[0] == '\"' || line[0] == '\'')
+				return (i + 1);
+			return (i);
+		}
+		if ((line[0] == '\"' || line[0] == '\'') && !line[i + 1])
 			return (-1);
 		i++;
-		len++;
 	}
-	return (len);
+	return (i);
 }
 
-int	ft_num_token(char *cl)
+int	ft_num_q_tokens(char *line)
 {
 	int	i;
 	int	len;
 	int	token_num;
-	char	sep;
+	char	**tokens;
 
-	if (!cl)
+	if (!line)
 		return (0);
 	i = 0;
 	token_num = 0;
-	while (cl[i] == ' '  && ft_strchr(SEP_STR, cl[i + 1]))
-		i++;
-	len = ft_tokenlen(cl + i);
-	if (len == 0)
-		return (0);
-	else
+	while (line[i])
 	{
-		i += len;
-		token_num++;
-	}
-	while (i < ft_strlen(cl))
-	{
-		while (cl[i] == ' ' && ft_strchr(SEP_STR, cl[i + 1]))
-			i++;
-		sep = cl[i];
-		len =  ft_tokenlen(cl + i);
+		len = ft_quoted_len(line + i);
 		if (len == -1)
 			return (write(2, ERR_OPEN_Q, 44), -1);
-		if (len > 0)
-		{
-			token_num++;
-			i += len;
-		}
-		i++;
-		if (i <= ft_strlen(cl) && !ft_isspace(cl[i]) && ft_strchr(SEP_STR, cl[i]))
-			i++;
+		i += len;
+		token_num++;
+		if (i >= ft_strlen(line))
+			break ;
 	}
 	return (token_num);
 }
 
-char	**ft_tokens(char *cl)
+char	**ft_token_quotes(char *line)
 {
 	int	i;
 	int	j;
 	int	len;
 	char	**tokens;
 
-	if (!cl)
+	if (!line)
 		return (NULL);
-	i = 0;
-	j = 0;
-	len = ft_num_token(cl);
+	len = ft_num_q_tokens(line);
 	if (len == -1)
 		return (NULL);
 	tokens = (char **)ft_calloc(len + 1, sizeof(char *));
 	if (!tokens)
 		return (NULL);
-	tokens[len] = NULL;
-	while (cl[i] == ' ')
-		i++;
-	len = ft_tokenlen(cl + i);
-	tokens[j++] =  ft_strndup(cl + i, len);
-	i += len;
-	if(i >= ft_strlen(cl) || ft_tokenlen(cl + i) <= 0)
-		return (tokens);
-	if (!tokens)
-		return(NULL);
-	while (i < ft_strlen(cl))
+	tokens[len] == NULL;
+	i = 0;
+	j = 0;
+	while (line[i])
 	{
-		if (ft_strchr(SEP_STR, cl[i]) && !ft_strchr(SEP_STR, cl[i + 1]))
-		{
-			len = ft_tokenlen(cl + i);
-			tokens[j] = ft_strndup(cl + i, len + 2);
-			if (!tokens[j++])
-				return (NULL);
-			i += len;
-		}
-		i++;
+		len = ft_quoted_len(line + i);
+		tokens[j++] = ft_strndup(line + i, len);
+		i += len;
+		if (i >= ft_strlen(line))
+			break ;
 	}
+	return (tokens);
+}
+
+char	**ft_tokens(char *line)
+{
+	char	*trimmed;
+	char	**spaced;
+	char	**tokens;
+	int i;
+
+	if (!line)
+		return(NULL);
+	trimmed = ft_strtrim(line, " ");
+	if (!trimmed);
+		return (NULL);
+	tokens = ft_token_quotes(trimmed);
+	if (!tokens)
+		return (NULL);
+	i = 0;
+	spaced = ft_insert_s_tokens(tokens, 0);
 	return (tokens);
 }

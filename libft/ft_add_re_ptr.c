@@ -1,6 +1,6 @@
 #include "libft.h"
 
-void	**ft_add_ptr(void **dptr, void *ptr, int pos)
+void	**ft_add_re_ptr(void **dptr, void *ptr, int pos)
 {
 	int	len;
 	int	i;
@@ -22,7 +22,8 @@ void	**ft_add_ptr(void **dptr, void *ptr, int pos)
 	{
 		if (j == pos)
 			r[i++] = (void *)ft_strdup((char *)ptr);
-		r[i++] = (void *)ft_strdup((char *)dptr[j]);
+		else
+			r[i++] = (void *)ft_strdup((char *)dptr[j]);
 		j++;
 	}
 	return (r);

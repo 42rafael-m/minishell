@@ -14,6 +14,8 @@ int	ft_doubleptr_len(void **dptr)
 {
 	int	i;
 
+	if (!dptr || !dptr[0])
+		return (0);
 	i = 0;
 	while (dptr[i])
 		i++;

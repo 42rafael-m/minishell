@@ -20,7 +20,7 @@ SRC = ft_atoi.c ft_isascii.c ft_memcmp.c \
       ft_strnchr.c ft_esc_char.c ft_free_prev_d.c\
       ft_atol.c ft_abs.c ft_doubleptr_len.c\
       ft_find_in_matrix.c ft_isspace.c ft_trim_spaces.c\
-      ft_strndup.c ft_add_ptr.c
+      ft_strndup.c ft_add_ptr.c ft_add_re_ptr.c
 
 BONUS_SRC = ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstclear_bonus.c\
 	ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstnew_bonus.c\

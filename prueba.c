@@ -14,7 +14,7 @@ char	**ft_test_quoted_tokens(char *line)
 		if (len == -1)
 			return (q_tokens);
 		i += len;
-		if (!line[i + 1])
+		if (!i >= ft_strlen(line))
 			break ;
 	}
 	len = ft_num_q_tokens(line);
@@ -24,12 +24,59 @@ char	**ft_test_quoted_tokens(char *line)
 	while (i < len)
 	{
 		printf("q_token[i] = 8%s8\n", q_tokens[i]);
-		free(q_tokens[i]);
 		i++;
 	}
-	free(q_tokens[i]);
-	free(q_tokens);
 	return (q_tokens);
+}
+
+char	**ft_test_space(char **tokens)
+{
+	int	i;
+	int	j;
+	int	len;
+	char	**t;
+
+	if (!tokens)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (i < ft_doubleptr_len((void **)tokens))
+	{
+		printf("line = 8%s8\n", tokens[i]);
+		while (j < ft_strlen(tokens[i]))
+		{
+			len = ft_spacelen(tokens[i] + j);
+			printf("spac_len = %d\n", len);
+			j += len;
+		}
+		i++;
+	}
+	i = 0;
+	while (tokens[i])
+	{
+		len = ft_num_s_tokens(tokens[i++]);
+		printf("num s_tokens = %d\n", len);
+	}
+	i = 0;
+	j = 0;
+	while (tokens[i])
+	{
+		t = ft_token_space(tokens[i]);
+		while (t[j])
+		{
+			printf("spaced_token = 8%s8\n", t[j++]);
+		}
+		ft_free_d(t);
+		i++;
+	}
+	t = ft_insert_s_tokens(tokens, 0);
+	if (!t)
+		return (write(2, "No inserted_tokens\n", 20), NULL);
+	printf("t = %p, t[0] = %p\n", t, t[0]);
+	i = 0;
+	while (t[i])
+		printf("inserted_tokens = 8%s8\n", t[i++]);
+	return (t);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -38,6 +85,8 @@ int	main(int argc, char **argv, char **envp)
 	int	i = 1;
 	char	*s = NULL;
 	char	**q_tokens;
+	char	**s_tokens;
+	char	**x;
 	char	*t;
 
 	while (argv[i])
@@ -53,9 +102,10 @@ int	main(int argc, char **argv, char **envp)
 	free(s);
 	printf("argv = 8%s8\n", t);
 	q_tokens = ft_test_quoted_tokens(t);
-	// if (ft_strstr(argv[1], "quoted") || ft_strstr(argv[1], "all"))
-	// 	q_tokens = ft_test_quoted_tokens(t);
-	// else
-	// 	q_tokens = ft_token_quotes(t);
-	
+	free(t);
+	i = 0;
+	printf("q_tokens len = %d\n", ft_doubleptr_len((void **)q_tokens));
+	s_tokens = ft_test_space(q_tokens);
+	printf("%p", s_tokens);
+	ft_free_d(s_tokens);
 }
