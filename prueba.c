@@ -40,13 +40,15 @@ char	**ft_test_space(char **tokens)
 		return (NULL);
 	i = 0;
 	j = 0;
+	tokens = ft_trim_tokens(tokens);
 	while (i < ft_doubleptr_len((void **)tokens))
 	{
 		printf("line = 8%s8\n", tokens[i]);
+		j = 0;
 		while (j < ft_strlen(tokens[i]))
 		{
 			len = ft_spacelen(tokens[i] + j);
-			printf("spac_len = %d\n", len);
+			printf("space_len = %d\n", len);
 			j += len;
 		}
 		i++;
@@ -58,22 +60,20 @@ char	**ft_test_space(char **tokens)
 		printf("num s_tokens = %d\n", len);
 	}
 	i = 0;
-	j = 0;
 	while (tokens[i])
 	{
 		t = ft_token_space(tokens[i]);
+		j = 0;
 		while (t[j])
-		{
 			printf("spaced_token = 8%s8\n", t[j++]);
-		}
 		ft_free_d(t);
 		i++;
 	}
 	t = ft_insert_s_tokens(tokens, 0);
 	if (!t)
 		return (write(2, "No inserted_tokens\n", 20), NULL);
-	printf("t = %p, t[0] = %p\n", t, t[0]);
 	i = 0;
+	printf("s_tokens len = %d\n", ft_doubleptr_len((void **)t));
 	while (t[i])
 		printf("inserted_tokens = 8%s8\n", t[i++]);
 	return (t);
@@ -105,6 +105,8 @@ int	main(int argc, char **argv, char **envp)
 	free(t);
 	i = 0;
 	printf("q_tokens len = %d\n", ft_doubleptr_len((void **)q_tokens));
+	while (q_tokens[i])
+		printf("q_tokens[i] final = 8%s8\n", q_tokens[i++]);
 	s_tokens = ft_test_space(q_tokens);
 	printf("%p", s_tokens);
 	ft_free_d(s_tokens);

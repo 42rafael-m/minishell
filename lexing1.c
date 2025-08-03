@@ -1,12 +1,37 @@
 #include "minishell.h"
 
+char	**ft_trim_tokens(char **tokens)
+{
+	int	i;
+	char	*t;
+
+	if (!tokens)
+		return (NULL);
+	i = 0;
+	while (tokens[i])
+	{
+		t = ft_strtrim(tokens[i], " ");
+		if (t != tokens[i])
+		{
+			free(tokens[i]);
+			tokens[i] = t;
+		}
+		i++;
+	}
+	return (tokens);
+}
+
 int	ft_spacelen(char *line)
 {
 	int	i;
 
 	if (!line)
 		return (0);
+	if (ft_strchr(QUOTES, line[0]))
+		return (ft_strlen(line));
 	i = 0;
+	while (line[i] == ' ')
+		i++;
 	while (line[i])
 	{
 		if (line[i] == ' ' && i != 0)
@@ -50,7 +75,7 @@ char	**ft_token_space(char *line)
 	tokens = (char **)ft_calloc(len + 1, sizeof(char *));
 	if (!tokens)
 		return (NULL);
-	tokens[len] == NULL;
+	tokens[len] = NULL;
 	i = 0;
 	j = 0;
 	while (line[i])
@@ -73,22 +98,25 @@ char	**ft_insert_s_tokens(char **tokens, int len)
 
 	if (!tokens)
 		return (NULL);
-	len =  ft_doubleptr_len((void **)tokens);
 	i = 0;
-	while (i < len)
+	while (i < ft_doubleptr_len((void **)tokens))
 	{
-		spaced = ft_token_space(tokens[i++]);
-		j = ft_doubleptr_len((void **)spaced) - 1;
-		while (j-- >= 0)
+		spaced = ft_token_space(tokens[i]);
+		j = ft_doubleptr_len((void **)spaced);
+		while (--j >= 0)
 		{
-			if (spaced[j + 1])
-				t = (char **)ft_add_ptr((void **)tokens, spaced[j + 1], i - 1);
+			if (spaced[j] && j == (ft_doubleptr_len((void **)spaced) - 1))
+				t = (char **)ft_add_re_ptr((void **)tokens, spaced[j], i);
+			else if (spaced[j] )
+				t = (char **)ft_add_ptr((void **)tokens, spaced[j], i);
 			if (t != tokens)
 				ft_free_d(tokens);
+			if (!t)
+				return (NULL);
 			tokens = t;
 		}
+		i += ft_doubleptr_len((void **)spaced);
 		ft_free_d(spaced);
 	}
-	len = ft_doubleptr_len((void **)tokens);
-	return (free(tokens[len - 1]), tokens[len - 1] = NULL, tokens);
+	return (tokens);
 }

@@ -19,6 +19,7 @@
 # define WRITE 0
 # define SEP_STR " <>\"\'"
 # define REDIR_S "<>"
+# define QUOTES "\"\'"
 # define NO_VAL_VAR " !\"#$%&'()*+,-./:;<=>?@[]^`{|}~ "
 # define ERR_OPEN_Q "minishell: syntax error: quotes not closed\n"
 
@@ -46,6 +47,7 @@ char	*ft_get_var(char *var_call, char **envp);
 char	**ft_token_quotes(char *line);
 char	**ft_tokens(char *line);
 char	**ft_token_space(char *line);
+char	**ft_trim_tokens(char **tokens);
 char	**ft_insert_s_tokens(char **tokens, int len);
 int		ft_num_q_tokens(char *line);
 int		ft_quoted_len(char *line);

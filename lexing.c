@@ -90,9 +90,9 @@ char	**ft_tokens(char *line)
 	if (!trimmed);
 		return (NULL);
 	tokens = ft_token_quotes(trimmed);
+	tokens = ft_trim_tokens(tokens);
 	if (!tokens)
 		return (NULL);
-	i = 0;
 	spaced = ft_insert_s_tokens(tokens, 0);
 	return (tokens);
 }

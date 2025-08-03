@@ -2,17 +2,27 @@
 
 int	main(int argc, char **argv)
 {
-	char	**r;
+	int	i = 1;
+	char	*s = NULL;
+	char	**tokens;
+	char	*t;
 
-	printf("HOLA\n");
-	r = (char **)ft_add_re_ptr((void **)argv, "hola", 1);
-	int i = 0;
-	int	len = ft_doubleptr_len((void **)r);
-	printf("len = %d\n", len);
-	while (r && r[i])
+	while (argv[i])
 	{
-		printf("%s\n", r[i]);
+
+		t = ft_strjoin(s, argv[i]);
+		free(s);
+		s = ft_strjoin(t, " ");
+		free(t);
 		i++;
 	}
-	ft_free_d(r);
+	tokens = ft_token_space(s);
+	i = 0;
+	while (tokens[i])
+	{
+		printf("tokens[%d] = 8%s8\n", i, tokens[i]);
+		free(tokens[i++]);
+	}
+	free(s);
+	free(tokens);
 }

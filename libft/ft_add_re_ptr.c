@@ -12,10 +12,10 @@ void	**ft_add_re_ptr(void **dptr, void *ptr, int pos)
 	len = ft_doubleptr_len(dptr);
 	if (!ptr || pos < 0 || pos > len)
 		return (dptr);
-	r = ft_calloc(len + 2, sizeof(void *));
+	r = ft_calloc(len + 1, sizeof(void *));
 	if (!r)
 		return (NULL);
-	r[len + 1] = NULL;
+	r[len] = NULL;
 	i = 0;
 	j = 0;
 	while (j < len + 1)
