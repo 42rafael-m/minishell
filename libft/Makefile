@@ -17,7 +17,7 @@ SRC = ft_atoi.c ft_isascii.c ft_memcmp.c \
       ft_atoi_base.c ft_power.c ft_iterative_factorial.c\
       ft_fibonacci.c ft_convert_base.c ft_nbr_base_len.c\
       ft_neg.c ft_putnbr.c ft_free_d.c\
-      ft_strnchr.c ft_esc_char.c ft_free_prev_d.c\
+      ft_strnchr.c ft_esc_str.c ft_free_prev_d.c\
       ft_atol.c ft_abs.c ft_doubleptr_len.c\
       ft_find_in_matrix.c ft_isspace.c ft_trim_spaces.c\
       ft_strndup.c ft_add_ptr.c ft_add_re_ptr.c

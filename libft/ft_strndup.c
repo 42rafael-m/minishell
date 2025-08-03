@@ -32,7 +32,11 @@ char	*ft_strndup(const char *src, size_t n)
 {
 	char	*dest;
 
-	dest = (char *)malloc((n + 1) * sizeof(char));
+    if (!src)
+        return (NULL);
+    if (n <= 0)
+        return (ft_strdup(src));
+	    dest = (char *)malloc((n + 1) * sizeof(char));
 	if (!dest)
 		return (NULL);
 	ft_strlcpy(dest, src, n + 1);

@@ -22,6 +22,7 @@
 # define QUOTES "\"\'"
 # define NO_VAL_VAR " !\"#$%&'()*+,-./:;<=>?@[]^`{|}~ "
 # define ERR_OPEN_Q "minishell: syntax error: quotes not closed\n"
+# define ESC_CHARS1 "\\\"\?$"
 
 extern volatile sig_atomic_t sigint_received;
 
@@ -41,16 +42,17 @@ typedef struct s_cli
 char	*ft_prompt(char **envp);
 char	*get_hostname(void);
 char	*get_pwd(char *cwd);
-char	*ft_expand_token(char *token);
+char	*ft_expand_line(char *token);
 char	*ft_expand_var(char	*token, int start, int end);
 char	*ft_get_var(char *var_call, char **envp);
-char	**ft_token_quotes(char *line);
+char	*ft_escaped_line(char *line, int start, int end);
+char	*ft_escape_quotes(char *line);
 char	**ft_tokens(char *line);
 char	**ft_token_space(char *line);
 char	**ft_trim_tokens(char **tokens);
 char	**ft_insert_s_tokens(char **tokens);
-int		ft_num_q_tokens(char *line);
-int		ft_quoted_len(char *line);
+int		ft_num_quoted(char *line);
+int		ft_quoted_len(char *line, char quote);
 int		ft_spacelen(char *line);
 int		ft_exec_shell(struct sigaction *sa, char **envp);
 int		ft_num_s_tokens(char *line);

@@ -34,6 +34,8 @@ int	ft_spacelen(char *line)
 		i++;
 	while (line[i])
 	{
+		if (ft_strchr(QUOTES, line[i]))
+			i += (ft_quoted_len(line + i) + 1);
 		if (line[i] == ' ' && i != 0)
 			return (i);
 		i++;
@@ -45,18 +47,20 @@ int	ft_num_s_tokens(char *line)
 {
 	int	i;
 	int	len;
+	int	line_len;
 	int	token_num;
 
 	if (!line)
 		return (0);
 	i = 0;
 	token_num = 0;
-	while (line[i])
+	line_len = ft_strlen(line);
+	while (i < line_len)
 	{
 		len = ft_spacelen(line + i);
 		i += len;
 		token_num++;
-		if (i >= ft_strlen(line))
+		if (i >= line_len)
 			break ;
 	}
 	return (token_num);
@@ -88,34 +92,33 @@ char	**ft_token_space(char *line)
 	}
 	return (tokens);
 }
+// char	**ft_insert_s_tokens(char **tokens)
+// {
+// 	int	i;
+// 	int	j;
+// 	char	**spaced;
+// 	char	**t;
 
-char	**ft_insert_s_tokens(char **tokens)
-{
-	int	i;
-	int	j;
-	char	**spaced;
-	char	**t;
 
-
-	i = 0;
-	while (i < ft_doubleptr_len((void **)tokens))
-	{
-		spaced = ft_token_space(tokens[i]);
-		j = ft_doubleptr_len((void **)spaced);
-		while (--j >= 0)
-		{
-			if (spaced[j] && j == (ft_doubleptr_len((void **)spaced) - 1))
-				t = (char **)ft_add_re_ptr((void **)tokens, spaced[j], i);
-			else if (spaced[j] )
-				t = (char **)ft_add_ptr((void **)tokens, spaced[j], i);
-			if (t != tokens)
-				ft_free_d(tokens);
-			if (!t)
-				return (NULL);
-			tokens = t;
-		}
-		i += ft_doubleptr_len((void **)spaced);
-		ft_free_d(spaced);
-	}
-	return (tokens);
-}
+// 	i = 0;
+// 	while (i < ft_doubleptr_len((void **)tokens))
+// 	{
+// 		spaced = ft_token_space(tokens[i]);
+// 		j = ft_doubleptr_len((void **)spaced);
+// 		while (--j >= 0)
+// 		{
+// 			if (spaced[j] && j == (ft_doubleptr_len((void **)spaced) - 1))
+// 				t = (char **)ft_add_re_ptr((void **)tokens, spaced[j], i);
+// 			else if (spaced[j] )
+// 				t = (char **)ft_add_ptr((void **)tokens, spaced[j], i);
+// 			if (t != tokens)
+// 				ft_free_d(tokens);
+// 			if (!t)
+// 				return (NULL);
+// 			tokens = t;
+// 		}
+// 		i += ft_doubleptr_len((void **)spaced);
+// 		ft_free_d(spaced);
+// 	}
+// 	return (tokens);
+// }

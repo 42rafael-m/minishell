@@ -14,10 +14,10 @@
 
 static int	ft_len(char *s, char *esc_char)
 {
-	int	r;
+	int	len;
 	int	i;
 
-	r = 0;
+	len = 0;
 	i = 0;
 	if (!s)
 		return (-1);
@@ -25,28 +25,30 @@ static int	ft_len(char *s, char *esc_char)
 	{
 		if (s[i] == '\\' && ft_strchr(esc_char, s[i + 1]))
 			i++;
-		r++;
+		len++;
 		i++;
 	}
-	return (r);
+	return (len);
 }
 
-char	*ft_esc_char(char *s, char *esc_char)
+char	*ft_esc_str(char *s, char *esc_char, size_t n)
 {
 	int		len;
 	char	*r;
-	int		i;
-	int		j;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
 	if (!s)
 		return (NULL);
+	if (n <= 0 || n > ft_strlen(s))
+		return (ft_strdup(s));
 	len = ft_len(s, esc_char);
 	r = (char *)ft_calloc(len + 1, sizeof(char));
 	if (!r)
 		return (NULL);
-	while (s[i])
+	while (i < n)
 	{
 		if (s[i] == '\\' && ft_strchr(esc_char, s[i]))
 			r[j] = s[++i];
