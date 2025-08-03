@@ -48,7 +48,7 @@ char	**ft_token_quotes(char *line);
 char	**ft_tokens(char *line);
 char	**ft_token_space(char *line);
 char	**ft_trim_tokens(char **tokens);
-char	**ft_insert_s_tokens(char **tokens, int len);
+char	**ft_insert_s_tokens(char **tokens);
 int		ft_num_q_tokens(char *line);
 int		ft_quoted_len(char *line);
 int		ft_spacelen(char *line);

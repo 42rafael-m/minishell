@@ -89,15 +89,14 @@ char	**ft_token_space(char *line)
 	return (tokens);
 }
 
-char	**ft_insert_s_tokens(char **tokens, int len)
+char	**ft_insert_s_tokens(char **tokens)
 {
 	int	i;
 	int	j;
 	char	**spaced;
 	char	**t;
 
-	if (!tokens)
-		return (NULL);
+
 	i = 0;
 	while (i < ft_doubleptr_len((void **)tokens))
 	{

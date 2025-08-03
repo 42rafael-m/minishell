@@ -93,6 +93,6 @@ char	**ft_tokens(char *line)
 	tokens = ft_trim_tokens(tokens);
 	if (!tokens)
 		return (NULL);
-	spaced = ft_insert_s_tokens(tokens, 0);
+	spaced = ft_insert_s_tokens(tokens);
 	return (tokens);
 }

@@ -69,7 +69,7 @@ char	**ft_test_space(char **tokens)
 		ft_free_d(t);
 		i++;
 	}
-	t = ft_insert_s_tokens(tokens, 0);
+	t = ft_insert_s_tokens(tokens);
 	if (!t)
 		return (write(2, "No inserted_tokens\n", 20), NULL);
 	i = 0;
