@@ -27,15 +27,13 @@ int	ft_spacelen(char *line)
 
 	if (!line)
 		return (0);
-	if (ft_strchr(QUOTES, line[0]))
-		return (ft_strlen(line));
 	i = 0;
 	while (line[i] == ' ')
 		i++;
 	while (line[i])
 	{
 		if (ft_strchr(QUOTES, line[i]))
-			i += (ft_quoted_len(line + i, line[i]) + 1);
+			i += (ft_quoted_len(line + i, line[i]));
 		if (line[i] == ' ' && i != 0)
 			return (i);
 		i++;
@@ -55,8 +53,10 @@ int	ft_num_s_tokens(char *line)
 	i = 0;
 	token_num = 0;
 	line_len = ft_strlen(line);
+	printf("line = 8%s8\n", line);
 	while (i < line_len)
 	{
+		printf("line[%d] = '%c'\n", i, line[i]);
 		len = ft_spacelen(line + i);
 		i += len;
 		token_num++;

@@ -47,55 +47,29 @@ char	*ft_test_expansion(char *line)
 	return (s);
 }
 
-// char	**ft_test_space(char **tokens)
-// {
-// 	int	i;
-// 	int	j;
-// 	int	len;
-// 	char	**t;
+char	**ft_test_space(char *line)
+{
+	int	i;
+	int	len;
+	char	**t;
 
-// 	if (!tokens)
-// 		return (NULL);
-// 	i = 0;
-// 	j = 0;
-// 	tokens = ft_trim_tokens(tokens);
-// 	while (i < ft_doubleptr_len((void **)tokens))
-// 	{
-// 		printf("line = 8%s8\n", tokens[i]);
-// 		j = 0;
-// 		while (j < ft_strlen(tokens[i]))
-// 		{
-// 			len = ft_spacelen(tokens[i] + j);
-// 			printf("space_len = %d\n", len);
-// 			j += len;
-// 		}
-// 		i++;
-// 	}
-// 	i = 0;
-// 	while (tokens[i])
-// 	{
-// 		len = ft_num_s_tokens(tokens[i++]);
-// 		printf("num s_tokens = %d\n", len);
-// 	}
-// 	i = 0;
-// 	while (tokens[i])
-// 	{
-// 		t = ft_token_space(tokens[i]);
-// 		j = 0;
-// 		while (t[j])
-// 			printf("spaced_token = 8%s8\n", t[j++]);
-// 		ft_free_d(t);
-// 		i++;
-// 	}
-// 	t = ft_insert_s_tokens(tokens);
-// 	if (!t)
-// 		return (write(2, "No inserted_tokens\n", 20), NULL);
-// 	i = 0;
-// 	printf("s_tokens len = %d\n", ft_doubleptr_len((void **)t));
-// 	while (t[i])
-// 		printf("inserted_tokens = 8%s8\n", t[i++]);
-// 	return (t);
-// }
+	if (!line)
+		return (NULL);
+	i = 0;
+	while (i < ft_strlen(line))
+	{
+		len = ft_spacelen(line + i);
+		printf("space_len = %d\n", len);
+		i += len;
+	}
+	len = ft_num_s_tokens(line);
+	printf("num s_tokens = %d\n", len);
+	i = 0;
+	t = ft_token_space(line);
+	while (t[i])
+		printf("spaced_token[%d] = 8%s8\n", i, t[i++]);
+	return (t);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -125,17 +99,12 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	printf("argv = 8%s8\n", t);
 	q_line = ft_test_quoted_tokens(t);
-	// if (t != q_line)
-	// 	free(t);
 	i = 0;
 	printf("%p\n", q_line);
 	printf("q_line = 8%s8\n", q_line);
 	e_line = ft_expand_line(q_line);
-	// if (q_line != e_line)
-	// 	free(q_line);
 	printf("e_line = 8%s8\n", e_line);
+	s_tokens = ft_test_space(e_line);
+	ft_free_d(s_tokens);
 	free(e_line);
-	// s_tokens = ft_test_space(q_line);
-	// printf("%p", s_tokens);
-	// ft_free_d(s_tokens);
 }
