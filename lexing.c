@@ -17,36 +17,10 @@ int	ft_quoted_len(char *line, char quote)
 				return (i + 1);
 			return (i);
 		}
-		if (line[0] == quote)
-			return (-1);
 		i++;
 	}
-	return (i);
+	return (write(2, ERR_OPEN_Q, 44), -1);
 }
-
-// int	ft_num_quoted(char *line)
-// {
-// 	int	i;
-// 	int	len;
-// 	int	token_num;
-// 	char	**tokens;
-
-// 	if (!line)
-// 		return (0);
-// 	i = 0;
-// 	token_num = 0;
-// 	while (line[i])
-// 	{
-// 		len = ft_quoted_len(line + i);
-// 		if (len == -1)
-// 			return (write(2, ERR_OPEN_Q, 44), -1);
-// 		i += len;
-// 		token_num++;
-// 		if (i >= ft_strlen(line))
-// 			break ;
-// 	}
-// 	return (token_num);
-// }
 
 char	*ft_escaped_line(char *line, int start, int end)
 {
@@ -58,9 +32,9 @@ char	*ft_escaped_line(char *line, int start, int end)
 		return (NULL);
 	if (end == 0)
 		return (ft_strdup(line));
-	escaped = ft_esc_str(line + start, ESC_CHARS1, end);
+	escaped = ft_esc_str(line + start, ESC_CHARS1, end - start);
 	t = ft_strndup(line, start);
-	if (!t || ! escaped)
+	if (!escaped)
 		return (NULL);
 	s = ft_strjoin(t, escaped);
 	if (!s)
@@ -69,7 +43,7 @@ char	*ft_escaped_line(char *line, int start, int end)
 	free(t);
 	t = ft_strjoin(s, line + end);
 	free(s);
-	return (t);
+	return (s = NULL, escaped = NULL, t);
 }
 
 char	*ft_escape_quotes(char *line)
@@ -82,17 +56,19 @@ char	*ft_escape_quotes(char *line)
 	if (!line)
 		return (NULL);
 	i = 0;
-	while (line[i])
+	while (i < ft_strlen(line))
 	{
 		if (ft_strchr(QUOTES, line[i]))
 		{
 			quote = line[i];
 			len = ft_quoted_len(line + i, quote);
 			if (len <= 0)
-				return (free(line), NULL);
+				return (NULL);
 			esc_line = ft_escaped_line(line, i, i + len);
-			if (!esc_line);
-				return (free(line), NULL);
+			if (!esc_line)
+				return (NULL);
+			free(line);
+			line = esc_line;
 			i += len;
 		}
 		i++;
@@ -117,6 +93,7 @@ char	**ft_tokens(char *line)
 	s = ft_expand_line(t);
 	if (!s)
 		return (NULL);
+	free(t);
 	tokens = ft_token_space(s);
 	free(s);
 	return (NULL);

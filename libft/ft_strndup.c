@@ -35,7 +35,7 @@ char	*ft_strndup(const char *src, size_t n)
     if (!src)
         return (NULL);
     if (n <= 0)
-        return (ft_strdup(src));
+        return (NULL);
 	    dest = (char *)malloc((n + 1) * sizeof(char));
 	if (!dest)
 		return (NULL);

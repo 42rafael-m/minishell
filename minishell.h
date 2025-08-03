@@ -17,7 +17,8 @@
 # define DEFAULT 0
 # define APPEND 1
 # define WRITE 0
-# define SEP_STR " <>\"\'"
+# define SEP_STR " \n\t<>\"\'"
+# define IFS " \t\n"
 # define REDIR_S "<>"
 # define QUOTES "\"\'"
 # define NO_VAL_VAR " !\"#$%&'()*+,-./:;<=>?@[]^`{|}~ "
@@ -56,6 +57,7 @@ int		ft_quoted_len(char *line, char quote);
 int		ft_spacelen(char *line);
 int		ft_exec_shell(struct sigaction *sa, char **envp);
 int		ft_num_s_tokens(char *line);
+int		ft_var_len(char	*var);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
 void	ft_init_list(t_cli *cli);

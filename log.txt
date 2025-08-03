@@ -1,0 +1,10 @@
+argv = 8"$USER" ads "123" $8
+double q_len = 7
+double q_len = 5
+double q_len = 5
+double q_len = -1
+simple q_len = -1
+q_token = 8"$USER" ads "123" $8
+0x4a4b3b0
+q_line = 8"$USER" ads "123" $8
+e_line = 8"rms35" ads "123" $8

@@ -31,7 +31,7 @@ static char	*ft_empty(char const *s1, char const *s2)
 		return (result);
 	}
 	if (!s2)
-		return ((char *)s1);
+		return (ft_strdup((char *)s1));
 	return (NULL);
 }
 

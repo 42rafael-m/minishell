@@ -1,30 +1,20 @@
 #include "minishell.h"
 
-// char	*ft_get_var(char *var_call, char **envp)
-// {
-// 	int	i;
-// 	int	len;
-// 	char	*t;
-// 	char	*var;
+int	ft_var_len(char	*var)
+{
+	int	i;
 
-// 	if (!var_call || !envp)
-// 		return (NULL);
-// 	i = 0;
-// 	var = NULL;
-// 	len = ft_strlen(var_call);
-// 	while (envp[i])
-// 	{
-// 		if (ft_strnstr(envp[i], var_call, len))
-// 		{
-// 			t = ft_strtrim(envp[i], var_call);
-// 			var = ft_strtrim(t, "=");
-// 			free(t);
-// 			return (var);
-// 		}
-// 		i++;
-// 	}
-// 	return (NULL);
-// }
+	if (!var)
+		return (0);
+	i  = 1;
+	while (var[i])
+	{
+		if (ft_strchr(SEP_STR, var[i]) || ft_strchr(NO_VAL_VAR, var[i]))
+			return (i);
+		i++;
+	}
+	return (i);
+}
 
 char	*ft_expand_var(char	*line, int start, int end)
 {
@@ -34,17 +24,21 @@ char	*ft_expand_var(char	*line, int start, int end)
 
 	if (!line)
 		return (NULL);
-	if (!line[end - 1])
-		end--;
+	if (end >= ft_strlen(line))
+		return (ft_strndup(line, end));
+	var = NULL;
 	s = ft_strndup(line + start, end);
 	t = ft_strtrim(s, NO_VAL_VAR);
-	free(s);
+	if (!s || !t)
+		return (NULL);
+	if (s != t)
+		free(s);
 	var = getenv(t);
 	free(t);
 	s = ft_strndup(line, start);
 	t = ft_strjoin(s, var);
 	free(s);
-	s = ft_strjoin(t, line + end);
+	s = ft_strjoin(t, line + end + 1);
 	free(t);
 	return (s);
 }
@@ -58,12 +52,16 @@ char	*ft_expand_line(char *line)
 	while (line && i < ft_strlen(line))
 	{
 		if (line[i] == '\'')
-			i += (ft_quoted_len(line + i, '\'') + 1);
-		if (i < ft_strlen(line) && line[i] == '$' && (i + 1 > ft_strlen(line) || ft_strchr(NO_VAL_VAR, line[i + 1])))
 		{
-			t = ft_expand_var(line, i, ft_spacelen(line + i));
+			i += (ft_quoted_len(line + i, '\'') + 1);
+			continue ;
+		}
+		if (line[i] == '$' && !ft_strchr(NO_VAL_VAR, line[i + 1]) && line[i + 1])
+		{
+			t = ft_expand_var(line, i, ft_var_len(line + i));
 			free(line);
 			line = t;
+			i += ft_var_len(line + i);
 		}
 		i++;
 	}

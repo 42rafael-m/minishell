@@ -35,7 +35,7 @@ int	ft_spacelen(char *line)
 	while (line[i])
 	{
 		if (ft_strchr(QUOTES, line[i]))
-			i += (ft_quoted_len(line + i) + 1);
+			i += (ft_quoted_len(line + i, line[i]) + 1);
 		if (line[i] == ' ' && i != 0)
 			return (i);
 		i++;
