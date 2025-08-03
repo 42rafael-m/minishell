@@ -58,14 +58,14 @@ char	**ft_test_space(char *line)
 	i = 0;
 	while (i < ft_strlen(line))
 	{
-		len = ft_spacelen(line + i);
+		len = ft_sep_len(line + i);
 		printf("space_len = %d\n", len);
 		i += len;
 	}
 	len = ft_num_s_tokens(line);
 	printf("num s_tokens = %d\n", len);
 	i = 0;
-	t = ft_token_space(line);
+	t = ft_token_sep(line);
 	while (t[i])
 		printf("spaced_token[%d] = 8%s8\n", i, t[i++]);
 	return (t);
@@ -93,18 +93,26 @@ int	main(int argc, char **argv, char **envp)
 		free(t);
 		i++;
 	}
-	t = ft_strtrim(s, " ");
-	free(s);
-	if (!t)
+	s_tokens = ft_tokens(s);
+	if (!s_tokens)
 		return (1);
-	printf("argv = 8%s8\n", t);
-	q_line = ft_test_quoted_tokens(t);
 	i = 0;
-	printf("%p\n", q_line);
-	printf("q_line = 8%s8\n", q_line);
-	e_line = ft_expand_line(q_line);
-	printf("e_line = 8%s8\n", e_line);
-	s_tokens = ft_test_space(e_line);
+	while (s_tokens[i])
+		printf("s_tokens[%d] = %s\n", i, s_tokens[i++]);
 	ft_free_d(s_tokens);
-	free(e_line);
+	free(s);
+	// t = ft_strtrim(s, " ");
+	// free(s);
+	// if (!t)
+	// 	return (1);
+	// printf("argv = 8%s8\n", t);
+	// q_line = ft_test_quoted_tokens(t);
+	// i = 0;
+	// printf("%p\n", q_line);
+	// printf("q_line = 8%s8\n", q_line);
+	// e_line = ft_expand_line(q_line);
+	// printf("e_line = 8%s8\n", e_line);
+	// s_tokens = ft_test_space(e_line);
+	// ft_free_d(s_tokens);
+	// free(e_line);
 }

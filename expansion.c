@@ -38,7 +38,7 @@ char	*ft_expand_var(char	*line, int start, int end)
 	s = ft_strndup(line, start);
 	t = ft_strjoin(s, var);
 	free(s);
-	s = ft_strjoin(t, line + end + 1);
+	s = ft_strjoin(t, line + start + end);
 	free(t);
 	return (s);
 }

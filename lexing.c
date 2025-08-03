@@ -86,15 +86,21 @@ char	**ft_tokens(char *line)
 	if (!line)
 		return(NULL);
 	s = ft_strtrim(line, " ");
-	t = ft_escape_quotes(s);
-	if (!s || !t);
-		return (NULL);
-	free(s);
-	s = ft_expand_line(t);
-	if (!s)
-		return (NULL);
+	printf("trim_line = 8%s8\n", s);
+	t = ft_expand_line(s);
+	printf("exp_line = 8%s8\n", t);
+	if (!s || !t)
+		return (printf("!s || !t\n"), NULL);
+	tokens = ft_token_sep(t);
+	if (!tokens)
+		return (printf("!tokens\n"), NULL);
 	free(t);
-	tokens = ft_token_space(s);
-	free(s);
-	return (NULL);
+	i = 0;
+	while (tokens[i])
+	{
+		tokens[i] = ft_escape_quotes(tokens[i]);
+		printf("tokens[%d] = 8%s8\n", i, tokens[i]);
+		i++;
+	}
+	return (tokens);
 }

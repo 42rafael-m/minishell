@@ -21,8 +21,9 @@ char	**ft_trim_tokens(char **tokens)
 	return (tokens);
 }
 
-int	ft_spacelen(char *line)
+int	ft_sep_len(char *line)
 {
+	char	redir;
 	int	i;
 
 	if (!line)
@@ -30,11 +31,17 @@ int	ft_spacelen(char *line)
 	i = 0;
 	while (line[i] == ' ')
 		i++;
+	if (ft_strchr(REDIR_S, line[i]))
+	{
+		redir = line[i++];
+		if (line[i] == redir)
+			i++;
+	}
 	while (line[i])
 	{
 		if (ft_strchr(QUOTES, line[i]))
 			i += (ft_quoted_len(line + i, line[i]));
-		if (line[i] == ' ' && i != 0)
+		if (ft_strchr(SEP_STR, line[i]) && i != 0)
 			return (i);
 		i++;
 	}
@@ -53,11 +60,9 @@ int	ft_num_s_tokens(char *line)
 	i = 0;
 	token_num = 0;
 	line_len = ft_strlen(line);
-	printf("line = 8%s8\n", line);
 	while (i < line_len)
 	{
-		printf("line[%d] = '%c'\n", i, line[i]);
-		len = ft_spacelen(line + i);
+		len = ft_sep_len(line + i);
 		i += len;
 		token_num++;
 		if (i >= line_len)
@@ -66,7 +71,7 @@ int	ft_num_s_tokens(char *line)
 	return (token_num);
 }
 
-char	**ft_token_space(char *line)
+char	**ft_token_sep(char *line)
 {
 	int	i;
 	int	j;
@@ -84,7 +89,7 @@ char	**ft_token_space(char *line)
 	j = 0;
 	while (line[i])
 	{
-		len = ft_spacelen(line + i);
+		len = ft_sep_len(line + i);
 		tokens[j++] = ft_strndup(line + i, len);
 		i += len;
 		if (i >= ft_strlen(line))
