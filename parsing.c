@@ -1,22 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 12:19:42 by rafael-m          #+#    #+#             */
+/*   Updated: 2025/08/04 15:40:01 by rafael-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	ft_check_redir(tokens)
-{
-	int	i;
+// int	ft_check_redir(char **tokens)
+// {
+// 	int	i;
 
-	if (!tokens)
-		return (0);
-	while (tokens[i])
-	{
-		if (strchr())
-	}
-}
+// 	if (!tokens)
+// 		return (0);
+// 	while (tokens[i])
+// 	{
+// 		if (strchr())
+// 	}
+// }
 
 int	ft_parse_line(char *line. int start, int end)
 {
 	char	*segment;
 	char	**tokens;
-	int	i;
+	int		i;
 
 	if (!line)
 		return (0);
@@ -50,9 +62,9 @@ void	ft_init_list(t_cli *cli)
 t_cli	*ft_parse(char	*line)
 {
 	t_cli	*cli;
-	int	i;
-	int	start;
-	int	len;
+	int		i;
+	int		start;
+	int		len;
 
 	if (!line)
 		return (NULL);

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 12:19:16 by rafael-m          #+#    #+#             */
+/*   Updated: 2025/08/04 15:53:48 by rafael-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-volatile sig_atomic_t sigint_received = 0;
+volatile sig_atomic_t	g_sigint_received = 0;
 
 char	*get_pwd(char *cwd)
 {
@@ -20,7 +32,7 @@ char	*get_pwd(char *cwd)
 		return (free(home), free(t), pwd);
 	}
 	pwd = ft_strdup(cwd);
-	return(free(home), pwd);
+	return (free(home), pwd);
 }
 
 char	*get_hostname(void)
@@ -28,7 +40,7 @@ char	*get_hostname(void)
 	char	*r;
 	char	*buffer;
 	char	*t;
-	int	fd;
+	int		fd;
 
 	r = NULL;
 	fd = open("/etc/hostname", O_RDONLY);
@@ -78,7 +90,7 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 	char	*cl;
 	char	**tokens;
 	char	*prompt;
-	int	i;
+	int		i;
 
 	prompt = NULL;
 	cl = NULL;
@@ -110,11 +122,11 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	ft_set_sig(IGNORE);
 	sa.sa_handler = ft_sig_handler;
-    sa.sa_flags = SA_RESTART;
+	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	ft_exec_shell(&sa, envp);
 	return (0);

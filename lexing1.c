@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexing1.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 12:18:55 by rafael-m          #+#    #+#             */
+/*   Updated: 2025/08/04 15:46:14 by rafael-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**ft_trim_tokens(char **tokens)
 {
-	int	i;
+	int		i;
 	char	*t;
 
 	if (!tokens)
@@ -24,7 +36,7 @@ char	**ft_trim_tokens(char **tokens)
 int	ft_sep_len(char *line)
 {
 	char	redir;
-	int	i;
+	int		i;
 
 	if (!line)
 		return (0);
@@ -73,9 +85,9 @@ int	ft_num_s_tokens(char *line)
 
 char	**ft_token_sep(char *line)
 {
-	int	i;
-	int	j;
-	int	len;
+	int		i;
+	int		j;
+	int		len;
 	char	**tokens;
 
 	if (!line)
@@ -97,33 +109,3 @@ char	**ft_token_sep(char *line)
 	}
 	return (tokens);
 }
-// char	**ft_insert_s_tokens(char **tokens)
-// {
-// 	int	i;
-// 	int	j;
-// 	char	**spaced;
-// 	char	**t;
-
-
-// 	i = 0;
-// 	while (i < ft_doubleptr_len((void **)tokens))
-// 	{
-// 		spaced = ft_token_space(tokens[i]);
-// 		j = ft_doubleptr_len((void **)spaced);
-// 		while (--j >= 0)
-// 		{
-// 			if (spaced[j] && j == (ft_doubleptr_len((void **)spaced) - 1))
-// 				t = (char **)ft_add_re_ptr((void **)tokens, spaced[j], i);
-// 			else if (spaced[j] )
-// 				t = (char **)ft_add_ptr((void **)tokens, spaced[j], i);
-// 			if (t != tokens)
-// 				ft_free_d(tokens);
-// 			if (!t)
-// 				return (NULL);
-// 			tokens = t;
-// 		}
-// 		i += ft_doubleptr_len((void **)spaced);
-// 		ft_free_d(spaced);
-// 	}
-// 	return (tokens);
-// }

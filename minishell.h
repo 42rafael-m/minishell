@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 12:19:26 by rafael-m          #+#    #+#             */
+/*   Updated: 2025/08/04 15:44:23 by rafael-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -25,19 +37,19 @@
 # define ERR_OPEN_Q "minishell: syntax error: quotes not closed\n"
 # define ESC_CHARS1 "\\\"\?$"
 
-extern volatile sig_atomic_t sigint_received;
+extern volatile sig_atomic_t	g_sigint_received;
 
 typedef struct s_cli
 {
-	char	*cmd;
-	char	*cmd_p;
-	char	**args;
-	int	fdin;
-	int	fdout;
-	char	*delim;
-	int	is_builtin;
+	char			*cmd;
+	char			*cmd_p;
+	char			**args;
+	int				fdin;
+	int				fdout;
+	char			*delim;
+	int				is_builtin;
+	int				r_mode;
 	struct s_cli	*next;
-	int	r_mode;
 }	t_cli;
 
 char	*ft_prompt(char **envp);
@@ -51,7 +63,7 @@ char	*ft_escape_quotes(char *line);
 char	**ft_tokens(char *line);
 char	**ft_token_sep(char *line);
 char	**ft_trim_tokens(char **tokens);
-char	**ft_insert_s_tokens(char **tokens);
+char	**ft_insert_tokens(char **tokens);
 int		ft_num_quoted(char *line);
 int		ft_quoted_len(char *line, char quote);
 int		ft_sep_len(char *line);
