@@ -6,7 +6,7 @@
 /*   By: rafael-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:29:22 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/06/05 12:01:36 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/04 12:21:10 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ char	*ft_strndup(const char *src, size_t n)
 {
 	char	*dest;
 
-    if (!src)
-        return (NULL);
-    if (n <= 0)
-        return (NULL);
-	    dest = (char *)malloc((n + 1) * sizeof(char));
+	if (!src)
+		return (NULL);
+	if (n <= 0)
+		return (NULL);
+	dest = (char *)malloc((n + 1) * sizeof(char));
 	if (!dest)
 		return (NULL);
 	ft_strlcpy(dest, src, n + 1);

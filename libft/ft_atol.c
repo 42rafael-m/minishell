@@ -6,14 +6,14 @@
 /*   By: rafael-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 20:27:36 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/07/20 20:29:11 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/04 12:26:07 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include"libft.h"
+#include "libft.h"
 
 /*
 DESCRIPTION
@@ -47,10 +47,7 @@ long	ft_atol(const char *str)
 	while ((str[i] >= '\t' && str[i] <= '\r') || str[i] == ' ')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
-	{
-		sign = 1 - 2 * (str[i] == '-');
-		i++;
-	}
+		sign = 1 - 2 * (str[++i] == '-');
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		digit = str[i] - '0';

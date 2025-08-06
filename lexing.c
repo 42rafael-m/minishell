@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexing.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 12:18:45 by rafael-m          #+#    #+#             */
+/*   Updated: 2025/08/04 15:47:32 by rafael-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_quoted_len(char *line, char quote)
@@ -66,8 +78,6 @@ char	*ft_escape_quotes(char *line)
 			if (len <= 0)
 				return (NULL);
 			esc_line = ft_escaped_line(line, i, i + len);
-			if (!esc_line)
-				return (NULL);
 			free(line);
 			line = esc_line;
 			i += len;
@@ -82,7 +92,7 @@ char	**ft_tokens(char *line)
 	char	*s;
 	char	**tokens;
 	char	*t;
-	int i;
+	int		i;
 
 	if (!line)
 		return(NULL);

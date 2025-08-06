@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 12:19:26 by rafael-m          #+#    #+#             */
+/*   Updated: 2025/08/04 15:44:23 by rafael-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -25,7 +37,7 @@
 # define ERR_OPEN_Q "minishell: syntax error: quotes not closed\n"
 # define ESC_CHARS1 "\\\"\?$"
 
-extern volatile sig_atomic_t sigint_received;
+extern volatile sig_atomic_t	g_sigint_received;
 
 typedef struct s_cli
 {

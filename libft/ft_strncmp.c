@@ -6,7 +6,7 @@
 /*   By: rafael-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:57:43 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/04/16 17:45:17 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/04 12:22:14 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ respectively, to be less than, to match, or be greater than s2.
 int	ft_strncmp(char *s1, char *s2, unsigned int n)
 {
 	if (!s1 || !s2)
-		return(-1);
+		return (-1);
 	while (n > 0 && *s1 && *s2 && (*s1 == *s2))
 	{
 		s1++;
