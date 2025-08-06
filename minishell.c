@@ -103,9 +103,9 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 		cl = readline(prompt);
 		if (!cl || !ft_strncmp(cl, "exit", 4))
 			break ;
-		if (sigint_received)
+		if (g_sigint_received)
 		{
-			sigint_received = 0;
+			g_sigint_received = 0;
 			continue ;
 		}
 		tokens = ft_tokens(cl);
@@ -123,11 +123,14 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	struct sigaction sa;
+//	t_cli	*cli;
 
 // 	ft_set_sig(IGNORE);
 // 	sa.sa_handler = ft_sig_handler;
 //     sa.sa_flags = SA_RESTART;
 // 	sigaction(SIGINT, &sa, NULL);
+//	cli = ft_init_list(cli);
+//	cli->env = ft_load_env(envp, cli)
 // 	ft_exec_shell(&sa, envp);
 // 	return (0);
 // }

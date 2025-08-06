@@ -27,10 +27,13 @@ int	ft_parse_line(char *line, int start, int end)
 	return (1);
 }
 
-void	ft_init_list(t_cli *cli)
+t_cli	*ft_init_list()
 {
+	t_cli *cli;
+
+	cli = (t_cli *)ft_calloc(1, sizeof(t_cli));
 	if (!cli)
-		return ;
+		return (NULL);
 	cli->cmd = NULL;
 	cli->cmd_p = NULL;
 	cli->args = NULL;
@@ -40,17 +43,15 @@ void	ft_init_list(t_cli *cli)
 	cli->is_builtin = 0;
 	cli->next = NULL;
 	cli->r_mode = WRITE;
-	return ;
+	return (cli);
 }
 
-// t_cli	*ft_parse(char	**tokens)
+// t_cli	*ft_parse(char	**tokens, t_cli *cli)
 // {
-// 	t_cli	*cli;
 // 	int		i;
 
 // 	if (!tokens)
 // 		return (NULL);
-// 	ft_init_list(cli);
 // 	while (tokens && tokens[i])
 // 	{
 // 		if (!ft_strncmp(tokens[0], ">>", 2))

@@ -93,7 +93,8 @@ int	main(int argc, char **argv, char **envp)
 		free(t);
 		i++;
 	}
-	s_tokens = ft_tokens(s);
+	t = ft_trim_spaces(s);
+	s_tokens = ft_tokens(t);
 	if (!s_tokens)
 		return (1);
 	i = 0;
@@ -101,6 +102,7 @@ int	main(int argc, char **argv, char **envp)
 		printf("s_tokens[%d] = %s\n", i, s_tokens[i++]);
 	ft_free_d(s_tokens);
 	free(s);
+	free(t);
 	// t = ft_strtrim(s, " ");
 	// free(s);
 	// if (!t)

@@ -19,7 +19,6 @@ int	ft_quoted_len(char *line, char quote)
 	if (!line)
 		return (0);
 	i = 0;
-	printf("line = %s\n", line);
 	if (line[0] == quote)
 		i++;
 	while (line[i])
@@ -97,9 +96,7 @@ char	**ft_tokens(char *line)
 	if (!line)
 		return(NULL);
 	s = ft_trim_spaces(line);
-	printf("trim_line = 8%s8\n", s);
 	t = ft_expand_line(s);
-	printf("exp_line = 8%s8\n", t);
 	if (!s || !t)
 		return (printf("!s || !t\n"), NULL);
 	tokens = ft_token_sep(t);
@@ -110,7 +107,6 @@ char	**ft_tokens(char *line)
 	while (tokens[i])
 	{
 		tokens[i] = ft_escape_quotes(tokens[i]);
-		printf("tokens[%d] = 8%s8\n", i, tokens[i]);
 		i++;
 	}
 	return (tokens);

@@ -75,7 +75,8 @@ int		ft_var_len(char	*var);
 int 	ft_trim_s_len(char *line);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
-void	ft_init_list(t_cli *cli);
+char	**ft_load_env(char **envp);
 t_cli	*ft_parse(char	*line);
+t_cli	*ft_init_list();
 
 #endif
