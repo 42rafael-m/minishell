@@ -24,7 +24,7 @@ char	**ft_trim_tokens(char **tokens)
 int	ft_sep_len(char *line)
 {
 	char	redir;
-	int	i;
+	int		i;
 
 	if (!line)
 		return (0);
@@ -65,6 +65,8 @@ int	ft_num_s_tokens(char *line)
 		len = ft_sep_len(line + i);
 		i += len;
 		token_num++;
+		// while (line[i] == ' ')
+		// 	i++;
 		if (i >= line_len)
 			break ;
 	}

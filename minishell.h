@@ -29,15 +29,16 @@ extern volatile sig_atomic_t sigint_received;
 
 typedef struct s_cli
 {
-	char	*cmd;
-	char	*cmd_p;
-	char	**args;
-	int	fdin;
-	int	fdout;
-	char	*delim;
-	int	is_builtin;
+	char			*cmd;
+	char			*cmd_p;
+	char			**args;
+	int				fdin;
+	int				fdout;
+	char			*delim;
+	int				is_builtin;
 	struct s_cli	*next;
-	int	r_mode;
+	int				r_mode;
+	char			**env;
 }	t_cli;
 
 char	*ft_prompt(char **envp);
@@ -52,12 +53,14 @@ char	**ft_tokens(char *line);
 char	**ft_token_sep(char *line);
 char	**ft_trim_tokens(char **tokens);
 char	**ft_insert_s_tokens(char **tokens);
+char	*ft_expand_line(char *line);
 int		ft_num_quoted(char *line);
 int		ft_quoted_len(char *line, char quote);
 int		ft_sep_len(char *line);
 int		ft_exec_shell(struct sigaction *sa, char **envp);
 int		ft_num_s_tokens(char *line);
 int		ft_var_len(char	*var);
+int 	ft_trim_s_len(char *line);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
 void	ft_init_list(t_cli *cli);

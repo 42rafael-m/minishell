@@ -108,14 +108,14 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 	return (free(prompt), free(cl), rl_clear_history(), 0);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	struct sigaction sa;
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	struct sigaction sa;
 
-	ft_set_sig(IGNORE);
-	sa.sa_handler = ft_sig_handler;
-    sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	ft_exec_shell(&sa, envp);
-	return (0);
-}
+// 	ft_set_sig(IGNORE);
+// 	sa.sa_handler = ft_sig_handler;
+//     sa.sa_flags = SA_RESTART;
+// 	sigaction(SIGINT, &sa, NULL);
+// 	ft_exec_shell(&sa, envp);
+// 	return (0);
+// }

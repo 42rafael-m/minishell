@@ -1,41 +1,24 @@
 #include "minishell.h"
 
-int	ft_check_redir(tokens)
+int	ft_parse_line(char *line, int start, int end)
 {
-	int	i;
-
-	if (!tokens)
-		return (0);
-	while (tokens[i])
-	{
-		if (strchr())
-	}
-}
-
-int	ft_parse_line(char *line. int start, int end)
-{
-	char	*segment;
 	char	**tokens;
 	int	i;
 
 	if (!line)
 		return (0);
 	i = 0;
-	segment = ft_strndup(line + start, end);
-	tokens = ft_tokens(segment);
-	if (!segment || !tokens)
+	tokens = ft_tokens(line);
+	if (!tokens)
 		return (0);
-	while (tokens[i])
-		tokens[i] = ft_final_token(tokens[i++]);
-	i = 0;
-	ft_check_redir(tokens);
+
 	return (1);
 }
 
 void	ft_init_list(t_cli *cli)
 {
 	if (!cli)
-		return (NULL);
+		return ;
 	cli->cmd = NULL;
 	cli->cmd_p = NULL;
 	cli->args = NULL;
@@ -45,28 +28,30 @@ void	ft_init_list(t_cli *cli)
 	cli->is_builtin = 0;
 	cli->next = NULL;
 	cli->r_mode = WRITE;
+	return ;
 }
 
-t_cli	*ft_parse(char	*line)
-{
-	t_cli	*cli;
-	int	i;
-	int	start;
-	int	len;
+// t_cli	*ft_parse(char	**tokens)
+// {
+// 	t_cli	*cli;
+// 	int		i;
 
-	if (!line)
-		return (NULL);
-	i = 0;
-	start = 0;
-	len = ft_strlen(line);
-	ft_init_list(cli);
-	while (line[i])
-	{
-		if (line[i] == '|' || i + 1 >= len)
-		{
-			ft_parse_line(line, star, i);
-			start = i + 1;
-		}
-		i++;
-	}
-}
+// 	if (!tokens)
+// 		return (NULL);
+// 	ft_init_list(cli);
+// 	while (tokens && tokens[i])
+// 	{
+// 		if (!ft_strncmp(tokens[0], ">>", 2))
+// 			ft_append();
+// 		else if (!ft_strncmp(tokens[0], "<<", 2))
+// 			ft_heredoc();
+// 		else if (tokens[i][0] == '<')
+// 			ft_input();
+// 		else if (tokens[i][0] == '>')
+// 			ft_output();
+// 		else if (!cli->cmd)
+// 			ft_cmd();
+// 		else if (tokens[i][0] == '|')
+			
+// 	}
+// }

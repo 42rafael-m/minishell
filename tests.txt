@@ -14,3 +14,4 @@
 "\"123 \' \$ \'123\" 456    789\"asdas\""
 ' "$USER" ad|ds 45<<6 "12|3" $'
 ' "$USER" ad|ds 45<<6 "12|3" $HOME $'
+'"adas" "" "123 | 123" ert "ert  " $USER+ 456|456 asd     | asd>>ads 123<<123 adsa < asd asda > ads <asd <asd >asd " asd>>dasa<<123<123>123" $ $+ $ ""'
