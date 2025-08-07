@@ -2,11 +2,11 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_cli	*cli;
-	int	i;
-	cli = ft_init_list();
-	cli->env = ft_load_env(envp);
-	i = 0;
-	while (cli->env[i])
-		printf("%s\n", cli->env[i++]);
+	int	fd = open(argv[1], O_RDONLY);
+	perror("open");
+	int	acc = access(argv[1], R_OK);
+	printf("fd = %d\n", fd);
+	perror("access");
+	int	n =  O_CREAT | O_WRONLY | O_TRUNC;
+	printf("n = %d\n", n);
 }

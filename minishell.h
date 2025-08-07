@@ -36,6 +36,8 @@
 # define NO_VAL_VAR " !\"#$%&'()*+,-./:;<=>?@[]^`{|}~ "
 # define ERR_OPEN_Q "minishell: syntax error: quotes not closed\n"
 # define ESC_CHARS1 "\\\"\?$"
+# define UNEX_T1 "minishell: syntax error near unexpected token '<'\n"
+# define UNEX_T2 "minishell: syntax error near unexpected token '>'\n"
 
 extern volatile sig_atomic_t	g_sigint_received;
 
@@ -53,6 +55,11 @@ typedef struct s_cli
 	char			**env;
 }	t_cli;
 
+char	**ft_tokens(char *line);
+char	**ft_token_sep(char *line);
+char	**ft_trim_tokens(char **tokens);
+char	**ft_insert_s_tokens(char **tokens);
+char	**ft_load_env(char **envp);
 char	*ft_prompt(char **envp);
 char	*get_hostname(void);
 char	*get_pwd(char *cwd);
@@ -61,10 +68,6 @@ char	*ft_expand_var(char	*token, int start, int end);
 char	*ft_get_var(char *var_call, char **envp);
 char	*ft_escaped_line(char *line, int start, int end);
 char	*ft_escape_quotes(char *line);
-char	**ft_tokens(char *line);
-char	**ft_token_sep(char *line);
-char	**ft_trim_tokens(char **tokens);
-char	**ft_insert_s_tokens(char **tokens);
 char	*ft_expand_line(char *line);
 int		ft_num_quoted(char *line);
 int		ft_quoted_len(char *line, char quote);
@@ -73,9 +76,11 @@ int		ft_exec_shell(struct sigaction *sa, char **envp);
 int		ft_num_s_tokens(char *line);
 int		ft_var_len(char	*var);
 int 	ft_trim_s_len(char *line);
+int		ft_append(char *token, t_cli *cli);
+int		ft_redir_len(char *line);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
-char	**ft_load_env(char **envp);
+void	ft_free_list(t_cli **cli);
 t_cli	*ft_parse(char	*line);
 t_cli	*ft_init_list();
 

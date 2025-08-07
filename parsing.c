@@ -12,19 +12,26 @@
 
 #include "minishell.h"
 
-int	ft_parse_line(char *line, int start, int end)
+int	ft_append(char *token, t_cli *cli)
 {
-	char	**tokens;
-	int		i;
+	char	*file;
 
-	if (!line)
-		return (0);
-	i = 0;
-	tokens = ft_tokens(line);
-	if (!tokens)
-		return (0);
-
+	if (!token || !cli)
+		return (NULL);
+	file = ft_strtrim(token, ">> ");
+	if (!file)
+		return (perror("malloc"), 0);
+	cli->fdout = open(file, O_APPEND);
+	if (cli->fdout == -1)
+		return (perror(file), 0);
 	return (1);
+}
+
+int	ft_herodoc(char *token, t_cli *cli)
+{
+	if (!token || !cli)
+		return (NULL);
+	
 }
 
 t_cli	*ft_init_list()
@@ -46,25 +53,26 @@ t_cli	*ft_init_list()
 	return (cli);
 }
 
-// t_cli	*ft_parse(char	**tokens, t_cli *cli)
-// {
-// 	int		i;
+t_cli	*ft_parse(char	**tokens, t_cli *cli)
+{
+	int		i;
 
-// 	if (!tokens)
-// 		return (NULL);
-// 	while (tokens && tokens[i])
-// 	{
-// 		if (!ft_strncmp(tokens[0], ">>", 2))
-// 			ft_append();
-// 		else if (!ft_strncmp(tokens[0], "<<", 2))
-// 			ft_heredoc();
-// 		else if (tokens[i][0] == '<')
-// 			ft_input();
-// 		else if (tokens[i][0] == '>')
-// 			ft_output();
-// 		else if (!cli->cmd)
-// 			ft_cmd();
-// 		else if (tokens[i][0] == '|')
-			
-// 	}
-// }
+	if (!tokens)
+		return (NULL);
+	i = 0;
+	while (tokens && tokens[i])
+	{
+		if (!ft_strcmp(tokens[i], ">>", 2))
+			ft_append(tokens[i], cli);
+		else if (!ft_strncmp(tokens[0], "<<", 2))
+			ft_heredoc();
+		else if (tokens[i][0] == '<')
+			ft_input();
+		else if (tokens[i][0] == '>')
+			ft_output();
+		else if (!cli->cmd)
+			ft_cmd();
+		else if (tokens[i][0] == '|')
+			ft_pipe();
+	}
+}

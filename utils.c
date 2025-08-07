@@ -12,6 +12,29 @@
 
 #include "minishell.h"
 
+void	ft_free_list(t_cli **cli)
+{
+	t_cli		*node;
+	t_cli		*next_node;
+
+	if (!cli || !*cli)
+		return ;
+	node = *cli;
+	while (node)
+	{
+		next_node = node->next;
+		free(node->cmd);
+		free(node->delim);
+		free(node->cmd_p);
+		ft_free_d(node->env);
+		ft_free_d(node->args);
+		free(node);
+		node = next_node;
+	}
+	*cli = NULL;
+	return ;
+}
+
 int ft_trim_s_len(char *line)
 {
 	int		i;

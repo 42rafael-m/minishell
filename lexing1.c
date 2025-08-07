@@ -33,21 +33,42 @@ char	**ft_trim_tokens(char **tokens)
 	return (tokens);
 }
 
-int	ft_sep_len(char *line)
+int	ft_redir_len(char *line)
 {
 	char	redir;
-	int		i;
+	int	i;
+
+	i = 0;
+	redir = line[i++];
+	if (line[i] == redir)
+		i++;
+	while (ft_isspace(line[i]))
+		i++;
+	if (ft_strchr(REDIR_S, line[i]))
+	{
+		if (line[i] == '<')
+			return (write(2, UNEX_T1, 51), -1);
+		return (write(2, UNEX_T2, 51), -1);
+	}
+	return (i);
+}
+
+int	ft_sep_len(char *line)
+{
+	int	i;
+	int	r_len;
 
 	if (!line)
 		return (0);
 	i = 0;
-	while (line[i] == ' ')
+	while (ft_isspace(line[i]))
 		i++;
 	if (ft_strchr(REDIR_S, line[i]))
 	{
-		redir = line[i++];
-		if (line[i] == redir)
-			i++;
+		r_len = ft_redir_len(line + i);
+		if (r_len == -1)
+			return (-1);
+		i += r_len;
 	}
 	while (line[i])
 	{
@@ -75,10 +96,10 @@ int	ft_num_s_tokens(char *line)
 	while (i < line_len)
 	{
 		len = ft_sep_len(line + i);
+		if (len == -1)
+			return (-1);
 		i += len;
 		token_num++;
-		// while (line[i] == ' ')
-		// 	i++;
 		if (i >= line_len)
 			break ;
 	}
@@ -95,6 +116,8 @@ char	**ft_token_sep(char *line)
 	if (!line)
 		return (NULL);
 	len = ft_num_s_tokens(line);
+	if (len == -1)
+		return (NULL);
 	tokens = (char **)ft_calloc(len + 1, sizeof(char *));
 	if (!tokens)
 		return (NULL);

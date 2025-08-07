@@ -1,13 +1,19 @@
-8     "123    "     "as    da"    8
-line =      "123    "     "as    da"    
-line = "123    "     "as    da"    
-line = "123    "     "as    da"    
-line = "as    da"    
-line = "as    da"    
-q_len = 7
-len = 21
-line = "123    "     "as    da"    
-line = "123    "     "as    da"    
-line = "as    da"    
-line = "as    da"    
-trimmed = 8"123    " "as    da"8
+123
+a.out
+borrar.c
+built-ins.c
+expansion.c
+here_doc.txt
+lexing1.c
+lexing.c
+libft
+log2.txt
+log.txt
+Makefile
+minishell.c
+minishell.h
+parsing.c
+prueba.c
+tests.txt
+utils.c
+variables.c
