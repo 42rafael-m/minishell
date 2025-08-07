@@ -64,12 +64,12 @@ char	*ft_expand_line(char *line)
 	while (line && i < ft_strlen(line))
 	{
 		if (line[i] == '\'')
-		{
 			i += (ft_quoted_len(line + i, '\'') + 1);
-			continue ;
-		}
 		if (line[i] == '<' && line[i + 1] == '<')
+		{
 			i += (ft_redir_len(line + i) + 1);
+			i += (ft_sep_len(line + i));
+		}
 		if (line[i] == '$' && !ft_strchr(NO_VAL_VAR,
 				line[i + 1]) && line[i + 1])
 		{
