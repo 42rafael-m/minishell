@@ -85,16 +85,9 @@ int	main(int argc, char **argv, char **envp)
 	q_line = NULL;
 	e_line = NULL;
 	t = NULL;
-	while (argv[i])
-	{
-
-		t = ft_strjoin(s, argv[i]);
-		free(s);
-		s = ft_strjoin(t, " ");
-		free(t);
-		i++;
-	}
+	s = ft_strdup(argv[1]);
 	t = ft_trim_spaces(s);
+	printf("trimmed = %s\n", t);
 	free(s);
 	s = ft_strdup(t);
 	x = ft_test_expansion(s);

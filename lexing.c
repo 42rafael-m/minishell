@@ -31,7 +31,7 @@ int	ft_quoted_len(char *line, char quote)
 		}
 		i++;
 	}
-	return (write(2, ERR_OPEN_Q, 44), -1);
+	return (write(2, ERR_OPEN_Q, 43), -1);
 }
 
 char	*ft_escaped_line(char *line, int start, int end)
