@@ -12,6 +12,57 @@
 
 #include "minishell.h"
 
+int	ft_delim_len(char *token)
+{
+	int	i;
+	int	len;
+	int	token_len;
+
+	if (!token)
+		return (0);
+	i = 2;
+	len = 0;
+	token_len = ft_strlen(token);
+	while (ft_isspace(token[i]))
+		i++;
+	while (i < token_len)
+	{
+		if (token[i] == '\"')
+		{
+			i++;
+			continue ;
+		}
+		i++;
+		len++;
+	}
+	return (len);
+}
+
+char	*ft_trim_delim(char *token, int *option)
+{
+	int		i;
+	int		len;
+	int		j;
+	char	*delim;
+	if (!token)
+		return (NULL);
+	i = 2;
+	j = 0;
+	len = ft_delim_len(token);
+	delim = ft_calloc(len + 1, sizeof(char));
+	while (ft_isspace(token[i]))
+		i++;
+	if (token[i] == '\"')
+		*option = 1;
+	while (delim && i < ft_strlen(token))
+	{
+		while (token[i] == '\"')
+			i++;
+		delim[j++] = token[i++];
+	}
+	return (delim);
+}
+
 int	ft_var_len(char	*var)
 {
 	int	i;

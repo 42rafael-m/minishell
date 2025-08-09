@@ -2,12 +2,19 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	int	i = 0;
+
 	int	n;
-	while (i < ft_strlen(argv[1]))
-	{
-		n = ft_quoted_len(argv[1], argv[1][0]);
-		printf("q_len = %d\n", n);
-		i += n;
-	}
+	int	op;
+	t_cli	*cli;
+
+	cli = ft_init_list();
+	op = 0;
+	n = ft_delim_len(argv[1]);
+	printf("here_len = %d\n", n);
+	char	*s = ft_trim_delim(argv[1], &op);
+	printf("delim = 8%s8, op = %d\n", s, op);
+	ft_heredoc(argv[1], cli);
+	printf("heredoc = 8%s8\n", cli->heredoc);
+	ft_free_list(&cli);
+	free(s);
 }

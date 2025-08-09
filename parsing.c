@@ -17,7 +17,7 @@ int	ft_append(char *token, t_cli *cli)
 	char	*file;
 
 	if (!token || !cli)
-		return (NULL);
+		return (0);
 	file = ft_strtrim(token, ">> ");
 	if (!file)
 		return (perror("malloc"), 0);
@@ -27,17 +27,42 @@ int	ft_append(char *token, t_cli *cli)
 	return (1);
 }
 
-int	ft_herodoc(char *token, t_cli *cli)
+int	ft_heredoc(char *token, t_cli *cli)
 {
 	char	*delim;
+	char	*t;
+	char	*line;
+	int		option;
 
 	if (!token || !cli)
-		return (NULL);
-	delim = ft_strtrim(token, "< ");
-	while (delim)
+		return (0);
+	printf("token = %s\n", token);
+	delim = ft_trim_delim(token, &option);
+	printf("delim = 8%s8\n", delim);
+	if (!delim)
+		return (0);
+	line = NULL;
+	t = NULL;
+	printf("delim_len = %d\n", ft_strlen(delim));
+	while (ft_strncmp(line, delim, ft_strlen(line)))
 	{
-		
+		free(line);
+		line = readline("> ");
+		printf("line_len = %d\n", ft_strlen(line));
+		printf("line = 8%s8\n", line);
+		t = ft_strjoin(cli->heredoc, line);
+		free(cli->heredoc);
+		cli->heredoc = ft_strjoin(t, "\n");
+		free(t);
+
 	}
+	if (option)
+	{
+		t = ft_expand_line(cli->heredoc);
+		free(cli->heredoc);
+		cli->heredoc = t;
+	}
+	return (1);
 }
 
 t_cli	*ft_init_list()
@@ -52,33 +77,33 @@ t_cli	*ft_init_list()
 	cli->args = NULL;
 	cli->fdin = 0;
 	cli->fdout = 1;
-	cli->delim = NULL;
+	cli->heredoc = NULL;
 	cli->is_builtin = 0;
 	cli->next = NULL;
 	cli->r_mode = WRITE;
 	return (cli);
 }
 
-t_cli	*ft_parse(char	**tokens, t_cli *cli)
-{
-	int		i;
+// t_cli	*ft_parse(char	**tokens, t_cli *cli)
+// {
+// 	int		i;
 
-	if (!tokens)
-		return (NULL);
-	i = 0;
-	while (tokens && tokens[i])
-	{
-		if (!ft_strcmp(tokens[i], ">>", 2))
-			ft_append(tokens[i], cli);
-		else if (!ft_strncmp(tokens[0], "<<", 2))
-			ft_heredoc();
-		else if (tokens[i][0] == '<')
-			ft_input();
-		else if (tokens[i][0] == '>')
-			ft_output();
-		else if (!cli->cmd)
-			ft_cmd();
-		else if (tokens[i][0] == '|')
-			ft_pipe();
-	}
-}
+// 	if (!tokens)
+// 		return (NULL);
+// 	i = 0;
+// 	while (tokens && tokens[i])
+// 	{
+// 		if (!ft_strcmp(tokens[i], ">>", 2))
+// 			ft_append(tokens[i], cli);
+// 		else if (!ft_strncmp(tokens[0], "<<", 2))
+// 			ft_heredoc();
+// 		else if (tokens[i][0] == '<')
+// 			ft_input();
+// 		else if (tokens[i][0] == '>')
+// 			ft_output();
+// 		else if (!cli->cmd)
+// 			ft_cmd();
+// 		else if (tokens[i][0] == '|')
+// 			ft_pipe();
+// 	}
+// }
