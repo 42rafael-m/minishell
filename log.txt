@@ -1,28 +1,14 @@
-==8183== Memcheck, a memory error detector
-==8183== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==8183== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
-==8183== Command: ./a.out "123""asd"
-==8183== 
-minishell: syntax error: quotes not closed
-==8183== 
-==8183== HEAP SUMMARY:
-==8183==     in use at exit: 11 bytes in 1 blocks
-==8183==   total heap usage: 10 allocs, 9 frees, 1,124 bytes allocated
-==8183== 
-==8183== 11 bytes in 1 blocks are definitely lost in loss record 1 of 1
-==8183==    at 0x48417B4: malloc (vg_replace_malloc.c:381)
-==8183==    by 0x10B26C: ft_strjoin (in /home/rms35/Documents/42/Cursus/minishell/a.out)
-==8183==    by 0x10A504: ft_escaped_line (lexing.c:56)
-==8183==    by 0x10A5D4: ft_escape_quotes (lexing.c:79)
-==8183==    by 0x10A751: ft_tokens (lexing.c:111)
-==8183==    by 0x1095B3: main (prueba.c:95)
-==8183== 
-==8183== LEAK SUMMARY:
-==8183==    definitely lost: 11 bytes in 1 blocks
-==8183==    indirectly lost: 0 bytes in 0 blocks
-==8183==      possibly lost: 0 bytes in 0 blocks
-==8183==    still reachable: 0 bytes in 0 blocks
-==8183==         suppressed: 0 bytes in 0 blocks
-==8183== 
-==8183== For lists of detected and suppressed errors, rerun with: -s
-==8183== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==16128== Memcheck, a memory error detector
+==16128== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==16128== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
+==16128== Command: ./a.out "adas"\ ""\ "123\ |\ 123"\ ert\ "ert\ \ "\ $USER+\ 456|456\ asd\ \ \ \ \ |\ asd\>\>ads\ 123\<\<123\ adsa\ \<\ asd\ \<\<$USER$USER\ asda\ \>\ ads\ \<asd\ \<asd\ \>asd\ "\ asd\>\>dasa\<\<123\<123\>123"\ $\ $+\ $\ \<\<\ $USER$USER\ \<\<$USER\ "$USER$USER"\ $USER
+==16128== 
+==16128== 
+==16128== HEAP SUMMARY:
+==16128==     in use at exit: 0 bytes in 0 blocks
+==16128==   total heap usage: 104 allocs, 104 frees, 7,980 bytes allocated
+==16128== 
+==16128== All heap blocks were freed -- no leaks are possible
+==16128== 
+==16128== For lists of detected and suppressed errors, rerun with: -s
+==16128== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

@@ -80,6 +80,7 @@ char	*ft_escape_quotes(char *line)
 			free(line);
 			line = esc_line;
 			i += len;
+			continue ;
 		}
 		i++;
 	}
@@ -99,12 +100,15 @@ char	**ft_tokens(char *line)
 	printf("in_trimmed = 8%s8\n", s);
 	t = ft_expand_line(s);
 	printf("in_expanded = 8%s8\n", t);
+	s = ft_escape_quotes(t);
+	printf("in_escaped = 8%s8\n", s);
 	if (!s || !t)
 		return (printf("!s || !t\n"), free(s), free(t), NULL);
-	tokens = ft_token_sep(t);
+	tokens = ft_token_sep(s);
 	if (!tokens)
 		return (printf("!tokens\n"), free(t),  NULL);
-	free(t);
+	// free(t);
+	free(s);
 	i = 0;
 	while (tokens[i])
 	{

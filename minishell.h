@@ -78,7 +78,7 @@ int		ft_num_s_tokens(char *line);
 int		ft_var_len(char	*var);
 int 	ft_trim_s_len(char *line);
 int		ft_append(char *token, t_cli *cli);
-int		ft_redir_len(char *line);
+int		ft_heredoc_len(char *line);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
 void	ft_free_list(t_cli **cli);

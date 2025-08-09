@@ -90,16 +90,18 @@ int	main(int argc, char **argv, char **envp)
 	printf("trimmed = %s\n", t);
 	free(s);
 	s = ft_strdup(t);
-	x = ft_test_expansion(s);
-	free(x);
+	// x = ft_test_expansion(s);
+	// free(x);
 	s_tokens = ft_tokens(t);
 	if (!s_tokens)
 		return (free(t), 1);
+	free(t);
+	free(s);
 	i = 0;
 	while (s_tokens[i])
 		printf("s_tokens[%d] = %s\n", i, s_tokens[i++]);
 	ft_free_d(s_tokens);
-	free(t);
+	// free(t);
 	// t = ft_strtrim(s, " ");
 	// free(s);
 	// if (!t)

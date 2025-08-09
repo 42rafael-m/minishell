@@ -29,9 +29,15 @@ int	ft_append(char *token, t_cli *cli)
 
 int	ft_herodoc(char *token, t_cli *cli)
 {
+	char	*delim;
+
 	if (!token || !cli)
 		return (NULL);
-	
+	delim = ft_strtrim(token, "< ");
+	while (delim)
+	{
+		
+	}
 }
 
 t_cli	*ft_init_list()
