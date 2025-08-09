@@ -29,7 +29,8 @@
 # define DEFAULT 0
 # define APPEND 1
 # define WRITE 0
-# define SEP_STR " \n\t<>\"\'|"
+# define SEP_STR " \n\t<>|"
+# define SEP_STR2 " \n\t<>|\"\'"
 # define IFS " \t\n"
 # define REDIR_S "<>"
 # define QUOTES "\"\'"

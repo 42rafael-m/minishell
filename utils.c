@@ -53,8 +53,9 @@ int ft_trim_s_len(char *line)
 			sep = line[i];
 			if (ft_quoted_len(line + i, sep)  <= 0)
 				return (-1);
-			len += (ft_quoted_len(line + i, sep));
-			i += (ft_quoted_len(line + i, sep));
+			len += ft_quoted_len(line + i, sep);
+			i += ft_quoted_len(line + i, sep);
+			sep == '\0';
 			continue ;
 		}
 		while (ft_isspace(line[i]) && (( i + 1) >= ft_strlen(line) || ft_isspace(line[i + 1])))

@@ -94,7 +94,7 @@ int	main(int argc, char **argv, char **envp)
 	free(x);
 	s_tokens = ft_tokens(t);
 	if (!s_tokens)
-		return (1);
+		return (free(t), 1);
 	i = 0;
 	while (s_tokens[i])
 		printf("s_tokens[%d] = %s\n", i, s_tokens[i++]);

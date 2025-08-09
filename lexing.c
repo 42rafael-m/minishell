@@ -96,12 +96,14 @@ char	**ft_tokens(char *line)
 	if (!line)
 		return(NULL);
 	s = ft_trim_spaces(line);
+	printf("in_trimmed = 8%s8\n", s);
 	t = ft_expand_line(s);
+	printf("in_expanded = 8%s8\n", t);
 	if (!s || !t)
-		return (printf("!s || !t\n"), NULL);
+		return (printf("!s || !t\n"), free(s), free(t), NULL);
 	tokens = ft_token_sep(t);
 	if (!tokens)
-		return (printf("!tokens\n"), NULL);
+		return (printf("!tokens\n"), free(t),  NULL);
 	free(t);
 	i = 0;
 	while (tokens[i])
