@@ -69,7 +69,7 @@ char	*ft_expand_line(char *line)
 		{
 			if (ft_heredoc_len(line + i) <= 0)
 				return (NULL);
-			i += (ft_heredoc_len(line + i) + 1);
+			i += (ft_heredoc_len(line + i));
 		}
 		if (line[i] == '$' && line[i + 1] && !ft_strchr(NO_VAL_VAR,
 				line[i + 1]))
@@ -78,7 +78,6 @@ char	*ft_expand_line(char *line)
 			free(line);
 			line = t;
 			i += (ft_var_len(line + i) - 1);
-			printf("line[%d] = '%c'\n", i, line[i]);
 		}
 		i++;
 	}
