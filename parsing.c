@@ -27,6 +27,36 @@ int	ft_append(char *token, t_cli *cli)
 	return (1);
 }
 
+char	*ft_expand_heredoc(int option, t_cli *cli)
+{
+	char	*t;
+
+	t = NULL;
+	if (option)
+	{
+		t = ft_expand_line(cli->heredoc);
+		if (!t)
+			return (NULL);
+		cli->heredoc = t;
+	}
+	return (cli->heredoc);
+}
+
+void	ft_here_error(char *delim)
+{
+	char	*t;
+	char	*error_msg;
+
+	if (!delim)
+		return ;
+	t = ft_strjoin(HERE_ERR, delim);
+	error_msg = ft_strjoin(t, "')\n");
+	write(2, error_msg, ft_strlen(error_msg));
+	free(error_msg);
+	free(t);
+	return ;
+}
+
 int	ft_heredoc(char *token, t_cli *cli)
 {
 	char	*delim;
@@ -36,33 +66,26 @@ int	ft_heredoc(char *token, t_cli *cli)
 
 	if (!token || !cli)
 		return (0);
-	printf("token = %s\n", token);
 	delim = ft_trim_delim(token, &option);
-	printf("delim = 8%s8\n", delim);
 	if (!delim)
 		return (0);
 	line = NULL;
-	t = NULL;
-	printf("delim_len = %d\n", ft_strlen(delim));
-	while (ft_strncmp(line, delim, ft_strlen(line)))
+	while (1)
 	{
 		free(line);
+		line = NULL;
 		line = readline("> ");
-		printf("line_len = %d\n", ft_strlen(line));
-		printf("line = 8%s8\n", line);
+		if (!ft_strncmp(line, delim, ft_strlen(line)) || !line)
+			break ;
 		t = ft_strjoin(cli->heredoc, line);
 		free(cli->heredoc);
 		cli->heredoc = ft_strjoin(t, "\n");
 		free(t);
-
 	}
-	if (option)
-	{
-		t = ft_expand_line(cli->heredoc);
-		free(cli->heredoc);
-		cli->heredoc = t;
-	}
-	return (1);
+	if (!line)
+		ft_here_error(delim);
+	cli->heredoc = ft_expand_heredoc(option, cli);
+	return (free(line), free(delim), 1);
 }
 
 t_cli	*ft_init_list()

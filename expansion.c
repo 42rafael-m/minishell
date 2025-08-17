@@ -44,6 +44,7 @@ char	*ft_trim_delim(char *token, int *option)
 	int		len;
 	int		j;
 	char	*delim;
+	
 	if (!token)
 		return (NULL);
 	i = 2;

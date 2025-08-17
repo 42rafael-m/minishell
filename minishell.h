@@ -39,6 +39,7 @@
 # define ESC_CHARS1 "\\\"\?$"
 # define UNEX_T1 "minishell: syntax error near unexpected token '<'\n"
 # define UNEX_T2 "minishell: syntax error near unexpected token '>'\n"
+# define HERE_ERR "minishell: warning: here-document delimited by end-of-file (wanted `"
 
 extern volatile sig_atomic_t	g_sigint_received;
 
@@ -71,6 +72,7 @@ char	*ft_escaped_line(char *line, int start, int end);
 char	*ft_escape_quotes(char *line);
 char	*ft_expand_line(char *line);
 char	*ft_trim_delim(char *token, int *option);
+char	*ft_expand_heredoc(int option, t_cli *cli);
 int		ft_num_quoted(char *line);
 int		ft_quoted_len(char *line, char quote);
 int		ft_sep_len(char *line);
@@ -85,6 +87,7 @@ int		ft_heredoc(char *token, t_cli *cli);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
 void	ft_free_list(t_cli **cli);
+void	ft_here_error(char *delim);
 t_cli	*ft_parse(char	*line);
 t_cli	*ft_init_list();
 
