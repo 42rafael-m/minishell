@@ -24,9 +24,11 @@
 # include <sys/resource.h>
 # include <dirent.h>
 # include <signal.h>
+#include <sys/wait.h>
 
 # define IGNORE 1
 # define DEFAULT 0
+# define READ 2
 # define APPEND 1
 # define WRITE 0
 # define SEP_STR " \n\t<>|"
@@ -48,8 +50,8 @@ typedef struct s_cli
 	char			*cmd;
 	char			*cmd_p;
 	char			**args;
-	int				fdin;
-	int				fdout;
+	char			*infile;
+	char			*outfile;
 	char			*heredoc;
 	int				is_builtin;
 	struct s_cli	*next;
@@ -84,6 +86,8 @@ int		ft_append(char *token, t_cli *cli);
 int		ft_heredoc_len(char *line);
 int		ft_delim_len(char *token);
 int		ft_heredoc(char *token, t_cli *cli);
+int		ft_infile(char *token, t_cli *cli);
+int		ft_outfile(char *token, t_cli *cli);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
 void	ft_free_list(t_cli **cli);

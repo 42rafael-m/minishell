@@ -12,80 +12,65 @@
 
 #include "minishell.h"
 
-int	ft_append(char *token, t_cli *cli)
+// int	ft_append(char *token, t_cli *cli)
+// {
+// 	char	*t;
+// 	char	*outfile;
+
+// 	if (!token || !cli)
+// 		return (0);
+// 	t = ft_strtrim(token, " >");
+// 	if (!t)
+// 		return (0);
+// 	if (ft_strchr(QUOTES, t[0]))
+// 	{
+// 		cli->outfile = ft_strndup(cli + 1, (ft_strlen(t) - 2));
+// 		if (!cli->outfile)
+// 			return (free(t), NULL);
+// 		free(t);
+// 	}
+// 	else
+// 		cli->outfile = t;
+// 	return (1);
+// }
+
+int	ft_outfile(char *token, t_cli *cli)
 {
-	char	*file;
+	char	*t;
+	char	*outfile;
+	char	*expanded;
 
 	if (!token || !cli)
 		return (0);
-	file = ft_strtrim(token, ">> ");
-	if (!file)
-		return (perror("malloc"), 0);
-	cli->fdout = open(file, O_APPEND);
-	if (cli->fdout == -1)
-		return (perror(file), 0);
+	t = ft_strtrim(token, "> ");
+	if (!t)
+		return (0);
+	if (t[0] != '\'')
+	{
+		expanded = ft_expand_line(t);
+		printf("expanded = %s\n", expanded);
+		cli->outfile = ft_escaped_line(expanded, 0, ft_strlen(expanded));
+		if (!cli->outfile)
+			return (free(expanded), 0);
+		free(expanded);
+	}
+	else
+		cli->outfile = expanded;
+	printf("outfile = 8%s8\n", cli->outfile);
 	return (1);
 }
 
-char	*ft_expand_heredoc(int option, t_cli *cli)
+int	ft_infile(char *token, t_cli *cli)
 {
 	char	*t;
-
-	t = NULL;
-	if (option)
-	{
-		t = ft_expand_line(cli->heredoc);
-		if (!t)
-			return (NULL);
-		cli->heredoc = t;
-	}
-	return (cli->heredoc);
-}
-
-void	ft_here_error(char *delim)
-{
-	char	*t;
-	char	*error_msg;
-
-	if (!delim)
-		return ;
-	t = ft_strjoin(HERE_ERR, delim);
-	error_msg = ft_strjoin(t, "')\n");
-	write(2, error_msg, ft_strlen(error_msg));
-	free(error_msg);
-	free(t);
-	return ;
-}
-
-int	ft_heredoc(char *token, t_cli *cli)
-{
-	char	*delim;
-	char	*t;
-	char	*line;
-	int		option;
 
 	if (!token || !cli)
 		return (0);
-	delim = ft_trim_delim(token, &option);
-	if (!delim)
+	t = ft_strtrim(token, "< ");
+	if (!t)
 		return (0);
-	line = NULL;
-	while (1)
-	{
-		free(line);
-		line = NULL;
-		line = readline("> ");
-		if (!ft_strncmp(line, delim, ft_strlen(line)) || !line)
-			break ;
-		t = ft_strjoin(cli->heredoc, line);
-		free(cli->heredoc);
-		cli->heredoc = ft_strjoin(t, "\n");
-		free(t);
-	}
-	if (!line)
-		ft_here_error(delim);
-	cli->heredoc = ft_expand_heredoc(option, cli);
-	return (free(line), free(delim), 1);
+	cli->infile = t;
+	return (1);
 }
 
 t_cli	*ft_init_list()
@@ -98,8 +83,8 @@ t_cli	*ft_init_list()
 	cli->cmd = NULL;
 	cli->cmd_p = NULL;
 	cli->args = NULL;
-	cli->fdin = 0;
-	cli->fdout = 1;
+	cli->infile = NULL;
+	cli->outfile = NULL;
 	cli->heredoc = NULL;
 	cli->is_builtin = 0;
 	cli->next = NULL;

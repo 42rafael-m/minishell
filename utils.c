@@ -26,6 +26,8 @@ void	ft_free_list(t_cli **cli)
 		free(node->cmd);
 		free(node->heredoc);
 		free(node->cmd_p);
+		free(node->infile);
+		free(node->outfile);
 		ft_free_d(node->env);
 		ft_free_d(node->args);
 		free(node);
