@@ -16,7 +16,7 @@ char	*ft_test_quoted_tokens(char *line)
 		if (len == -1)
 			break ;
 		i += len;
-		if (!i >= ft_strlen(line))
+		if (i >= ft_strlen(line))
 			break ;
 	}
 	i = 0;
@@ -27,7 +27,7 @@ char	*ft_test_quoted_tokens(char *line)
 		if (len == -1)
 			break ;
 		i += len;
-		if (!i >= ft_strlen(line))
+		if (i >= ft_strlen(line))
 			break ;
 	}
 	q_line = ft_escape_quotes(line);

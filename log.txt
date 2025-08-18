@@ -1,14 +1,14 @@
-==10137== Memcheck, a memory error detector
-==10137== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==10137== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
-==10137== Command: ./a.out "adas"\ ""\ "123\ |\ 123"\ ert\ "ert\ \ "\ $USER+\ 456|456\ asd\ \ \ \ \ |\ asd\>\>ads\ 123\<\<123\ adsa\ \<\ asd\ \<\<$USER$USER\ asda\ \>\ ads\ \<asd\ \<asd\ \>asd\ "\ asd\>\>dasa\<\<123\<123\>123"\ $\ $+\ $\ \<\<\ $USER$USER\ \<\<$USER\ "$USER$USER"\ $USER\ \<$USER\ \<\ \ "$USER"
-==10137== 
-==10137== 
-==10137== HEAP SUMMARY:
-==10137==     in use at exit: 0 bytes in 0 blocks
-==10137==   total heap usage: 119 allocs, 119 frees, 9,763 bytes allocated
-==10137== 
-==10137== All heap blocks were freed -- no leaks are possible
-==10137== 
-==10137== For lists of detected and suppressed errors, rerun with: -s
-==10137== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==2330228== Memcheck, a memory error detector
+==2330228== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2330228== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==2330228== Command: ./a.out $USER$USER+
+==2330228== 
+==2330228== 
+==2330228== HEAP SUMMARY:
+==2330228==     in use at exit: 0 bytes in 0 blocks
+==2330228==   total heap usage: 16 allocs, 16 frees, 1,197 bytes allocated
+==2330228== 
+==2330228== All heap blocks were freed -- no leaks are possible
+==2330228== 
+==2330228== For lists of detected and suppressed errors, rerun with: -s
+==2330228== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

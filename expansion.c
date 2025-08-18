@@ -6,7 +6,7 @@
 /*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:18:24 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/04 15:54:58 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/18 15:28:46 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,13 @@ char	*ft_trim_delim(char *token, int *option)
 int	ft_var_len(char	*var)
 {
 	int	i;
+	int	len;
 
 	if (!var)
 		return (0);
 	i = 1;
-	while (var[i])
+	len = ft_strlen(var);
+	while (i < len)
 	{
 		if (ft_strchr(SEP_STR, var[i]) || ft_strchr(NO_VAL_VAR, var[i]))
 			return (i);
@@ -88,7 +90,7 @@ char	*ft_expand_var(char	*line, int start, int end)
 
 	if (!line)
 		return (NULL);
-	if (end >= ft_strlen(line))
+	if (end > ft_strlen(line))
 		return (ft_strndup(line, end));
 	var = NULL;
 	s = ft_strndup(line + start, end);
@@ -127,6 +129,7 @@ char	*ft_expand_line(char *line)
 				line[i + 1]))
 		{
 			t = ft_expand_var(line, i, ft_var_len(line + i));
+			printf("expand_var = %s\n", t);
 			free(line);
 			line = t;
 			i += (ft_var_len(line + i) - 1);

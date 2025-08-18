@@ -6,7 +6,7 @@
 /*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:19:54 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/04 15:40:51 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/18 15:17:33 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int ft_trim_s_len(char *line)
 				return (-1);
 			len += ft_quoted_len(line + i, sep);
 			i += ft_quoted_len(line + i, sep);
-			sep == '\0';
+			sep = '\0';
 			continue ;
 		}
 		while (ft_isspace(line[i]) && (( i + 1) >= ft_strlen(line) || ft_isspace(line[i + 1])))
