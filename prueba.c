@@ -82,6 +82,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*t;
 	char	*x;
 
+	printf("argv = 8%s8\n", argv[1]);
 	q_line = NULL;
 	e_line = NULL;
 	t = NULL;

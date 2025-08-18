@@ -6,33 +6,41 @@
 /*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:19:42 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/04 15:40:01 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/18 18:08:56 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	ft_append(char *token, t_cli *cli)
-// {
-// 	char	*t;
-// 	char	*outfile;
+int	ft_append(char *token, t_cli *cli)
+{
+	char	*t;
+	char	*outfile;
+	char	*expanded;
 
-// 	if (!token || !cli)
-// 		return (0);
-// 	t = ft_strtrim(token, " >");
-// 	if (!t)
-// 		return (0);
-// 	if (ft_strchr(QUOTES, t[0]))
-// 	{
-// 		cli->outfile = ft_strndup(cli + 1, (ft_strlen(t) - 2));
-// 		if (!cli->outfile)
-// 			return (free(t), NULL);
-// 		free(t);
-// 	}
-// 	else
-// 		cli->outfile = t;
-// 	return (1);
-// }
+	if (!token || !cli)
+		return (0);
+	t = ft_strtrim(token, "> ");
+	if (!t)
+		return (0);
+	if (t[0] != '\'')
+	{
+		expanded = ft_expand_line(t);
+		cli->outfile = ft_escaped_line(expanded, 0, ft_strlen(expanded));
+		if (!cli->outfile)
+			return (free(expanded), 0);
+		free(expanded);
+	}
+	else
+	{
+		cli->outfile = ft_esc_str(t, QUOTES, ft_strlen(t));
+		free(t);
+		t = ft_strtrim(cli->outfile, "\'");
+		free(cli->outfile);
+		cli->outfile = t;
+	}
+	return (1);
+}
 
 int	ft_outfile(char *token, t_cli *cli)
 {
@@ -48,28 +56,49 @@ int	ft_outfile(char *token, t_cli *cli)
 	if (t[0] != '\'')
 	{
 		expanded = ft_expand_line(t);
-		printf("expanded = %s\n", expanded);
 		cli->outfile = ft_escaped_line(expanded, 0, ft_strlen(expanded));
 		if (!cli->outfile)
 			return (free(expanded), 0);
 		free(expanded);
 	}
 	else
-		cli->outfile = expanded;
-	printf("outfile = 8%s8\n", cli->outfile);
+	{
+		cli->outfile = ft_esc_str(t, QUOTES, ft_strlen(t));
+		free(t);
+		t = ft_strtrim(cli->outfile, "\'");
+		free(cli->outfile);
+		cli->outfile = t;
+	}
 	return (1);
 }
 
 int	ft_infile(char *token, t_cli *cli)
 {
 	char	*t;
+	char	*infile;
+	char	*expanded;
 
 	if (!token || !cli)
 		return (0);
 	t = ft_strtrim(token, "< ");
 	if (!t)
 		return (0);
-	cli->infile = t;
+	if (t[0] != '\'')
+	{
+		expanded = ft_expand_line(t);
+		cli->infile = ft_escaped_line(expanded, 0, ft_strlen(expanded));
+		if (!cli->infile)
+			return (free(expanded), 0);
+		free(expanded);
+	}
+	else
+	{
+		cli->outfile = ft_esc_str(t, QUOTES, ft_strlen(t));
+		free(t);
+		t = ft_strtrim(cli->infile, "\'");
+		free(cli->infile);
+		cli->infile = t;
+	}
 	return (1);
 }
 
@@ -102,7 +131,10 @@ t_cli	*ft_init_list()
 // 	while (tokens && tokens[i])
 // 	{
 // 		if (!ft_strcmp(tokens[i], ">>", 2))
-// 			ft_append(tokens[i], cli);
+// 		{
+			// ft_append(tokens[i], cli);
+			// cli->r_mode = APPEND;
+			// }
 // 		else if (!ft_strncmp(tokens[0], "<<", 2))
 // 			ft_heredoc();
 // 		else if (tokens[i][0] == '<')

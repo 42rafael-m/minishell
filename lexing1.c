@@ -6,7 +6,7 @@
 /*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:18:55 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/04 15:46:14 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/18 17:44:27 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,16 @@
 int	ft_heredoc_len(char *line)
 {
 	char	redir;
-	int	i;
-
-	i = 2;
-	while (ft_isspace(line[i]))
+	int		i;
+	int		len;
+	
+	len = ft_strlen(line);
+	i = 1;
+	if (i < len && line[i] == line[0])
 		i++;
-	if (ft_strchr(REDIR_S, line[i]))
+	while (line[i] && ft_isspace(line[i]))
+		i++;
+	if (line[i] && ft_strchr(REDIR_S, line[i]))
 		return (write(2, UNEX_T1, 50), -1);
 	while (line [i])
 	{		
@@ -55,7 +59,7 @@ int	ft_sep_len(char *line)
 	i = 0;
 	while (i < ft_strlen(line) && ft_isspace(line[i]))
 		i++;
-	if (ft_strchr(REDIR_S, line[i]) && ft_strchr(REDIR_S, line[i + 1]))
+	if (ft_strchr(REDIR_S, line[i]))
 		return (ft_heredoc_len(line + i));
 	while (i < ft_strlen(line))
 	{

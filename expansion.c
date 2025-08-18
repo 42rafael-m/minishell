@@ -6,7 +6,7 @@
 /*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:18:24 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/18 15:28:46 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/18 17:31:12 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,20 +119,18 @@ char	*ft_expand_line(char *line)
 	{
 		if (line[i] == '\'')
 			i += (ft_quoted_len(line + i, '\'') + 1);
-		if (line[i] == '<' && line[i + 1] == '<')
+		if (ft_strchr(REDIR_S, line[i]))
 		{
 			if (ft_heredoc_len(line + i) <= 0)
 				return (NULL);
-			i += (ft_heredoc_len(line + i));
+			i += (ft_heredoc_len(line + i) - 1);
 		}
 		if (line[i] == '$' && line[i + 1] && !ft_strchr(NO_VAL_VAR,
 				line[i + 1]))
 		{
 			t = ft_expand_var(line, i, ft_var_len(line + i));
-			printf("expand_var = %s\n", t);
 			free(line);
 			line = t;
-			i += (ft_var_len(line + i) - 1);
 		}
 		i++;
 	}
