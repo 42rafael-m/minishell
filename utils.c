@@ -12,6 +12,25 @@
 
 #include "minishell.h"
 
+t_cli	*ft_init_node()
+{
+	t_cli *cli;
+
+	cli = (t_cli *)ft_calloc(1, sizeof(t_cli));
+	if (!cli)
+		return (NULL);
+	cli->cmd = NULL;
+	cli->args = NULL;
+	cli->env = NULL;
+	cli->infile = NULL;
+	cli->outfile = NULL;
+	cli->heredoc = NULL;
+	cli->is_builtin = 0;
+	cli->next = NULL;
+	cli->r_mode = WRITE;
+	return (cli);
+}
+
 void	ft_free_list(t_cli **cli)
 {
 	t_cli		*node;

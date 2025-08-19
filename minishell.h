@@ -90,6 +90,7 @@ int		ft_heredoc(char *token, t_cli *cli);
 int		ft_infile(char *token, t_cli *cli);
 int		ft_outfile(char *token, t_cli *cli);
 int		ft_cmd(char	*token, t_cli *cli);
+int		ft_args(char *token, t_cli *cli, int pos);
 void	ft_no_cmd_error(char *cmd);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
