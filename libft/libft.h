@@ -104,5 +104,6 @@ int			ft_isspace(int c);
 char		*ft_trim_spaces(char *s);
 void		**ft_add_ptr(void **dptr, void *ptr, int pos);
 void		**ft_add_re_ptr(void **dptr, void *ptr, int pos);
+int			ft_strcmp(char *s1, char *s2);
 
 #endif

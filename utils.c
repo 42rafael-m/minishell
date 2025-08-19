@@ -24,8 +24,8 @@ void	ft_free_list(t_cli **cli)
 	{
 		next_node = node->next;
 		free(node->cmd);
+		node->cmd = NULL;
 		free(node->heredoc);
-		free(node->cmd_p);
 		free(node->infile);
 		free(node->outfile);
 		ft_free_d(node->env);

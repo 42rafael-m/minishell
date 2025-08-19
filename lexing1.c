@@ -12,20 +12,22 @@
 
 #include "minishell.h"
 
-// char	**ft_trim_tokens(char **tokens)
-// {
-// 	int		i;
-// 	char	*t;
+char	**ft_trim_tokens(char **tokens)
+{
+	int		i;
+	char	*t;
 
-// 	i = 0;
-// 	while (tokens && tokens[i])
-// 	{
-// 		if (!ft_strncmp(tokens[i], "<<", 2))
-// 			i += ft_heredoc_len(tokens[i]);
-		
-// 	}
-// 	return (tokens);
-// }
+	i = 0;
+	while (tokens && tokens[i])
+	{
+		t = ft_strtrim(tokens[i], " \t");
+		if (!t)
+			return (perror("malloc"), NULL);
+		free(tokens[i]);
+		tokens[i++] = t;
+	}
+	return (tokens);
+}
 
 int	ft_heredoc_len(char *line)
 {

@@ -39,6 +39,7 @@ int	ft_append(char *token, t_cli *cli)
 		free(cli->outfile);
 		cli->outfile = t;
 	}
+	cli->r_mode = APPEND;
 	return (1);
 }
 
@@ -102,7 +103,7 @@ int	ft_infile(char *token, t_cli *cli)
 	return (1);
 }
 
-t_cli	*ft_init_list()
+t_cli	*ft_init_node()
 {
 	t_cli *cli;
 
@@ -110,8 +111,8 @@ t_cli	*ft_init_list()
 	if (!cli)
 		return (NULL);
 	cli->cmd = NULL;
-	cli->cmd_p = NULL;
 	cli->args = NULL;
+	cli->env = NULL;
 	cli->infile = NULL;
 	cli->outfile = NULL;
 	cli->heredoc = NULL;
@@ -121,29 +122,41 @@ t_cli	*ft_init_list()
 	return (cli);
 }
 
-// t_cli	*ft_parse(char	**tokens, t_cli *cli)
-// {
-// 	int		i;
+t_cli	*ft_parse(char	**token, t_cli *cli)
+{
+	int		i;
 
-// 	if (!tokens)
-// 		return (NULL);
-// 	i = 0;
-// 	while (tokens && tokens[i])
-// 	{
-// 		if (!ft_strcmp(tokens[i], ">>", 2))
-// 		{
-			// ft_append(tokens[i], cli);
-			// cli->r_mode = APPEND;
-			// }
-// 		else if (!ft_strncmp(tokens[0], "<<", 2))
-// 			ft_heredoc();
-// 		else if (tokens[i][0] == '<')
-// 			ft_input();
-// 		else if (tokens[i][0] == '>')
-// 			ft_output();
-// 		else if (!cli->cmd)
-// 			ft_cmd();
-// 		else if (tokens[i][0] == '|')
-// 			ft_pipe();
-// 	}
-// }
+	if (!token)
+		return (NULL);
+	i = 0;
+	while (token && token[i])
+	{
+		printf("t[%d] = 8%s8\n", i, token[i]);
+		if (!ft_strncmp(token[i], ">>", 2) && !ft_append(token[i], cli))
+			return (NULL);
+		else if (!ft_strncmp(token[0], "<<", 2) && !ft_heredoc(token[i], cli))
+			return (NULL);
+		else if (token[i][0] == '<' && !ft_infile(token[i], cli))
+			return (NULL);
+		else if (token[i][0] == '>' && !ft_outfile(token[i], cli))
+			return (NULL);
+		else if (!cli->cmd && !ft_cmd(token[i], cli))
+			return (NULL);
+		else if (token[i][0] == '|')
+		{
+			cli->next = ft_init_node();
+			if (!cli->next)
+				return (NULL);
+			cli = cli->next;
+		}
+		else
+		{
+			printf("HOLA\n");
+			cli->args = (char **)ft_add_ptr((void *)cli->args, (char *)token[i], i + 1);
+			if (!cli->args)
+				return (NULL);
+		}
+		i++;
+	}
+	return (cli);
+}

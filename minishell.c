@@ -129,7 +129,7 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 // 	sa.sa_handler = ft_sig_handler;
 //     sa.sa_flags = SA_RESTART;
 // 	sigaction(SIGINT, &sa, NULL);
-//	cli = ft_init_list(cli);
+//	cli = ft_init_node(cli);
 //	cli->env = ft_load_env(envp, cli)
 // 	ft_exec_shell(&sa, envp);
 // 	return (0);
