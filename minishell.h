@@ -24,7 +24,7 @@
 # include <sys/resource.h>
 # include <dirent.h>
 # include <signal.h>
-#include <sys/wait.h>
+# include <sys/wait.h>
 
 # define IGNORE 1
 # define DEFAULT 0
@@ -57,6 +57,7 @@ typedef struct s_cli
 	struct s_cli	*next;
 	int				r_mode;
 	char			**env;
+	int				n_tokens;
 }	t_cli;
 
 char	**ft_tokens(char *line);
@@ -90,12 +91,13 @@ int		ft_infile(char *token, t_cli *cli);
 int		ft_outfile(char *token, t_cli *cli);
 int		ft_cmd(char	*token, t_cli *cli);
 int		ft_args(char *token, t_cli *cli, int pos);
+int		ft_expand_tokens(char **tokens);
 void	ft_no_cmd_error(char *cmd);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
 void	ft_free_list(t_cli **cli);
 void	ft_here_error(char *delim);
 t_cli	*ft_parse(char **tokens, t_cli *cli);
-t_cli	*ft_init_node();
+t_cli	*ft_init_node(int len);
 
 #endif

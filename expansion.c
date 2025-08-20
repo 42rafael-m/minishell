@@ -107,3 +107,24 @@ char	*ft_expand_line(char *line)
 	}
 	return (line);
 }
+
+int	ft_expand_tokens(char **tokens)
+{
+	char	*t;
+	int		i;
+
+	if (!tokens)
+		return (0);
+	i = 0;
+	while (tokens[i])
+	{
+		t = ft_expand_line(tokens[i]);
+		if (t != tokens[i])
+			free(tokens[i]);
+		tokens[i] = ft_escape_quotes(t);
+		if (t && !tokens[i])
+			return (0);
+		i++;
+	}
+	return (1);
+}

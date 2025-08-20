@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_cli	*ft_init_node()
+t_cli	*ft_init_node(int len)
 {
 	t_cli *cli;
 
@@ -28,6 +28,7 @@ t_cli	*ft_init_node()
 	cli->is_builtin = 0;
 	cli->next = NULL;
 	cli->r_mode = WRITE;
+	cli->n_tokens = len;
 	return (cli);
 }
 

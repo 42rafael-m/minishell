@@ -26,6 +26,8 @@ functions return a pointer to the terminator.
 
 char	*ft_strchr(const char *s, int c)
 {
+	if (!s)
+		return (NULL);
 	while (*s)
 	{
 		if ((unsigned char)c == *s)

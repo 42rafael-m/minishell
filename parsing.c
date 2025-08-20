@@ -123,7 +123,7 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 			ft_cmd(token[i], cli);
 		else if (token[i][0] == '|')
 		{
-			cli->next = ft_init_node();
+			cli->next = ft_init_node(cli->n_tokens);
 			if (!cli->next)
 				return (NULL);
 			cli = cli->next;

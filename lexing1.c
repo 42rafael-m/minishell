@@ -35,7 +35,6 @@ int	ft_heredoc_len(char *line)
 	int		i;
 	int		len;
 	
-	len = ft_strlen(line);
 	i = 0;
 	while (ft_strchr(REDIR_S, line[i]) && i < 2)
 		i++;
@@ -43,6 +42,13 @@ int	ft_heredoc_len(char *line)
 		i++;
 	if (line[i] && ft_strchr(REDIR_S, line[i]))
 		return (write(2, UNEX_T1, 50), -1);
+	if (ft_strchr(QUOTES, line[i]))
+	{
+		len = ft_quoted_len(line + i, line[i]);
+		if (len < 0)
+			return (printf("here_len error\n"), -1);
+		i += len;
+	}
 	while (line [i])
 	{		
 		if (ft_strchr(SEP_STR, line [i]))
@@ -68,7 +74,7 @@ int	ft_sep_len(char *line)
 		if (ft_strchr(QUOTES, line[i]))
 		{
 			if (ft_quoted_len(line + i, line[i]) < 0)
-				return (-1);
+				return (printf("sep_len error\n"), -1);
 			i = (ft_quoted_len(line + i, line[i]) + i);
 		}
 		if (ft_strchr(SEP_STR, line[i]) && i != 0)

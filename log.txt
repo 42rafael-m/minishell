@@ -1,14 +1,22 @@
-==8508== Memcheck, a memory error detector
-==8508== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==8508== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
-==8508== Command: ./a.out \<\ ""FIN""
-==8508== 
-==8508== 
-==8508== HEAP SUMMARY:
-==8508==     in use at exit: 0 bytes in 0 blocks
-==8508==   total heap usage: 7 allocs, 7 frees, 1,149 bytes allocated
-==8508== 
-==8508== All heap blocks were freed -- no leaks are possible
-==8508== 
-==8508== For lists of detected and suppressed errors, rerun with: -s
-==8508== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==14267== Memcheck, a memory error detector
+==14267== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==14267== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
+==14267== Command: ./a.out "1"\ ""\ "2"
+==14267== 
+==14267== Syscall param access(pathname) points to unaddressable byte(s)
+==14267==    at 0x49B63C7: access (access.c:27)
+==14267==    by 0x10A67A: ft_cmd (parsing1.c:88)
+==14267==    by 0x10A12C: ft_parse (parsing.c:123)
+==14267==    by 0x109510: main (borrar.c:46)
+==14267==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==14267== 
+minishell: 1: command not found
+==14267== 
+==14267== HEAP SUMMARY:
+==14267==     in use at exit: 0 bytes in 0 blocks
+==14267==   total heap usage: 56 allocs, 56 frees, 1,866 bytes allocated
+==14267== 
+==14267== All heap blocks were freed -- no leaks are possible
+==14267== 
+==14267== For lists of detected and suppressed errors, rerun with: -s
+==14267== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

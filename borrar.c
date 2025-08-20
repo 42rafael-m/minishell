@@ -27,14 +27,17 @@ void	ft_print_node(t_cli *cli)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_cli	*cli = ft_init_node();
 
 	int	i = 0;
-	int len = ft_doubleptr_len((void **)argv);
 	char	*trimmed = ft_trim_spaces(argv[1]);
-	char	**tokens = ft_token_sep(trimmed);
+	char	**tokens = ft_tokens(trimmed);
+	t_cli	*cli = ft_init_node(ft_doubleptr_len((void **)tokens));
+	int len = ft_sep_len(trimmed);
+	printf("trimmed = %s\n", trimmed);
+	free(trimmed);
+	printf("sep_len = %d\n", len);
 	ft_trim_tokens(tokens);
-	while (tokens && tokens[i])
+	while (tokens && i < cli->n_tokens)
 	{
 		printf("tokens[%d] = 8%s8\n", i, tokens[i]);
 		i++;
@@ -44,5 +47,4 @@ int	main(int argc, char **argv, char **envp)
 	ft_print_node(cli);
 	ft_free_list(start);
 	ft_free_d(tokens);
-	free(trimmed);
 }

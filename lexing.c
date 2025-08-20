@@ -18,17 +18,11 @@ int	ft_quoted_len(char *line, char quote)
 
 	if (!line)
 		return (0);
-	i = 0;
-	if (line[0] == quote)
-		i++;
+	i = 1;
 	while (line[i])
 	{
 		if (line[i] == quote)
-		{
-			if (line[0] != quote)
-				return (i + 2);
 			return (i + 1);
-		}
 		i++;
 	}
 	return (write(2, ERR_OPEN_Q, 43), -1);
@@ -44,7 +38,7 @@ char	*ft_escaped_line(char *line, int start, int end)
 		return (NULL);
 	if (end == 0)
 		return (ft_strdup(line));
-	escaped = ft_esc_str(line + start, ESC_CHARS1, end - start);
+	escaped = ft_esc_str(line + start + 1, ESC_CHARS1, end - start - 2);
 	t = ft_strndup(line, start);
 	if (!escaped)
 		return (NULL);
@@ -80,7 +74,6 @@ char	*ft_escape_quotes(char *line)
 			free(line);
 			line = esc_line;
 			i += len;
-			continue ;
 		}
 		i++;
 	}
@@ -91,29 +84,26 @@ char	**ft_tokens(char *line)
 {
 	char	*s;
 	char	**tokens;
-	char	*t;
 	int		i;
+	t_cli	*cli;
 
 	if (!line)
 		return(NULL);
 	s = ft_trim_spaces(line);
 	printf("in_trimmed = 8%s8\n", s);
-	t = ft_expand_line(s);
-	printf("in_expanded = 8%s8\n", t);
-	s = ft_escape_quotes(t);
-	printf("in_escaped = 8%s8\n", s);
-	if (!s || !t)
-		return (printf("!s || !t\n"), free(s), free(t), NULL);
 	tokens = ft_token_sep(s);
-	if (!tokens)
-		return (printf("!tokens\n"), free(t),  NULL);
-	// free(t);
+	cli = ft_init_node(ft_doubleptr_len((void **)tokens));
 	free(s);
+	if (!tokens)
+		return (printf("!tokens\n"), NULL);
+	if (!ft_expand_tokens(tokens))
+		return (ft_free_d(tokens), NULL);
 	i = 0;
-	while (tokens[i])
+	while (i < cli->n_tokens)
 	{
-		tokens[i] = ft_escape_quotes(tokens[i]);
+		printf("expanded_token[%d] = 8%s8\n", i, tokens[i]);
 		i++;
 	}
+	ft_free_list(&cli);
 	return (tokens);
 }

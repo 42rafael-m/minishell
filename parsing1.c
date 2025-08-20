@@ -80,12 +80,17 @@ int	ft_cmd(char	*token, t_cli *cli)
 	if (ft_strchr(QUOTES, token[0]))
 		trimmed = ft_strndup(token + 1, ft_strlen(token) - 1);
 	else
-		trimmed = token;
-	if (ft_strchr(token, '/'))
+		trimmed = ft_strdup(token);
+	if (trimmed && ft_strchr(trimmed, '/'))
 		cli->cmd = ft_strdup(trimmed);
 	else
 		cli->cmd = ft_cmd_path(getenv("PATH"), trimmed);
 	if (access(cli->cmd, X_OK))
-		return (ft_no_cmd_error(trimmed), free(trimmed), 0);
-	return (free(trimmed), 1);
+	{
+		ft_no_cmd_error(trimmed);
+		free(cli->cmd);
+		cli->cmd = NULL;
+		return (free(trimmed), trimmed = NULL, 0);
+	}
+	return (free(trimmed), trimmed = NULL, 1);
 }
