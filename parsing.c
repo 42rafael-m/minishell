@@ -14,95 +14,65 @@
 
 int	ft_append(char *token, t_cli *cli)
 {
-	char	*t;
-	char	*outfile;
-	char	*expanded;
+	int	i;
 
 	if (!token || !cli)
 		return (0);
+	i = 0;
 	free(cli->outfile);
-	t = ft_strtrim(token, "> ");
-	if (!t)
-		return (0);
-	if (t[0] != '\'')
-	{
-		expanded = ft_expand_line(t);
-		cli->outfile = ft_escaped_line(expanded, 0, ft_strlen(expanded));
-		if (!cli->outfile)
-			return (free(expanded), 0);
-		free(expanded);
-	}
-	else
-	{
-		cli->outfile = ft_esc_str(t, QUOTES, ft_strlen(t));
-		free(t);
-		t = ft_strtrim(cli->outfile, "\'");
-		free(cli->outfile);
-		cli->outfile = t;
-	}
 	cli->r_mode = APPEND;
+	while (token[i] == '>' && i < 2)
+		i++;
+	while (ft_isspace(token[i]))
+		i++;
+	if (ft_strchr(QUOTES, token[i]))
+		cli->outfile = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
+	else
+		cli->outfile = ft_strdup(token + i);
+	if (!cli->outfile)
+		return (0);
 	return (1);
 }
 
 int	ft_outfile(char *token, t_cli *cli)
 {
-	char	*t;
-	char	*outfile;
-	char	*expanded;
+	int	i;
 
 	if (!token || !cli)
 		return (0);
+	i = 0;
 	free(cli->outfile);
-	t = ft_strtrim(token, "> ");
-	if (!t)
-		return (0);
-	if (t[0] != '\'')
-	{
-		expanded = ft_expand_line(t);
-		cli->outfile = ft_escaped_line(expanded, 0, ft_strlen(expanded));
-		if (!cli->outfile)
-			return (free(expanded), 0);
-		free(expanded);
-	}
+	while (token[i] == '>' && i < 1)
+		i++;
+	while (ft_isspace(token[i]))
+		i++;
+	if (ft_strchr(QUOTES, token[i]))
+		cli->outfile = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
 	else
-	{
-		cli->outfile = ft_esc_str(t, QUOTES, ft_strlen(t));
-		free(t);
-		t = ft_strtrim(cli->outfile, "\'");
-		free(cli->outfile);
-		cli->outfile = t;
-	}
+		cli->outfile = ft_strdup(token + i);
+	if (!cli->outfile)
+		return (0);
 	return (1);
 }
 
 int	ft_infile(char *token, t_cli *cli)
 {
-	char	*t;
-	char	*infile;
-	char	*expanded;
+	int	i;
 
 	if (!token || !cli)
 		return (0);
+	i = 0;
 	free(cli->infile);
-	t = ft_strtrim(token, "< ");
-	if (!t)
-		return (0);
-	if (t[0] != '\'')
-	{
-		expanded = ft_expand_line(t);
-		cli->infile = ft_escaped_line(expanded, 0, ft_strlen(expanded));
-		if (!cli->infile)
-			return (free(expanded), 0);
-		free(expanded);
-	}
+	while (token[i] == '<' && i < 1)
+		i++;
+	while (ft_isspace(token[i]))
+		i++;
+	if (ft_strchr(QUOTES, token[i]))
+		cli->outfile = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
 	else
-	{
-		cli->outfile = ft_esc_str(t, QUOTES, ft_strlen(t));
-		free(t);
-		t = ft_strtrim(cli->infile, "\'");
-		free(cli->infile);
-		cli->infile = t;
-	}
+		cli->infile = ft_strdup(token + i);
+	if (!cli->infile)
+		return (0);
 	return (1);
 }
 
