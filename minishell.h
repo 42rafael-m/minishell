@@ -85,7 +85,6 @@ int		ft_var_len(char	*var);
 int 	ft_trim_s_len(char *line);
 int		ft_append(char *token, t_cli *cli);
 int		ft_heredoc_len(char *line);
-int		ft_delim_len(char *token);
 int		ft_heredoc(char *token, t_cli *cli);
 int		ft_infile(char *token, t_cli *cli);
 int		ft_outfile(char *token, t_cli *cli);

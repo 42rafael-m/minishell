@@ -36,8 +36,8 @@ int	ft_heredoc_len(char *line)
 	int		len;
 	
 	len = ft_strlen(line);
-	i = 1;
-	if (i < len && line[i] == line[0])
+	i = 0;
+	while (ft_strchr(REDIR_S, line[i]) && i < 2)
 		i++;
 	while (line[i] && ft_isspace(line[i]))
 		i++;
@@ -70,7 +70,6 @@ int	ft_sep_len(char *line)
 			if (ft_quoted_len(line + i, line[i]) < 0)
 				return (-1);
 			i = (ft_quoted_len(line + i, line[i]) + i);
-			continue ;
 		}
 		if (ft_strchr(SEP_STR, line[i]) && i != 0)
 			return (i);

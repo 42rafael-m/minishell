@@ -12,55 +12,26 @@
 
 #include "minishell.h"
 
-int	ft_delim_len(char *token)
-{
-	int	i;
-	int	len;
-	int	token_len;
-
-	if (!token)
-		return (0);
-	i = 2;
-	len = 0;
-	token_len = ft_strlen(token);
-	while (ft_isspace(token[i]))
-		i++;
-	while (i < token_len)
-	{
-		if (token[i] == '\"')
-		{
-			i++;
-			continue ;
-		}
-		i++;
-		len++;
-	}
-	return (len);
-}
-
 char	*ft_trim_delim(char *token, int *option)
 {
-	int		i;
-	int		len;
-	int		j;
 	char	*delim;
-	
+	int		i;
+
 	if (!token)
 		return (NULL);
-	i = 2;
-	j = 0;
-	len = ft_delim_len(token);
-	delim = ft_calloc(len + 1, sizeof(char));
+	i = 0;
+	while (token[i] == '<' && i < 2)
+		i++;
 	while (ft_isspace(token[i]))
 		i++;
-	if (token[i] == '\"')
-		*option = 1;
-	while (delim && i < ft_strlen(token))
+	if (ft_strchr(QUOTES, token[i]))
 	{
-		while (token[i] == '\"')
-			i++;
-		delim[j++] = token[i++];
+		if (token[i] == '\"')
+			*option = 1;
+		delim = ft_strndup(token + i + 1, ft_strlen(token) - 1);
 	}
+	else
+		delim = ft_strdup(token + i);
 	return (delim);
 }
 
@@ -119,7 +90,7 @@ char	*ft_expand_line(char *line)
 	{
 		if (line[i] == '\'')
 			i += (ft_quoted_len(line + i, '\'') + 1);
-		if (ft_strchr(REDIR_S, line[i]))
+		if (line[i] == '<' && line[i + 1] == '<')
 		{
 			if (ft_heredoc_len(line + i) <= 0)
 				return (NULL);
