@@ -28,7 +28,7 @@ char	*ft_trim_delim(char *token, int *option)
 	{
 		if (token[i] == '\"')
 			*option = 1;
-		delim = ft_strndup(token + i + 1, ft_strlen(token) - 1);
+		delim = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
 	}
 	else
 		delim = ft_strdup(token + i);

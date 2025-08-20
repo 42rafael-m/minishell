@@ -52,6 +52,7 @@ int	ft_heredoc(char *token, t_cli *cli)
 	if (!token || !cli)
 		return (0);
 	delim = ft_trim_delim(token, &option);
+	printf("delim = %s\n", delim);
 	if (!delim)
 		return (0);
 	line = NULL;
