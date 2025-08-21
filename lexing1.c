@@ -99,7 +99,7 @@ int	ft_num_s_tokens(char *line)
 	line_len = ft_strlen(line);
 	while (i < line_len)
 	{
-		len = ft_sep_len(line + i);
+		len = ft_sep_len(line + i) + 1;
 		printf("sep = %c\n", line[i + len]);
 		if (len == -1)
 			return (-1);
