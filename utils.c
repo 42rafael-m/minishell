@@ -12,6 +12,31 @@
 
 #include "minishell.h"
 
+void	ft_print_node(t_cli *cli)
+{
+	int	i = 0;
+
+	if (!cli)
+		return ;
+	printf("cmd = %s\n", cli->cmd);
+	printf("infile = %s\n", cli->infile);
+	printf("outfile = %s\n", cli->outfile);
+	printf("is_builtin = %d\n", cli->is_builtin);
+	printf("r_mode = %d\n", cli->r_mode);
+	printf("heredoc = %s\n", cli->heredoc);
+	while (cli->args && cli->args[i])
+	{
+		printf("args[%d] = %s\n", i, cli->args[i]);
+		i++;
+	}
+	i = 0;
+	while (cli->env && cli->env[i])
+	{
+		printf("env[%d] = %s\n", i, cli->env[i]);
+		i++;
+	}
+}
+
 t_cli	*ft_init_node(int len)
 {
 	t_cli *cli;

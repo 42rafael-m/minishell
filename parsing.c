@@ -110,20 +110,20 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 	if (!token)
 		return (NULL);
 	i = 0;
-	while (token && token[i])
+	while (i < cli->n_tokens)
 	{
 		printf("t[%d] = 8%s8\n", i, token[i]);
-		if (!ft_strncmp(token[i], ">>", 2))
+		if (token[i] && !ft_strncmp(token[i], ">>", 2))
 			ft_append(token[i], cli);
-		else if (!ft_strncmp(token[i], "<<", 2))
+		else if (token[i] && !ft_strncmp(token[i], "<<", 2))
 			ft_heredoc(token[i], cli);
-		else if (token[i][0] == '<')
+		else if (token[i] && token[i][0] == '<')
 			ft_infile(token[i], cli);
-		else if (token[i][0] == '>')
+		else if (token[i] && token[i][0] == '>')
 			ft_outfile(token[i], cli);
-		else if (!cli->cmd)
+		else if (token[i] && !cli->cmd)
 			ft_cmd(token[i], cli);
-		else if (token[i][0] == '|')
+		else if (token[i] && token[i][0] == '|')
 		{
 			cli->next = ft_init_node(cli->n_tokens);
 			if (!cli->next)

@@ -57,29 +57,31 @@ char	*ft_escape_quotes(char *line)
 	int		i;
 	int		len;
 	char	*esc_line;
-	char	quote;
+	char	*s;
 
 	if (!line)
 		return (NULL);
 	i = 0;
-	while (i < ft_strlen(line))
+	s = ft_strdup(line);
+	while (i < ft_strlen(s))
 	{
-		if (ft_strchr(QUOTES, line[i]))
+		if (ft_strchr(QUOTES, s[i]))
 		{
-			if (line[i + 1] == line[i])
+			if (line[i + 1] == s[i])
 				return (NULL);
-			quote = line[i];
-			len = ft_quoted_len(line + i, quote);
+			len = ft_quoted_len(s + i,  s[i]);
 			if (len <= 0)
 				return (NULL);
-			esc_line = ft_escaped_line(line, i, i + len);
-			free(line);
-			line = esc_line;
+			esc_line = ft_escaped_line(s, i, i + len);
+			free(s);
+			s = esc_line;
+			if (s != esc_line)
+				free(esc_line);
 			i += len;
 		}
 		i++;
 	}
-	return (line);
+	return (s);
 }
 
 char	**ft_tokens(char *line)
@@ -110,6 +112,13 @@ char	**ft_tokens(char *line)
 	while (i < cli->n_tokens)
 	{
 		printf("expanded_token[%d] = 8%s8\n", i, tokens[i]);
+		i++;
+	}
+	ft_parse(tokens, cli);
+	ft_print_node(cli);
+	while (tokens && i <= cli->n_tokens)
+	{
+		free(tokens[i]);
 		i++;
 	}
 	ft_free_list(&cli);

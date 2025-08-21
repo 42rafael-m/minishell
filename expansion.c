@@ -67,16 +67,17 @@ char	*ft_expand_var(char	*line, int start, int end)
 	s = ft_strndup(line + start, end);
 	t = ft_strtrim(s, NO_VAL_VAR);
 	if (!s || !t)
-		return (NULL);
-	if (s != t)
-		free(s);
+		return (free(s), free(t), NULL);
+	free(s);
 	var = getenv(t);
 	free(t);
 	s = ft_strndup(line, start);
 	t = ft_strjoin(s, var);
 	free(s);
+	s = NULL;
 	s = ft_strjoin(t, line + start + end);
 	free(t);
+	t = NULL;
 	return (s);
 }
 
@@ -93,20 +94,21 @@ char	*ft_expand_line(char *line)
 		if (line[i] == '<' && line[i + 1] == '<')
 		{
 			if (ft_heredoc_len(line + i) <= 0)
-				return (NULL);
+				return (free(line), line = NULL, NULL);
 			i += (ft_heredoc_len(line + i) - 1);
 		}
 		if (line[i] == '$' && line[i + 1] && !ft_strchr(NO_VAL_VAR,
 				line[i + 1]))
 		{
 			t = ft_expand_var(line, i, ft_var_len(line + i));
-			free(line);
+			if (line != t)
+				free(line);
 			line = t;
 		}
 		i++;
 	}
 	t = ft_strtrim(line, " ");
-	return (free(line), t);
+	return (free(line), line = NULL, t);
 }
 
 int	ft_expand_tokens(char **tokens)
@@ -121,9 +123,8 @@ int	ft_expand_tokens(char **tokens)
 	{
 		t = ft_expand_line(tokens[i]);
 		printf("in_expanded = 8%s8\n", t);
-		if (t != tokens[i])
-			free(tokens[i]);
 		tokens[i] = ft_escape_quotes(t);
+		free(t);
 		printf("in_escaped = 8%s8\n", tokens[i]);
 		// if (t && !tokens[i])
 		// 	return (0);    Comentado por caso de que el token sea "", que devuelve nulo y no hay error. Mirar cómo manejar los otros errores

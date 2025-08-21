@@ -100,4 +100,6 @@ void	ft_here_error(char *delim);
 t_cli	*ft_parse(char **tokens, t_cli *cli);
 t_cli	*ft_init_node(int len);
 
+void	ft_print_node(t_cli *cli);
+
 #endif
