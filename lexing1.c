@@ -44,7 +44,6 @@ int	ft_heredoc_len(char *line)
 		return (write(2, UNEX_T1, 50), -1);
 	if (ft_strchr(QUOTES, line[i]))
 	{
-		printf("line[%d] = %c\n", i, line[i]);
 		len = ft_quoted_len(line + i, line[i]);
 		if (len < 0)
 			return (printf("here_len error\n"), -1);
@@ -53,10 +52,10 @@ int	ft_heredoc_len(char *line)
 	while (line [i])
 	{		
 		if (ft_strchr(SEP_STR, line [i]))
-			return (printf("heredoc_len = %d\n", i), i);
+			return (i);
 		i++;
 	}
-	return (printf("heredoc_len = %d\n", i), i);
+	return (i);
 }
 
 int	ft_sep_len(char *line)
@@ -100,7 +99,7 @@ int	ft_num_s_tokens(char *line)
 	while (i < line_len)
 	{
 		len = ft_sep_len(line + i) + 1;
-		printf("sep = %c\n", line[i + len]);
+		// printf("sep = %c\n", line[i + len]);
 		if (len == -1)
 			return (-1);
 		i += len;

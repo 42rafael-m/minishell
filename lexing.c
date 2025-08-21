@@ -66,6 +66,8 @@ char	*ft_escape_quotes(char *line)
 	{
 		if (ft_strchr(QUOTES, line[i]))
 		{
+			if (line[i + 1] == line[i])
+				return (NULL);
 			quote = line[i];
 			len = ft_quoted_len(line + i, quote);
 			if (len <= 0)
@@ -94,8 +96,14 @@ char	**ft_tokens(char *line)
 	tokens = ft_token_sep(s);
 	cli = ft_init_node(ft_doubleptr_len((void **)tokens));
 	free(s);
-	if (!tokens)
+	if (!tokens || !cli)
 		return (printf("!tokens\n"), NULL);
+	i = 0;
+	while (i < cli->n_tokens)
+	{
+		printf("sep_token[%d] = 8%s8\n", i, tokens[i]);
+		i++;
+	}
 	if (!ft_expand_tokens(tokens))
 		return (ft_free_d(tokens), NULL);
 	i = 0;

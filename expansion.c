@@ -125,8 +125,8 @@ int	ft_expand_tokens(char **tokens)
 			free(tokens[i]);
 		tokens[i] = ft_escape_quotes(t);
 		printf("in_escaped = 8%s8\n", tokens[i]);
-		if (t && !tokens[i])
-			return (0);
+		// if (t && !tokens[i])
+		// 	return (0);    Comentado por caso de que el token sea "", que devuelve nulo y no hay error. Mirar cómo manejar los otros errores
 		i++;
 	}
 	return (1);
