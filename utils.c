@@ -37,6 +37,19 @@ void	ft_print_node(t_cli *cli)
 	}
 }
 
+void	ft_free_tokens(char **tokens, int n)
+{
+	int	i;
+
+	i = 0;
+	while (tokens && i <= n)
+	{
+		free(tokens[i]);
+		i++;
+	}
+	free(tokens);
+}
+
 t_cli	*ft_init_node(int len)
 {
 	t_cli *cli;

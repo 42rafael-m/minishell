@@ -68,10 +68,10 @@ char	*ft_escape_quotes(char *line)
 		if (ft_strchr(QUOTES, s[i]))
 		{
 			if (line[i + 1] == s[i])
-				return (NULL);
+				return (free(s), NULL);
 			len = ft_quoted_len(s + i,  s[i]);
 			if (len <= 0)
-				return (NULL);
+				return (free(s), NULL);
 			esc_line = ft_escaped_line(s, i, i + len);
 			free(s);
 			s = esc_line;
@@ -116,11 +116,7 @@ char	**ft_tokens(char *line)
 	}
 	ft_parse(tokens, cli);
 	ft_print_node(cli);
-	while (tokens && i <= cli->n_tokens)
-	{
-		free(tokens[i]);
-		i++;
-	}
+	ft_free_tokens(tokens, cli->n_tokens);
 	ft_free_list(&cli);
-	return (tokens);
+	return (NULL);
 }

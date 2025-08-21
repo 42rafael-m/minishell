@@ -1,38 +1,15 @@
-==7418== Memcheck, a memory error detector
-==7418== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==7418== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
-==7418== Command: ./a.out ""\ "ls"
-==7418== 
+==7786== Memcheck, a memory error detector
+==7786== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==7786== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
+==7786== Command: ./a.out ""\ "ls"
+==7786== 
 malloc: Success
-==7418== 
-==7418== HEAP SUMMARY:
-==7418==     in use at exit: 6 bytes in 2 blocks
-==7418==   total heap usage: 16 allocs, 14 frees, 1,197 bytes allocated
-==7418== 
-==7418== 3 bytes in 1 blocks are definitely lost in loss record 1 of 2
-==7418==    at 0x48417B4: malloc (vg_replace_malloc.c:381)
-==7418==    by 0x10C1F3: ft_calloc (in /home/rms35/Documents/42/Cursus/minishell/a.out)
-==7418==    by 0x10BEF9: ft_strdup (in /home/rms35/Documents/42/Cursus/minishell/a.out)
-==7418==    by 0x10A742: ft_escape_quotes (lexing.c:65)
-==7418==    by 0x109844: ft_expand_tokens (expansion.c:126)
-==7418==    by 0x10A952: ft_tokens (lexing.c:109)
-==7418==    by 0x10928E: main (borrar.c:10)
-==7418== 
-==7418== 3 bytes in 1 blocks are definitely lost in loss record 2 of 2
-==7418==    at 0x48417B4: malloc (vg_replace_malloc.c:381)
-==7418==    by 0x10C2B3: ft_strjoin (in /home/rms35/Documents/42/Cursus/minishell/a.out)
-==7418==    by 0x10A6EB: ft_escaped_line (lexing.c:50)
-==7418==    by 0x10A7FC: ft_escape_quotes (lexing.c:75)
-==7418==    by 0x109844: ft_expand_tokens (expansion.c:126)
-==7418==    by 0x10A952: ft_tokens (lexing.c:109)
-==7418==    by 0x10928E: main (borrar.c:10)
-==7418== 
-==7418== LEAK SUMMARY:
-==7418==    definitely lost: 6 bytes in 2 blocks
-==7418==    indirectly lost: 0 bytes in 0 blocks
-==7418==      possibly lost: 0 bytes in 0 blocks
-==7418==    still reachable: 0 bytes in 0 blocks
-==7418==         suppressed: 0 bytes in 0 blocks
-==7418== 
-==7418== For lists of detected and suppressed errors, rerun with: -s
-==7418== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+==7786== 
+==7786== HEAP SUMMARY:
+==7786==     in use at exit: 0 bytes in 0 blocks
+==7786==   total heap usage: 16 allocs, 16 frees, 1,197 bytes allocated
+==7786== 
+==7786== All heap blocks were freed -- no leaks are possible
+==7786== 
+==7786== For lists of detected and suppressed errors, rerun with: -s
+==7786== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

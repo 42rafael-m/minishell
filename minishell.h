@@ -97,6 +97,7 @@ void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
 void	ft_free_list(t_cli **cli);
 void	ft_here_error(char *delim);
+void	ft_free_tokens(char **tokens, int n);
 t_cli	*ft_parse(char **tokens, t_cli *cli);
 t_cli	*ft_init_node(int len);
 
