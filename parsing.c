@@ -63,6 +63,8 @@ int	ft_infile(char *token, t_cli *cli)
 		return (0);
 	i = 0;
 	free(cli->infile);
+	free(cli->heredoc);
+	cli->heredoc = NULL;
 	while (token[i] == '<' && i < 1)
 		i++;
 	while (ft_isspace(token[i]))

@@ -105,7 +105,8 @@ char	*ft_expand_line(char *line)
 		}
 		i++;
 	}
-	return (line);
+	t = ft_strtrim(line, " ");
+	return (free(line), t);
 }
 
 int	ft_expand_tokens(char **tokens)
@@ -119,9 +120,11 @@ int	ft_expand_tokens(char **tokens)
 	while (tokens[i])
 	{
 		t = ft_expand_line(tokens[i]);
+		printf("in_expanded = 8%s8\n", t);
 		if (t != tokens[i])
 			free(tokens[i]);
 		tokens[i] = ft_escape_quotes(t);
+		printf("in_escaped = 8%s8\n", tokens[i]);
 		if (t && !tokens[i])
 			return (0);
 		i++;
