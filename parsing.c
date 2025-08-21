@@ -6,7 +6,7 @@
 /*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:19:42 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/18 18:08:56 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/21 17:13:38 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int	ft_args(char *token, t_cli *cli, int pos)
 {
 	char	**t;
 
+	if (!token)
+		return (0);
 	if (!cli->args)
 	{
 		cli->args = (char **)ft_calloc(2, sizeof(char *));

@@ -6,7 +6,7 @@
 /*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:18:55 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/18 17:44:27 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/08/21 17:11:20 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	**ft_trim_tokens(char **tokens)
 	{
 		t = ft_strtrim(tokens[i], " \t");
 		if (!t)
-			return (perror("malloc"), NULL);
+			return (/* perror("malloc"),  */NULL);
 		free(tokens[i]);
 		tokens[i++] = t;
 	}
