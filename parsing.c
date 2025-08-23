@@ -70,7 +70,7 @@ int	ft_infile(char *token, t_cli *cli)
 	while (ft_isspace(token[i]))
 		i++;
 	if (ft_strchr(QUOTES, token[i]))
-		cli->outfile = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
+		cli->infile = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
 	else
 		cli->infile = ft_strdup(token + i);
 	if (!cli->infile)

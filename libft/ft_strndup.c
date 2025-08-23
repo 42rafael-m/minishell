@@ -36,7 +36,7 @@ char	*ft_strndup(const char *src, size_t n)
 		return (NULL);
 	if (n <= 0)
 		return (NULL);
-	dest = (char *)malloc((n + 1) * sizeof(char));
+	dest = (char *)ft_calloc(n + 1, sizeof(char));
 	if (!dest)
 		return (NULL);
 	ft_strlcpy(dest, src, n + 1);

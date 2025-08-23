@@ -25,7 +25,8 @@ int	ft_quoted_len(char *line, char quote)
 			return (i + 1);
 		i++;
 	}
-	return (write(2, ERR_OPEN_Q, 43), -1);
+	write(2, ERR_OPEN_Q, 43);
+	return (-1);
 }
 
 char	*ft_escaped_line(char *line, int start, int end)
@@ -67,7 +68,7 @@ char	*ft_escape_quotes(char *line)
 	{
 		if (ft_strchr(QUOTES, s[i]))
 		{
-			if (line[i + 1] == s[i])
+			if (s[i + 1] == s[i])
 				return (free(s), NULL);
 			len = ft_quoted_len(s + i,  s[i]);
 			if (len <= 0)
@@ -77,7 +78,7 @@ char	*ft_escape_quotes(char *line)
 			s = esc_line;
 			if (s != esc_line)
 				free(esc_line);
-			i += len;
+			i += (len - 3);
 		}
 		i++;
 	}
@@ -99,7 +100,7 @@ char	**ft_tokens(char *line)
 	cli = ft_init_node(ft_doubleptr_len((void **)tokens));
 	free(s);
 	if (!tokens || !cli)
-		return (printf("!tokens\n"), NULL);
+		return (printf("!tokens\n"), ft_free_tokens(tokens, ft_doubleptr_len((void **)tokens)), ft_free_list(&cli), NULL);
 	i = 0;
 	while (i < cli->n_tokens)
 	{
@@ -107,7 +108,7 @@ char	**ft_tokens(char *line)
 		i++;
 	}
 	if (!ft_expand_tokens(tokens))
-		return (ft_free_d(tokens), NULL);
+		return (ft_free_tokens(tokens, cli->n_tokens), NULL);
 	i = 0;
 	while (i < cli->n_tokens)
 	{

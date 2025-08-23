@@ -18,12 +18,18 @@ void	ft_print_node(t_cli *cli)
 
 	if (!cli)
 		return ;
-	printf("cmd = %s\n", cli->cmd);
-	printf("infile = %s\n", cli->infile);
-	printf("outfile = %s\n", cli->outfile);
-	printf("is_builtin = %d\n", cli->is_builtin);
-	printf("r_mode = %d\n", cli->r_mode);
-	printf("heredoc = %s\n", cli->heredoc);
+	if (cli->cmd)
+		printf("cmd = %s\n", cli->cmd);
+	if (cli->infile)
+		printf("infile = %s\n", cli->infile);
+	if (cli->outfile)
+		printf("outfile = %s\n", cli->outfile);
+	if (cli->is_builtin)
+		printf("is_builtin = %d\n", cli->is_builtin);
+	if (cli->r_mode)
+		printf("r_mode = %d\n", cli->r_mode);
+	if (cli->heredoc)
+		printf("heredoc = %s\n", cli->heredoc);
 	while (cli->args && cli->args[i])
 	{
 		printf("args[%d] = %s\n", i, cli->args[i]);

@@ -22,7 +22,7 @@ char	**ft_trim_tokens(char **tokens)
 	{
 		t = ft_strtrim(tokens[i], " \t");
 		if (!t)
-			return (/* perror("malloc"),  */NULL);
+			return (perror("malloc"), NULL);
 		free(tokens[i]);
 		tokens[i++] = t;
 	}
@@ -76,6 +76,7 @@ int	ft_sep_len(char *line)
 			if (ft_quoted_len(line + i, line[i]) < 0)
 				return (printf("sep_len error\n"), -1);
 			i = (ft_quoted_len(line + i, line[i]) + i);
+			continue ;
 		}
 		if (ft_strchr(SEP_STR, line[i]) && i != 0)
 			return (i);
@@ -99,12 +100,14 @@ int	ft_num_s_tokens(char *line)
 	while (i < line_len)
 	{
 		len = ft_sep_len(line + i) + 1;
-		// printf("sep = %c\n", line[i + len]);
-		if (len == -1)
-			return (-1);
+		if (len <= 0)
+			return (printf("num_s_tokens error!\n"), -1);
 		i += len;
+		if (i < ft_strlen(line))
+			printf("line after q_len = %s\n", line + i);
 		token_num++;
 	}
+	printf("token_num = %d\n", token_num);
 	return (token_num);
 }
 
