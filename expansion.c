@@ -91,13 +91,13 @@ char	*ft_expand_line(char *line)
 	{
 		if (line[i] == '\'')
 			i += (ft_quoted_len(line + i, '\'') + 1);
-		if (line[i] == '<' && line[i + 1] == '<')
+		if (i < ft_strlen(line) && line[i] == '<' && line[i + 1] == '<')
 		{
 			if (ft_heredoc_len(line + i) <= 0)
 				return (free(line), line = NULL, NULL);
 			i += (ft_heredoc_len(line + i) - 1);
 		}
-		if (line[i] == '$' && line[i + 1] && !ft_strchr(NO_VAL_VAR,
+		if (i < ft_strlen(line) && line[i] == '$' && line[i + 1] && !ft_strchr(NO_VAL_VAR,
 				line[i + 1]))
 		{
 			t = ft_expand_var(line, i, ft_var_len(line + i));
@@ -111,24 +111,32 @@ char	*ft_expand_line(char *line)
 	return (free(line), line = NULL, t);
 }
 
-int	ft_expand_tokens(char **tokens)
+char	**ft_expand_tokens(char **tokens)
 {
 	char	*t;
+	char	**piped;
 	int		i;
 
 	if (!tokens)
-		return (0);
+		return (NULL);
 	i = 0;
-	while (tokens[i])
+	piped = ft_lex_pipe(tokens, ft_doubleptr_len((void **)tokens));
+	// while (piped[i])
+	// {
+	// 	printf("piped[%d] = %s\n", i, piped[i]);
+	// 	i++;
+	// }
+	i = 0;
+	while (piped[i])
 	{
-		t = ft_expand_line(tokens[i]);
-		printf("in_expanded = 8%s8\n", t);
-		tokens[i] = ft_escape_quotes(t);
+		t = ft_expand_line(piped[i]);
+		// printf("in_expanded = 8%s8\n", t);
+		piped[i] = ft_escape_quotes(t);
 		free(t);
-		printf("in_escaped = 8%s8\n", tokens[i]);
+		// printf("in_escaped = 8%s8\n", piped[i]);
 		// if (t && !tokens[i])
 		// 	return (0);    Comentado por caso de que el token sea "", que devuelve nulo y no hay error. Mirar cómo manejar los otros errores
 		i++;
 	}
-	return (1);
+	return (piped);
 }

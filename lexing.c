@@ -12,6 +12,37 @@
 
 #include "minishell.h"
 
+char	**ft_lex_pipe(char **token, int len)
+{
+	char	**t;
+	char	**s;
+	int		spaces;
+	int		i;
+
+	if (!token || len <= 0)
+		return (NULL);
+	i = 0;
+	while (token[i])
+	{
+		if (token[i][0] == '|' && token[i][1])
+		{
+			spaces = 1;
+			t = (char **)ft_add_re_ptr((void **)token, "|", i);
+			while (ft_isspace(token[i][spaces]))
+				spaces++;
+			s = (char **)ft_add_ptr((void **)t, token[i] + spaces, i + 1);
+			if (!t || ! s)
+				return (ft_free_d(s), ft_free_d(t), NULL);
+			ft_free_tokens(token, len);
+			ft_free_tokens(t, len);
+			token = s;
+			len++;
+		}
+		i++;
+	}
+	return (token);
+}
+
 int	ft_quoted_len(char *line, char quote)
 {
 	int	i;
@@ -85,7 +116,7 @@ char	*ft_escape_quotes(char *line)
 	return (s);
 }
 
-char	**ft_tokens(char *line)
+t_cli	*ft_tokens(char *line)
 {
 	char	*s;
 	char	**tokens;
@@ -95,29 +126,31 @@ char	**ft_tokens(char *line)
 	if (!line)
 		return(NULL);
 	s = ft_trim_spaces(line);
-	printf("in_trimmed = 8%s8\n", s);
+	// printf("in_trimmed = 8%s8\n", s);
 	tokens = ft_token_sep(s);
 	cli = ft_init_node(ft_doubleptr_len((void **)tokens));
 	free(s);
 	if (!tokens || !cli)
 		return (printf("!tokens\n"), ft_free_tokens(tokens, ft_doubleptr_len((void **)tokens)), ft_free_list(&cli), NULL);
-	i = 0;
-	while (i < cli->n_tokens)
-	{
-		printf("sep_token[%d] = 8%s8\n", i, tokens[i]);
-		i++;
-	}
-	if (!ft_expand_tokens(tokens))
+	// i = 0;
+	// while (i < cli->n_tokens)
+	// {
+	// 	printf("sep_token[%d] = 8%s8\n", i, tokens[i]);
+	// 	i++;
+	// }
+	tokens = ft_expand_tokens(tokens);
+	if (!tokens)
 		return (ft_free_tokens(tokens, cli->n_tokens), NULL);
-	i = 0;
-	while (i < cli->n_tokens)
-	{
-		printf("expanded_token[%d] = 8%s8\n", i, tokens[i]);
-		i++;
-	}
+	// i = 0;
+	// while (i <= cli->n_tokens)
+	// {
+	// 	printf("expanded_token[%d] = 8%s8\n", i, tokens[i]);
+	// 	i++;
+	// }
+	// printf("cli b4 parse = %p\n", cli);
 	ft_parse(tokens, cli);
-	ft_print_node(cli);
+	// printf("cli after parse = %p\n", cli);
+	// printf("cli->next after parse = %p\n", cli->next);
 	ft_free_tokens(tokens, cli->n_tokens);
-	ft_free_list(&cli);
-	return (NULL);
+	return (cli);
 }

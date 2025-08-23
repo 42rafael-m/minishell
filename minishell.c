@@ -90,13 +90,12 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 	char	*cl;
 	char	**tokens;
 	char	*prompt;
-	int		i;
+	t_cli	*cli;
 
 	prompt = NULL;
 	cl = NULL;
 	while (1)
 	{
-		i = 0;
 		free(cl);
 		free(prompt);
 		prompt = ft_prompt(envp);
@@ -108,29 +107,35 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 			g_sigint_received = 0;
 			continue ;
 		}
-		tokens = ft_tokens(cl);
-		while (tokens && tokens[i])
+		cli = ft_tokens(cl);
+		if (envp)
 		{
-			write(1, tokens[i], ft_strlen(tokens[i]));
-			write(1, "\n", 1);
-			i++;
+			cli->env = ft_load_env(envp);
+			envp = NULL;
 		}
+		ft_print_list(cli);
+		ft_free_list(&cli);
+		// tokens = ft_tokens(cl);
+		// while (tokens && tokens[i])
+		// {
+		// 	write(1, tokens[i], ft_strlen(tokens[i]));
+		// 	write(1, "\n", 1);
+		// 	i++;
+		// }
 		add_history(cl);
 	}
 	return (free(prompt), free(cl), rl_clear_history(), 0);
 }
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	struct sigaction sa;
-//	t_cli	*cli;
+int	main(int argc, char **argv, char **envp)
+{
+	struct sigaction sa;
+	t_cli	*cli;
 
-// 	ft_set_sig(IGNORE);
-// 	sa.sa_handler = ft_sig_handler;
-//     sa.sa_flags = SA_RESTART;
-// 	sigaction(SIGINT, &sa, NULL);
-//	cli = ft_init_node(cli);
-//	cli->env = ft_load_env(envp, cli)
-// 	ft_exec_shell(&sa, envp);
-// 	return (0);
-// }
+	ft_set_sig(IGNORE);
+	sa.sa_handler = ft_sig_handler;
+    sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
+	ft_exec_shell(&sa, envp);
+	return (0);
+}

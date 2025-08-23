@@ -61,15 +61,17 @@ int	ft_heredoc_len(char *line)
 int	ft_sep_len(char *line)
 {
 	int	i;
+	int	len;
 
 	if (!line)
 		return (0);
 	i = 0;
-	while (i < ft_strlen(line) && ft_isspace(line[i]))
+	len = ft_strlen(line);
+	while (i < len && ft_isspace(line[i]))
 		i++;
 	if (ft_strchr(REDIR_S, line[i]))
 		return (ft_heredoc_len(line + i));
-	while (i < ft_strlen(line))
+	while (i < len)
 	{
 		if (ft_strchr(QUOTES, line[i]))
 		{
@@ -99,15 +101,13 @@ int	ft_num_s_tokens(char *line)
 	line_len = ft_strlen(line);
 	while (i < line_len)
 	{
-		len = ft_sep_len(line + i) + 1;
-		if (len <= 0)
+		len = ft_sep_len(line + i);
+		if (len < 0)
 			return (printf("num_s_tokens error!\n"), -1);
 		i += len;
-		if (i < ft_strlen(line))
-			printf("line after q_len = %s\n", line + i);
 		token_num++;
+		i++;
 	}
-	printf("token_num = %d\n", token_num);
 	return (token_num);
 }
 

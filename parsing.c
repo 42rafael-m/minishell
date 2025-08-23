@@ -112,9 +112,12 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 	if (!token)
 		return (NULL);
 	i = 0;
-	while (i < cli->n_tokens)
+	while (i <= cli->n_tokens)
 	{
-		printf("t[%d] = 8%s8\n", i, token[i]);
+		// printf("t[%d] = 8%s8\n", i, token[i], token[i]);
+		// printf("cli = %p\n", cli);
+		// if (token[i])
+		// 	printf("token[%d][0] = '%c'\n", i, token[i][0]);
 		if (token[i] && !ft_strncmp(token[i], ">>", 2))
 			ft_append(token[i], cli);
 		else if (token[i] && !ft_strncmp(token[i], "<<", 2))
@@ -124,10 +127,14 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 		else if (token[i] && token[i][0] == '>')
 			ft_outfile(token[i], cli);
 		else if (token[i] && !cli->cmd)
+		{
 			ft_cmd(token[i], cli);
+			// printf("cli (%p) cmd = %s\n", cli, cli->cmd);
+		}
 		else if (token[i] && token[i][0] == '|')
 		{
 			cli->next = ft_init_node(cli->n_tokens);
+			// printf("cli->next in parse = %p\n", cli->next);
 			if (!cli->next)
 				return (NULL);
 			cli = cli->next;

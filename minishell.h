@@ -58,13 +58,15 @@ typedef struct s_cli
 	int				r_mode;
 	char			**env;
 	int				n_tokens;
+	int				status;
 }	t_cli;
 
-char	**ft_tokens(char *line);
 char	**ft_token_sep(char *line);
 char	**ft_trim_tokens(char **tokens);
 char	**ft_insert_s_tokens(char **tokens);
 char	**ft_load_env(char **envp);
+char	**ft_lex_pipe(char **token, int len);
+char	**ft_expand_tokens(char **tokens);
 char	*ft_prompt(char **envp);
 char	*get_hostname(void);
 char	*get_pwd(char *cwd);
@@ -91,16 +93,16 @@ int		ft_infile(char *token, t_cli *cli);
 int		ft_outfile(char *token, t_cli *cli);
 int		ft_cmd(char	*token, t_cli *cli);
 int		ft_args(char *token, t_cli *cli, int pos);
-int		ft_expand_tokens(char **tokens);
 void	ft_no_cmd_error(char *cmd);
 void	ft_set_sig(int option);
 void	ft_sig_handler(int signal);
 void	ft_free_list(t_cli **cli);
 void	ft_here_error(char *delim);
 void	ft_free_tokens(char **tokens, int n);
+t_cli	*ft_tokens(char *line);
 t_cli	*ft_parse(char **tokens, t_cli *cli);
 t_cli	*ft_init_node(int len);
 
-void	ft_print_node(t_cli *cli);
+void	ft_print_list(t_cli *cli);
 
 #endif

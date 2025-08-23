@@ -9,7 +9,7 @@ char	**ft_load_env(char **envp)
 	if (!envp)
 		return (NULL);
 	len = ft_doubleptr_len((void **)envp);
-	env = (char **)ft_calloc(len, sizeof(char *));
+	env = (char **)ft_calloc(len + 1, sizeof(char *));
 	if (!env)
 		return (NULL);
 	i = 0;

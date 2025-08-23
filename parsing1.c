@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+int	ft_parse_pipe(char *token, t_cli *cli)
+{
+	char	*pipe;
+
+	if (!token || !cli)
+		return (-1);
+	
+}
+
 char	*ft_cmd_path(char *env_path, char *cmd)
 {
 	int		i;
@@ -85,12 +94,7 @@ int	ft_cmd(char	*token, t_cli *cli)
 		cli->cmd = ft_strdup(trimmed);
 	else
 		cli->cmd = ft_cmd_path(getenv("PATH"), trimmed);
-	// if (access(cli->cmd, X_OK))
-	// {
-	// 	ft_no_cmd_error(trimmed);
-	// 	free(cli->cmd);
-	// 	cli->cmd = NULL;
-	// 	return (free(trimmed), trimmed = NULL, 0);
-	// }
+	if (!cli->cmd)
+		cli->cmd = ft_strdup(token);
 	return (free(trimmed), trimmed = NULL, 1);
 }
