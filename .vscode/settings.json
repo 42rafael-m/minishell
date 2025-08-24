@@ -63,7 +63,9 @@
     "libft.h": "c",
     "limits.h": "c",
     "minishell.h": "c",
-    "history.h": "c"
+    "history.h": "c",
+    "fcntl.h": "c",
+    "wait.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

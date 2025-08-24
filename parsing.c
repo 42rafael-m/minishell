@@ -118,7 +118,8 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 		if (token[i] && !ft_strncmp(token[i], ">>", 2))
 			ft_append(token[i], cli);
 		else if (token[i] && !ft_strncmp(token[i], "<<", 2))
-			ft_heredoc(token[i], cli);
+			if (ft_heredoc(token[i], cli) < 0)
+				return (cli);
 		else if (token[i] && token[i][0] == '<')
 			ft_infile(token[i], cli);
 		else if (token[i] && token[i][0] == '>')

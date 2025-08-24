@@ -107,9 +107,21 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 		if (g_sigint_received || ft_strlen(cl) <= 0)
 		{
 			g_sigint_received = 0;
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
 			continue ;
 		}
 		cli = ft_tokens(cl, envp);
+		if (g_sigint_received)
+		{
+			g_sigint_received = 0;
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+			ft_free_list(&cli); 
+			continue ;
+		}
 		ft_print_list(cli);
 		ft_free_list(&cli);
 		add_history(cl);
@@ -120,12 +132,12 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	struct sigaction sa;
-	t_cli	*cli;
+	extern int rl_catch_signals;
+    extern int rl_catch_sigwinch;
 
+    rl_catch_signals = 0;
+	rl_catch_sigwinch = 0;
 	ft_set_sig(PARENT);
-	sa.sa_handler = ft_sig_handler;
-    sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
 	ft_exec_shell(&sa, envp);
 	return (0);
 }

@@ -80,22 +80,34 @@ int	ft_heredoc(char *token, t_cli *cli)
 
 	if (!token || !cli)
 		return (0);
+	option = 0;
 	delim = ft_trim_delim(token, &option);
-	// printf("delim = %s\n", delim);
 	free(cli->heredoc);
 	free(cli->infile);
 	cli->infile = NULL;
 	cli->heredoc = NULL;
 	if (!delim)
 		return (0);
+	g_sigint_received = 0;
+	ft_set_sig(HERE_DOC);
 	line = NULL;
-	option = 0;
 	while (1)
 	{
 		free(line);
-		line = NULL;
 		line = readline("> ");
-		if (!ft_strncmp(line, delim, ft_strlen(line)) || !line)
+		if (g_sigint_received)
+		{
+			cli->status = 130;
+			free(line);
+			free(delim);
+			ft_set_sig(PARENT);
+			free(cli->heredoc);
+			cli->heredoc = NULL;
+			return (-1);
+		}
+		if (!line)
+			break ;
+		if (!ft_strcmp(line, delim))
 			break ;
 		t = ft_strjoin(cli->heredoc, line);
 		free(cli->heredoc);
@@ -105,5 +117,6 @@ int	ft_heredoc(char *token, t_cli *cli)
 	if (!line)
 		ft_here_error(delim);
 	cli->heredoc = ft_expand_heredoc(option, cli);
+	ft_set_sig(PARENT);
 	return (free(line), free(delim), 1);
 }

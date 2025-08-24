@@ -25,10 +25,13 @@
 # include <dirent.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <termios.h>
 
-# define HERE_DOC 2
-# define PARENT 1
-# define CHILD 0
+# define HERE_DOC 11
+# define PARENT 10
+# define IGNORE 1
+# define CHILD 2
+# define DEFAULT 0
 # define READ 2
 # define APPEND 1
 # define WRITE 0
@@ -107,6 +110,7 @@ void	ft_sig_handler(int signal);
 void	ft_free_list(t_cli **cli);
 void	ft_here_error(char *delim);
 void	ft_free_tokens(char **tokens, int n);
+void    ft_sig_handler_hd(int signal);
 t_cli	*ft_tokens(char *line, char **env);
 t_cli	*ft_parse(char **tokens, t_cli *cli);
 t_cli	*ft_init_node(int len, char **envp);
