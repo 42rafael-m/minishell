@@ -65,8 +65,8 @@ char	**ft_token_sep(char *line);
 char	**ft_trim_tokens(char **tokens);
 char	**ft_insert_s_tokens(char **tokens);
 char	**ft_load_env(char **envp);
-char	**ft_lex_pipe(char **token, int len);
-char	**ft_expand_tokens(char **tokens);
+char	**ft_lex_pipe(char **token, int *len);
+char	**ft_expand_tokens(char **tokens, int *len);
 char	*ft_prompt(char **envp);
 char	*get_hostname(void);
 char	*get_pwd(char *cwd);
@@ -99,10 +99,9 @@ void	ft_sig_handler(int signal);
 void	ft_free_list(t_cli **cli);
 void	ft_here_error(char *delim);
 void	ft_free_tokens(char **tokens, int n);
-t_cli	*ft_tokens(char *line);
+t_cli	*ft_tokens(char *line, char **env);
 t_cli	*ft_parse(char **tokens, t_cli *cli);
-t_cli	*ft_init_node(int len);
-
+t_cli	*ft_init_node(int len, char **env);
 void	ft_print_list(t_cli *cli);
 
 #endif

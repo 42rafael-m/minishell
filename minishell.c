@@ -107,21 +107,10 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 			g_sigint_received = 0;
 			continue ;
 		}
-		cli = ft_tokens(cl);
-		if (envp)
-		{
-			cli->env = ft_load_env(envp);
-			envp = NULL;
-		}
+		cli = ft_tokens(cl, envp);
 		ft_print_list(cli);
+		ft_free_d(cli->env);
 		ft_free_list(&cli);
-		// tokens = ft_tokens(cl);
-		// while (tokens && tokens[i])
-		// {
-		// 	write(1, tokens[i], ft_strlen(tokens[i]));
-		// 	write(1, "\n", 1);
-		// 	i++;
-		// }
 		add_history(cl);
 	}
 	return (free(prompt), free(cl), rl_clear_history(), 0);

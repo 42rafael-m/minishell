@@ -33,7 +33,7 @@ void	ft_print_list(t_cli *cli)
 			printf("r_mode %d = %d\n", node, cli->r_mode);
 		if (cli->heredoc)
 			printf("heredoc %d = %s\n", node, cli->heredoc);
-		while (cli->args && cli->args[i])
+		while (cli->args && i < ft_doubleptr_len((void **)cli->args))
 		{
 			printf("args[%d] %d = %s\n", i, node, cli->args[i]);
 			i++;
@@ -63,7 +63,7 @@ void	ft_free_tokens(char **tokens, int n)
 		free(tokens);
 }
 
-t_cli	*ft_init_node(int len)
+t_cli	*ft_init_node(int len, char **env)
 {
 	t_cli *cli;
 
@@ -72,7 +72,7 @@ t_cli	*ft_init_node(int len)
 		return (NULL);
 	cli->cmd = NULL;
 	cli->args = NULL;
-	cli->env = NULL;
+	cli->env = env;
 	cli->infile = NULL;
 	cli->outfile = NULL;
 	cli->heredoc = NULL;
@@ -97,10 +97,13 @@ void	ft_free_list(t_cli **cli)
 		free(node->cmd);
 		node->cmd = NULL;
 		free(node->heredoc);
+		node->heredoc = NULL;
 		free(node->infile);
+		node->infile = NULL;
 		free(node->outfile);
-		ft_free_d(node->env);
+		node->outfile = NULL;
 		ft_free_d(node->args);
+		node->args = NULL;
 		free(node);
 		node = next_node;
 	}

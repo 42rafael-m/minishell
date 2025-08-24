@@ -111,7 +111,7 @@ char	*ft_expand_line(char *line)
 	return (free(line), line = NULL, t);
 }
 
-char	**ft_expand_tokens(char **tokens)
+char	**ft_expand_tokens(char **tokens, int *len)
 {
 	char	*t;
 	char	**piped;
@@ -120,7 +120,7 @@ char	**ft_expand_tokens(char **tokens)
 	if (!tokens)
 		return (NULL);
 	i = 0;
-	piped = ft_lex_pipe(tokens, ft_doubleptr_len((void **)tokens));
+	piped = ft_lex_pipe(tokens, len);
 	// while (piped[i])
 	// {
 	// 	printf("piped[%d] = %s\n", i, piped[i]);

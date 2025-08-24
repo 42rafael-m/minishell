@@ -60,6 +60,7 @@ int	ft_heredoc(char *token, t_cli *cli)
 	if (!delim)
 		return (0);
 	line = NULL;
+	option = 0;
 	while (1)
 	{
 		free(line);
