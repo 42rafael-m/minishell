@@ -100,9 +100,10 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 		free(prompt);
 		prompt = ft_prompt(envp);
 		cl = readline(prompt);
+
 		if (!cl || !ft_strncmp(cl, "exit", 4))
 			break ;
-		if (g_sigint_received)
+		if (g_sigint_received || ft_strlen(cl) <= 0)
 		{
 			g_sigint_received = 0;
 			continue ;

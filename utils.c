@@ -39,11 +39,11 @@ void	ft_print_list(t_cli *cli)
 			i++;
 		}
 		i = 0;
-		while (cli->env && cli->env[i])
-		{
-			printf("env[%d] %d = %s\n", i, node, cli->env[i]);
-			i++;
-		}
+		// while (cli->env && cli->env[i])
+		// {
+		// 	printf("env[%d] %d = %s\n", i, node, cli->env[i]);
+		// 	i++;
+		// }
 		cli = cli->next;
 		node++;
 	}
