@@ -26,8 +26,9 @@
 # include <signal.h>
 # include <sys/wait.h>
 
-# define IGNORE 1
-# define DEFAULT 0
+# define HERE_DOC 2
+# define PARENT 1
+# define CHILD 0
 # define READ 2
 # define APPEND 1
 # define WRITE 0
@@ -46,6 +47,14 @@
 
 extern volatile sig_atomic_t	g_sigint_received;
 
+// typedef enum e_sigmode
+// {
+//     SIG_MODE_PARENT = 0,
+//     SIG_MODE_CHILD  = 1,
+//     SIG_MODE_HEREDOC = 2,
+//     SIG_MODE_IGNORE_ALL = 3
+// }	t_sigmode;
+
 typedef struct s_cli
 {
 	char			*cmd;
@@ -62,7 +71,6 @@ typedef struct s_cli
 }	t_cli;
 
 char	**ft_token_sep(char *line);
-char	**ft_trim_tokens(char **tokens);
 char	**ft_insert_s_tokens(char **tokens);
 char	**ft_load_env(char **envp);
 char	**ft_lex_pipe(char **token, int *len);
@@ -101,7 +109,7 @@ void	ft_here_error(char *delim);
 void	ft_free_tokens(char **tokens, int n);
 t_cli	*ft_tokens(char *line, char **env);
 t_cli	*ft_parse(char **tokens, t_cli *cli);
-t_cli	*ft_init_node(int len, char **env);
+t_cli	*ft_init_node(int len, char **envp);
 void	ft_print_list(t_cli *cli);
 
 #endif

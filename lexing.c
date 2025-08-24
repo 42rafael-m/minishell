@@ -12,37 +12,6 @@
 
 #include "minishell.h"
 
-char	**ft_lex_pipe(char **token, int *len)
-{
-	char	**t;
-	char	**s;
-	int		spaces;
-	int		i;
-
-	if (!token || !len || *len <= 0)
-		return (NULL);
-	i = 0;
-	while (token[i])
-	{
-		if (token[i][0] == '|' && token[i][1])
-		{
-			spaces = 1;
-			t = (char **)ft_add_re_ptr((void **)token, "|", i);
-			while (ft_isspace(token[i][spaces]))
-				spaces++;
-			s = (char **)ft_add_ptr((void **)t, token[i] + spaces, i + 1);
-			if (!t || ! s)
-				return (ft_free_d(s), ft_free_d(t), NULL);
-			ft_free_tokens(token, *len);
-			ft_free_tokens(t, *len);
-			token = s;
-			*len++;
-		}
-		i++;
-	}
-	return (token);
-}
-
 int	ft_quoted_len(char *line, char quote)
 {
 	int	i;
@@ -116,26 +85,41 @@ char	*ft_escape_quotes(char *line)
 	return (s);
 }
 
-t_cli	*ft_tokens(char *line, char **env)
+void	ft_free_all(char **token, t_cli **cli, char **env)
+{
+	if (token && cli && *cli)
+		ft_free_tokens(token, (*cli)->n_tokens);
+	else if (token)
+		ft_free_d(token);
+	if (cli && *cli)
+		ft_free_list(cli);
+	if (env)
+		ft_free_d(env);	
+}
+
+t_cli	*ft_tokens(char *line, char **envp)
 {
 	char	*s;
 	char	**tokens;
-	int		len;
+	char	**env;
 	t_cli	*cli;
 
 	if (!line)
 		return(NULL);
 	s = ft_trim_spaces(line);
 	tokens = ft_token_sep(s);
-	len = ft_num_s_tokens(s);
 	free(s);
-	cli = ft_init_node(len, ft_load_env(env));
+	env = ft_load_env(envp);
+	cli = ft_init_node(ft_num_s_tokens(line), env);
 	if (!tokens || !cli)
-		return (printf("!tokens\n"), ft_free_tokens(tokens, ft_doubleptr_len((void **)tokens)), ft_free_list(&cli), NULL);
+		return (ft_free_all(tokens, &cli, env), NULL);
 	tokens = ft_expand_tokens(tokens, &(cli->n_tokens));
 	if (!tokens)
-		return (ft_free_tokens(tokens, cli->n_tokens), NULL);
+		return (ft_free_all(tokens, &cli, env), NULL);
+	if (tokens && tokens[0] && tokens[0][0] == '|')
+		return (ft_free_all(tokens, &cli, env), write(2, "minishell: syntax error near unexpected token `|'\n", 50), NULL);
 	ft_parse(tokens, cli);
 	ft_free_tokens(tokens, cli->n_tokens);
+	ft_free_d(env);
 	return (cli);
 }

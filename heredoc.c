@@ -12,6 +12,35 @@
 
 #include "minishell.h"
 
+int	ft_heredoc_len(char *line)
+{
+	char	redir;
+	int		i;
+	int		len;
+	
+	i = 0;
+	while (ft_strchr(REDIR_S, line[i]) && i < 2)
+		i++;
+	while (line[i] && ft_isspace(line[i]))
+		i++;
+	if (line[i] && ft_strchr(REDIR_S, line[i]))
+		return (write(2, UNEX_T1, 50), -1);
+	if (ft_strchr(QUOTES, line[i]))
+	{
+		len = ft_quoted_len(line + i, line[i]);
+		if (len < 0)
+			return (printf("here_len error\n"), -1);
+		i += len;
+	}
+	while (line [i])
+	{		
+		if (ft_strchr(SEP_STR, line [i]))
+			return (i);
+		i++;
+	}
+	return (i);
+}
+
 char	*ft_expand_heredoc(int option, t_cli *cli)
 {
 	char	*t;

@@ -65,10 +65,12 @@ char	*ft_prompt(char **envp)
 	char	*prompt;
 	char	*t;
 
+	if (!envp)
+		return (NULL);
 	user = ft_strtrim(getenv("USER"), "USER=");
 	t = (char *)ft_calloc(4096, sizeof(char));
 	if (!t || ! user)
-		return (NULL);
+		return (perror("malloc: "), NULL);
 	pwd = get_pwd(getcwd(t, 4096));
 	free(t);
 	prompt = ft_strjoin(user, "@");
@@ -100,8 +102,7 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 		free(prompt);
 		prompt = ft_prompt(envp);
 		cl = readline(prompt);
-
-		if (!cl || !ft_strncmp(cl, "exit", 4))
+		if (!cl)
 			break ;
 		if (g_sigint_received || ft_strlen(cl) <= 0)
 		{
@@ -110,7 +111,6 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 		}
 		cli = ft_tokens(cl, envp);
 		ft_print_list(cli);
-		ft_free_d(cli->env);
 		ft_free_list(&cli);
 		add_history(cl);
 	}
@@ -122,7 +122,7 @@ int	main(int argc, char **argv, char **envp)
 	struct sigaction sa;
 	t_cli	*cli;
 
-	ft_set_sig(IGNORE);
+	ft_set_sig(PARENT);
 	sa.sa_handler = ft_sig_handler;
     sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);

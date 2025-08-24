@@ -12,50 +12,35 @@
 
 #include "minishell.h"
 
-char	**ft_trim_tokens(char **tokens)
+char	**ft_lex_pipe(char **token, int *len)
 {
+	char	**t;
+	char	**s;
+	int		spaces;
 	int		i;
-	char	*t;
 
+	if (!token || !len || *len <= 0)
+		return (NULL);
 	i = 0;
-	while (tokens && tokens[i])
+	while (token[i])
 	{
-		t = ft_strtrim(tokens[i], " \t");
-		if (!t)
-			return (perror("malloc"), NULL);
-		free(tokens[i]);
-		tokens[i++] = t;
-	}
-	return (tokens);
-}
-
-int	ft_heredoc_len(char *line)
-{
-	char	redir;
-	int		i;
-	int		len;
-	
-	i = 0;
-	while (ft_strchr(REDIR_S, line[i]) && i < 2)
-		i++;
-	while (line[i] && ft_isspace(line[i]))
-		i++;
-	if (line[i] && ft_strchr(REDIR_S, line[i]))
-		return (write(2, UNEX_T1, 50), -1);
-	if (ft_strchr(QUOTES, line[i]))
-	{
-		len = ft_quoted_len(line + i, line[i]);
-		if (len < 0)
-			return (printf("here_len error\n"), -1);
-		i += len;
-	}
-	while (line [i])
-	{		
-		if (ft_strchr(SEP_STR, line [i]))
-			return (i);
+		if (token[i][0] == '|' && token[i][1])
+		{
+			spaces = 1;
+			t = (char **)ft_add_re_ptr((void **)token, "|", i);
+			while (ft_isspace(token[i][spaces]))
+				spaces++;
+			s = (char **)ft_add_ptr((void **)t, token[i] + spaces, i + 1);
+			if (!t || ! s)
+				return (ft_free_d(s), ft_free_d(t), NULL);
+			ft_free_tokens(token, *len);
+			ft_free_tokens(t, *len);
+			token = s;
+			*len++;
+		}
 		i++;
 	}
-	return (i);
+	return (token);
 }
 
 int	ft_sep_len(char *line)

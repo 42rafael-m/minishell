@@ -17,6 +17,8 @@ void	ft_print_list(t_cli *cli)
 	int	i = 0;
 	int	node = 0;
 
+	if (!cli)
+		return ;
 	while (cli)
 	{
 		if (!cli)
@@ -67,12 +69,16 @@ t_cli	*ft_init_node(int len, char **env)
 {
 	t_cli *cli;
 
+	if (len <= 0)
+		return (NULL);
 	cli = (t_cli *)ft_calloc(1, sizeof(t_cli));
 	if (!cli)
-		return (NULL);
+		return (ft_free_d(env), perror("malloc"), NULL);
 	cli->cmd = NULL;
 	cli->args = NULL;
-	cli->env = env;
+	cli->env = ft_load_env(env);
+	if (env && !cli->env)
+		perror("malloc: ");
 	cli->infile = NULL;
 	cli->outfile = NULL;
 	cli->heredoc = NULL;
@@ -102,6 +108,8 @@ void	ft_free_list(t_cli **cli)
 		node->infile = NULL;
 		free(node->outfile);
 		node->outfile = NULL;
+		ft_free_d(node->env);
+		node->env = NULL;
 		ft_free_d(node->args);
 		node->args = NULL;
 		free(node);
@@ -159,7 +167,7 @@ char	*ft_trim_spaces(char *line)
 		i++;
 	while (trimmed && line && i < ft_strlen(line))
 	{
-		while (sep == '\0' && ft_isspace(line[i]) && (ft_isspace(line[i + 1]) || !line[i + 1]))
+		while (!sep && ft_isspace(line[i]) && (ft_isspace(line[i + 1]) || !line[i + 1]))
 			i++;
 		if (ft_strchr(QUOTES, line[i]))
 		{
@@ -171,34 +179,4 @@ char	*ft_trim_spaces(char *line)
 		trimmed[j++] = line[i++];
 	}
 	return (trimmed);
-}
-
-void	ft_sig_handler(int signal)
-{
-	struct sigaction	sa;
-
-	g_sigint_received = 1;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-void	ft_set_sig(int option)
-{
-	struct sigaction	sa;
-
-	if (option == 1)
-	{
-		sa.sa_handler = SIG_IGN;
-		sa.sa_flags = 0;
-		sigaction(SIGINT, &sa, NULL);
-		sigaction(SIGQUIT, &sa, NULL);
-		return ;
-	}
-	sa.sa_handler = SIG_DFL;
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
-	return ;
 }
