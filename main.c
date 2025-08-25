@@ -1,27 +1,23 @@
 #include "minishell.h"
 
+void ft_sig_h(int signal)
+{
+	int	status;
+
+	status = 0;
+	if (signal == SIGINT)
+		write(1, "Hello!\n", 7);
+	exit(status);
+}
+
 int	main(int argc, char **argv)
 {
-	int	i;
+	struct sigaction sa;
 
-	i = 0;
-	char **s = (char **)ft_calloc(argc + 1, sizeof(char *));
-	while (i < argc)
-	{
-		s[i] = ft_strdup(argv[i]);
-		i++;
-	}
-	s[i] = NULL;
-	char **t = ft_lex_pipe(s, &argc);
-	i = 0;
-	int	len = ft_doubleptr_len((void **)t);
-	if (len < argc)
-		len = argc;
-	while (i <= len)
-	{
-		if (t && t[i])
-			printf("t[%d] = 8%s8\n", i, t[i]);
-		i++;
-	}
-	ft_free_d(t);
+	ft_memset(&sa, 0, sizeof(sa));
+	sa.sa_handler = ft_sig_h;
+	sigaction(SIGINT, &sa, NULL);
+	// sigaction(SIGQUIT, &sa, NULL);
+	while (1)
+		continue ;
 }

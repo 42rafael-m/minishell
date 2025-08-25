@@ -12,38 +12,70 @@
 
 #include "minishell.h"
 
-char	**ft_lex_pipe(char **token, int *len)
+// char	**ft_lex_pipe(char **token, int *len)
+// {
+// 	char	**t;
+// 	char	**s;
+// 	int		spaces;
+// 	int		i;
+
+// 	if (!token || !len || *len <= 0)
+// 		return (NULL);
+// 	i = 0;
+// 	while (token[i])
+// 	{
+// 		if (token[i][0] == '|' && token[i][1])
+// 		{
+// 			spaces = 1;
+// 			t = (char **)ft_add_re_ptr((void **)token, "|", i);
+// 			while (ft_isspace(token[i][spaces]))
+// 				spaces++;
+// 			s = (char **)ft_add_ptr((void **)t, token[i] + spaces, i + 1);
+// 			if (!t || ! s)
+// 				return (ft_free_d(s), ft_free_d(t), NULL);
+// 			ft_free_tokens(token, *len);
+// 			ft_free_tokens(t, *len);
+// 			token = s;
+// 			*len++;
+// 		}
+// 		i++;
+// 	}
+// 	return (token);
+// }
+
+int	ft_sep_len(char *line, int pos)
 {
-	char	**t;
-	char	**s;
-	int		spaces;
+	char	*err;
+	char	*t;
 	int		i;
 
-	if (!token || !len || *len <= 0)
-		return (NULL);
-	i = 0;
-	while (token[i])
+	if (!line || pos < 0)
+		return (-1);
+	if (ft_isspace(line[pos]) || ft_strchr(REDIR_S, line[pos]))
+		return (pos);
+	if (ft_strchr(OP_STR, line[pos]))
 	{
-		if (token[i][0] == '|' && token[i][1])
+		i = 1;
+		if (line[pos + i] == line[pos])
+			i++;
+		while (ft_isspace(line[pos + i]))
+			i++;
+		if (pos + i < ft_strlen(line) && ft_strchr(OP_STR, line[pos + i]))
 		{
-			spaces = 1;
-			t = (char **)ft_add_re_ptr((void **)token, "|", i);
-			while (ft_isspace(token[i][spaces]))
-				spaces++;
-			s = (char **)ft_add_ptr((void **)t, token[i] + spaces, i + 1);
-			if (!t || ! s)
-				return (ft_free_d(s), ft_free_d(t), NULL);
-			ft_free_tokens(token, *len);
-			ft_free_tokens(t, *len);
-			token = s;
-			*len++;
+			t = ft_strjoin(SYN_ERR, &(line[pos + i]));
+			err = ft_strjoin(t, "\'\n");
+			if (!t || !err)
+				perror("malloc : ");
+			return (write(2, err, ft_strlen(err)), free(t), free(err),-1);
 		}
-		i++;
 	}
-	return (token);
+	if (pos == 0 && ft_strchr(OP_STR, line[pos]) && line[pos + 1] == line[pos])
+		return (2);
+	if (pos == 0 && ft_strchr(OP_STR, line[pos]))
+		return (1);
 }
 
-int	ft_sep_len(char *line)
+int	ft_token_len(char *line)
 {
 	int	i;
 	int	len;
@@ -67,6 +99,8 @@ int	ft_sep_len(char *line)
 		}
 		if (ft_strchr(SEP_STR, line[i]) && i != 0)
 			return (i);
+		if (ft_strchr(SEP_STR, line[i]) && i == 0)
+			return (ft_sep_len(line + i, i));			
 		i++;
 	}
 	return (i);
@@ -77,23 +111,23 @@ int	ft_num_s_tokens(char *line)
 	int	i;
 	int	len;
 	int	line_len;
-	int	token_num;
+	int	num_token;
 
 	if (!line)
 		return (0);
 	i = 0;
-	token_num = 0;
+	num_token = 0;
 	line_len = ft_strlen(line);
 	while (i < line_len)
 	{
-		len = ft_sep_len(line + i);
+		len = ft_token_len(line + i);
 		if (len < 0)
 			return (-1);
 		i += len;
-		token_num++;
-		i++;
+		num_token++;
+		continue ;
 	}
-	return (token_num);
+	return (num_token);
 }
 
 char	**ft_token_sep(char *line)
@@ -107,18 +141,20 @@ char	**ft_token_sep(char *line)
 		return (NULL);
 	len = ft_num_s_tokens(line);
 	if (len < 0)
-		return (NULL);
+		return (free(line), NULL);
 	tokens = (char **)ft_calloc(len + 1, sizeof(char *));
+	if (!tokens)
+		return (free(line), perror("malloc : "), NULL);
 	i = 0;
 	j = 0;
 	while (tokens && i < ft_strlen(line))
 	{
 		while (ft_isspace(line[i]))
 			i++;
-		if (ft_sep_len(line + i) <= 0)
-			return (tokens[len] = NULL, ft_free_d(tokens), NULL);
-		tokens[j++] = ft_strndup(line + i, ft_sep_len(line + i));
-		i += ft_sep_len(line + i);
+		if (ft_token_len(line + i) <= 0)
+			return (tokens[len] = NULL, ft_free_d(tokens), free(line), NULL);
+		tokens[j++] = ft_strndup(line + i, ft_token_len(line + i));
+		i += ft_token_len(line + i);
 	}
-	return (tokens[len] = NULL, tokens);
+	return (free(line), tokens[len] = NULL, tokens);
 }

@@ -96,6 +96,7 @@ int	ft_exec_shell(char **envp)
 
 	prompt = NULL;
 	cl = NULL;
+	tokens = NULL;
 	while (1)
 	{
 		free(cl);
@@ -103,15 +104,17 @@ int	ft_exec_shell(char **envp)
 		prompt = ft_prompt(envp);
 		cl = readline(prompt);
 		if (!cl)
-			break ;
+			return (free(prompt), rl_clear_history(), write(1, "exit\n", 5), 0);
 		if (g_sigint_received || ft_strlen(cl) <= 0)
 		{
 			g_sigint_received = 0;
 			continue ;
 		}
-		cli = ft_tokens(cl, envp);
-		if (cl && !tokens)
-			return (2);
+		if (cl[ft_strlen(cl) - 1] == '|')
+			cl = ft_heredoc_pipe(cl);
+		if (!cl)
+			return (free(cl), free(prompt), rl_clear_history(), 2);
+		cli = ft_tokens(cl, envp);	
 		ft_print_list(cli);
 		ft_free_list(&cli);
 		add_history(cl);

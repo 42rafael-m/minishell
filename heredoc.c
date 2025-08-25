@@ -95,11 +95,11 @@ char	*ft_heredoc_pipe(char *line)
 		free(line);
 		line = ft_strjoin(t, "\n");
 		free(t);
-		if (line[ft_strlen(line) - 1] == '|')
+		if (line[ft_strlen(line) - 2] == '|')
 			continue ;
 		break ;
 	}
-	return (line);
+	return (free(new_line), line);
 }
 
 int	ft_heredoc(char *token, t_cli *cli)
@@ -126,6 +126,8 @@ int	ft_heredoc(char *token, t_cli *cli)
 		line = readline("> ");
 		if (!line || !ft_strncmp(line, delim, ft_strlen(line)))
 			break ;
+		if (g_sigint_received)
+			return (free(line), free(delim), -1);
 		t = ft_strjoin(cli->heredoc, line);
 		free(cli->heredoc);
 		cli->heredoc = ft_strjoin(t, "\n");

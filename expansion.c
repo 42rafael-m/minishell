@@ -114,20 +114,20 @@ char	*ft_expand_line(char *line)
 char	**ft_expand_tokens(char **tokens, int *len)
 {
 	char	*t;
-	char	**piped;
+	// char	**piped;
 	int		i;
 
 	if (!tokens)
 		return (NULL);
 	i = 0;
-	piped = ft_lex_pipe(tokens, len);
+	// piped = ft_lex_pipe(tokens, len);
 	i = 0;
-	while (piped[i])
+	while (tokens[i])
 	{
-		t = ft_expand_line(piped[i]);
-		piped[i] = ft_escape_quotes(t);
+		t = ft_expand_line(tokens[i]);
+		tokens[i] = ft_escape_quotes(t);
 		free(t);
 		i++;
 	}
-	return (piped);
+	return (tokens);
 }
