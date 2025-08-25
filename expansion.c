@@ -121,21 +121,12 @@ char	**ft_expand_tokens(char **tokens, int *len)
 		return (NULL);
 	i = 0;
 	piped = ft_lex_pipe(tokens, len);
-	// while (piped[i])
-	// {
-	// 	printf("piped[%d] = %s\n", i, piped[i]);
-	// 	i++;
-	// }
 	i = 0;
 	while (piped[i])
 	{
 		t = ft_expand_line(piped[i]);
-		// printf("in_expanded = 8%s8\n", t);
 		piped[i] = ft_escape_quotes(t);
 		free(t);
-		// printf("in_escaped = 8%s8\n", piped[i]);
-		// if (t && !tokens[i])
-		// 	return (0);    Comentado por caso de que el token sea "", que devuelve nulo y no hay error. Mirar cómo manejar los otros errores
 		i++;
 	}
 	return (piped);

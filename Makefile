@@ -1,6 +1,9 @@
 NAME = minishell
 LIBFT_A = libft/libft.a
-SRC = minishell.c lexing.c lexing1.c utils.c parsing.c expansion.c heredoc.c
+SRC = minishell.c lexing.c lexing1.c utils.c\
+	parsing.c parsing1.c expansion.c\
+	heredoc.c variables.c signals.c
+
 OBJ = $(SRC:.c=.o)
 CFLAGS += -g -Ilibft #-Wall -Wextra -Werror 
 

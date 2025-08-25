@@ -23,13 +23,13 @@ int	ft_heredoc_len(char *line)
 		i++;
 	while (line[i] && ft_isspace(line[i]))
 		i++;
-	if (line[i] && ft_strchr(REDIR_S, line[i]))
-		return (write(2, UNEX_T1, 50), -1);
+	if (line[i] && ft_strchr(REDIR_S, line[i]) || !line[1])
+		return ( write(2, UNEX_T1, 50), -1);
 	if (ft_strchr(QUOTES, line[i]))
 	{
 		len = ft_quoted_len(line + i, line[i]);
 		if (len < 0)
-			return (printf("here_len error\n"), -1);
+			return (-1);
 		i += len;
 	}
 	while (line [i])
@@ -81,7 +81,6 @@ int	ft_heredoc(char *token, t_cli *cli)
 	if (!token || !cli)
 		return (0);
 	delim = ft_trim_delim(token, &option);
-	// printf("delim = %s\n", delim);
 	free(cli->heredoc);
 	free(cli->infile);
 	cli->infile = NULL;

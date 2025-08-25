@@ -61,7 +61,7 @@ int	ft_sep_len(char *line)
 		if (ft_strchr(QUOTES, line[i]))
 		{
 			if (ft_quoted_len(line + i, line[i]) < 0)
-				return (printf("sep_len error\n"), -1);
+				return (-2);
 			i = (ft_quoted_len(line + i, line[i]) + i);
 			continue ;
 		}
@@ -88,7 +88,7 @@ int	ft_num_s_tokens(char *line)
 	{
 		len = ft_sep_len(line + i);
 		if (len < 0)
-			return (printf("num_s_tokens error!\n"), -1);
+			return (-1);
 		i += len;
 		token_num++;
 		i++;
@@ -106,7 +106,7 @@ char	**ft_token_sep(char *line)
 	if (!line)
 		return (NULL);
 	len = ft_num_s_tokens(line);
-	if (len == -1)
+	if (len < 0)
 		return (NULL);
 	tokens = (char **)ft_calloc(len + 1, sizeof(char *));
 	i = 0;
