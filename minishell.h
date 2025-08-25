@@ -26,6 +26,7 @@
 # include <signal.h>
 # include <sys/wait.h>
 
+# define HERE_PIPE 3
 # define HERE_DOC 2
 # define PARENT 1
 # define CHILD 0
@@ -40,11 +41,12 @@
 # define NO_VAL_VAR " !\"#$%&'()*+,-./:;<=>?@[]^`{|}~ "
 # define ERR_OPEN_Q "minishell: syntax error: quotes not closed\n"
 # define ESC_CHARS1 "\\\"\?$"
+# define PIPE_ERR "minishell: syntax error near unexpected token `|'\n"
 # define UNEX_T1 "minishell: syntax error near unexpected token '<'\n"
 # define UNEX_T2 "minishell: syntax error near unexpected token '>'\n"
 # define HERE_ERR "minishell: warning: here-document delimited by end-of-file (wanted `"
 # define CMD_ERR ": command not found\n"
-
+# define HERE_PIPE_ERR "minishell: syntax error: unexpected end of file\nexit\n"
 extern volatile sig_atomic_t	g_sigint_received;
 
 // typedef enum e_sigmode
@@ -87,10 +89,11 @@ char	*ft_expand_line(char *line);
 char	*ft_trim_delim(char *token, int *option);
 char	*ft_expand_heredoc(int option, t_cli *cli);
 char    *ft_cmd_path(char *env_path, char *cmd);
+char	*ft_heredoc_pipe(char *line);
 int		ft_num_quoted(char *line);
 int		ft_quoted_len(char *line, char quote);
 int		ft_sep_len(char *line);
-int		ft_exec_shell(struct sigaction *sa, char **envp);
+int		ft_exec_shell(char **envp);
 int		ft_num_s_tokens(char *line);
 int		ft_var_len(char	*var);
 int 	ft_trim_s_len(char *line);

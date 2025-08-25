@@ -105,12 +105,14 @@ t_cli	*ft_tokens(char *line, char **envp)
 	t_cli	*cli;
 
 	if (!line)
-		return(NULL);
+		return (NULL);
+	if (line[ft_strlen(line) - 1] == '|')
+		line = ft_heredoc_pipe(line);
 	s = ft_trim_spaces(line);
 	tokens = ft_token_sep(s);
+	free(s);
 	if (!tokens)
 		return (NULL);
-	free(s);
 	env = ft_load_env(envp);
 	cli = ft_init_node(ft_num_s_tokens(line), env);
 	if (!cli)
@@ -119,7 +121,7 @@ t_cli	*ft_tokens(char *line, char **envp)
 	if (!tokens)
 		return (ft_free_all(tokens, &cli, env), NULL);
 	if (tokens && tokens[0] && tokens[0][0] == '|')
-		return (ft_free_all(tokens, &cli, env), write(2, "minishell: syntax error near unexpected token `|'\n", 50), NULL);
+		return (ft_free_all(tokens, &cli, env), write(2, PIPE_ERR, 50), NULL);
 	ft_parse(tokens, cli);
 	ft_free_tokens(tokens, cli->n_tokens);
 	ft_free_d(env);

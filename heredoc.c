@@ -19,11 +19,11 @@ int	ft_heredoc_len(char *line)
 	int		len;
 	
 	i = 0;
-	while (ft_strchr(REDIR_S, line[i]) && i < 2)
+	while (i < ft_strlen(line) && i < 2 && ft_strchr(REDIR_S, line[i]))
 		i++;
 	while (line[i] && ft_isspace(line[i]))
 		i++;
-	if (line[i] && ft_strchr(REDIR_S, line[i]) || !line[1])
+	if (line[i] && ft_strchr(REDIR_S, line[i]) || !line[1] || (ft_strchr(REDIR_S, line[2]) && !line[i]))
 		return ( write(2, UNEX_T1, 50), -1);
 	if (ft_strchr(QUOTES, line[i]))
 	{
@@ -71,6 +71,37 @@ void	ft_here_error(char *delim)
 	return ;
 }
 
+char	*ft_heredoc_pipe(char *line)
+{
+	char	*new_line;
+	char	*t;
+	int		i;
+
+	if (!line)
+		return (NULL);
+	new_line = NULL;
+	while (1)
+	{
+		i = 0;
+		free(new_line);
+		new_line = readline("> ");
+		if (!new_line)
+			return (free(line), line = NULL, write(1, HERE_PIPE_ERR, 53), NULL);
+		while (new_line && ft_isspace(new_line[i]))
+			i++;
+		if (!new_line[i] || new_line[i] == '\n')
+			continue ;
+		t = ft_strjoin(line, new_line);
+		free(line);
+		line = ft_strjoin(t, "\n");
+		free(t);
+		if (line[ft_strlen(line) - 1] == '|')
+			continue ;
+		break ;
+	}
+	return (line);
+}
+
 int	ft_heredoc(char *token, t_cli *cli)
 {
 	char	*delim;
@@ -92,9 +123,8 @@ int	ft_heredoc(char *token, t_cli *cli)
 	while (1)
 	{
 		free(line);
-		line = NULL;
 		line = readline("> ");
-		if (!ft_strncmp(line, delim, ft_strlen(line)) || !line)
+		if (!line || !ft_strncmp(line, delim, ft_strlen(line)))
 			break ;
 		t = ft_strjoin(cli->heredoc, line);
 		free(cli->heredoc);

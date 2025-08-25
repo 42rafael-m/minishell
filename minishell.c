@@ -87,7 +87,7 @@ char	*ft_prompt(char **envp)
 	return (free(t), free(pwd), prompt);
 }
 
-int	ft_exec_shell(struct sigaction *sa, char **envp)
+int	ft_exec_shell(char **envp)
 {
 	char	*cl;
 	char	**tokens;
@@ -110,6 +110,8 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 			continue ;
 		}
 		cli = ft_tokens(cl, envp);
+		if (cl && !tokens)
+			return (2);
 		ft_print_list(cli);
 		ft_free_list(&cli);
 		add_history(cl);
@@ -119,13 +121,6 @@ int	ft_exec_shell(struct sigaction *sa, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	struct sigaction sa;
-	t_cli	*cli;
-
 	ft_set_sig(PARENT);
-	sa.sa_handler = ft_sig_handler;
-    sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	ft_exec_shell(&sa, envp);
-	return (0);
+	return (ft_exec_shell(envp));
 }
