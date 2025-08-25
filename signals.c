@@ -25,7 +25,7 @@ void	ft_set_sig(int option)
 	struct sigaction	sa;
 
 	ft_memset(&sa, 0, sizeof(sa));
-	sigemptyset(&sa.sa_mask);
+	// sigemptyset(&sa.sa_mask);
 	if (option == IGNORE)
 	{
 		sa.sa_handler = SIG_IGN;
