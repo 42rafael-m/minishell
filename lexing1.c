@@ -86,7 +86,7 @@ int	ft_token_len(char *line)
 	len = ft_strlen(line);
 	while (i < len && ft_isspace(line[i]))
 		i++;
-	if (ft_strchr(REDIR_S, line[i]))
+	if (i < len && ft_strchr(REDIR_S, line[i]))
 		return (ft_heredoc_len(line + i));
 	while (i < len)
 	{
@@ -98,7 +98,7 @@ int	ft_token_len(char *line)
 			continue ;
 		}
 		if (ft_strchr(SEP_STR, line[i]) && i != 0)
-			return (i);
+			return (i + 1);
 		if (ft_strchr(SEP_STR, line[i]) && i == 0)
 			return (ft_sep_len(line + i, i));			
 		i++;
@@ -125,7 +125,6 @@ int	ft_num_s_tokens(char *line)
 			return (-1);
 		i += len;
 		num_token++;
-		continue ;
 	}
 	return (num_token);
 }

@@ -136,5 +136,6 @@ int	ft_heredoc(char *token, t_cli *cli)
 	if (!line)
 		ft_here_error(delim);
 	cli->heredoc = ft_expand_heredoc(option, cli);
+	printf("hd = %s\n", cli->heredoc);
 	return (free(line), free(delim), 1);
 }

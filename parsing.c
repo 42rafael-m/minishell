@@ -113,13 +113,13 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 	if (!token || !cli)
 		return (NULL);
 	i = 0;
-	while (i <= cli->n_tokens)
+	while (i < cli->n_tokens)
 	{
 		if (token[i] && !ft_strncmp(token[i], ">>", 2))
 			ft_append(token[i], cli);
 		else if (token[i] && !ft_strncmp(token[i], "<<", 2))
 		{
-			if (ft_heredoc(token[i], cli) < 0);
+			if (ft_heredoc(token[i], cli) == 0)
 				return (NULL);
 		}
 		else if (token[i] && token[i][0] == '<')
