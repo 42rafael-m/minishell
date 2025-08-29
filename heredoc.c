@@ -23,8 +23,6 @@ int	ft_heredoc_len(char *line)
 		i++;
 	while (line[i] && ft_isspace(line[i]))
 		i++;
-	if (line[i] && ft_strchr(REDIR_S, line[i]) || !line[1] || (ft_strchr(REDIR_S, line[2]) && !line[i]))
-		return ( write(2, UNEX_T1, 50), -1);
 	if (ft_strchr(QUOTES, line[i]))
 	{
 		len = ft_quoted_len(line + i, line[i]);
@@ -86,7 +84,7 @@ char	*ft_heredoc_pipe(char *line)
 		free(new_line);
 		new_line = readline("> ");
 		if (!new_line)
-			return (free(line), line = NULL, write(1, HERE_PIPE_ERR, 53), NULL);
+			return (free(line), line = NULL, write(2, HERE_PIPE_ERR, 53), NULL);
 		while (new_line && ft_isspace(new_line[i]))
 			i++;
 		if (!new_line[i] || new_line[i] == '\n')
@@ -120,6 +118,7 @@ int	ft_heredoc(char *token, t_cli *cli)
 		return (0);
 	line = NULL;
 	option = 0;
+	ft_set_sig(HERE_DOC);
 	while (1)
 	{
 		free(line);
@@ -127,12 +126,13 @@ int	ft_heredoc(char *token, t_cli *cli)
 		if (!line || !ft_strncmp(line, delim, ft_strlen(line)))
 			break ;
 		if (g_sigint_received)
-			return (free(line), free(delim), -1);
+			return (free(line), free(delim), write(2, "sig received in hd\n", 20), g_sigint_received = 0, -1);
 		t = ft_strjoin(cli->heredoc, line);
 		free(cli->heredoc);
 		cli->heredoc = ft_strjoin(t, "\n");
 		free(t);
 	}
+	ft_set_sig(PARENT);
 	if (!line)
 		ft_here_error(delim);
 	cli->heredoc = ft_expand_heredoc(option, cli);

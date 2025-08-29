@@ -12,37 +12,6 @@
 
 #include "minishell.h"
 
-// char	**ft_lex_pipe(char **token, int *len)
-// {
-// 	char	**t;
-// 	char	**s;
-// 	int		spaces;
-// 	int		i;
-
-// 	if (!token || !len || *len <= 0)
-// 		return (NULL);
-// 	i = 0;
-// 	while (token[i])
-// 	{
-// 		if (token[i][0] == '|' && token[i][1])
-// 		{
-// 			spaces = 1;
-// 			t = (char **)ft_add_re_ptr((void **)token, "|", i);
-// 			while (ft_isspace(token[i][spaces]))
-// 				spaces++;
-// 			s = (char **)ft_add_ptr((void **)t, token[i] + spaces, i + 1);
-// 			if (!t || ! s)
-// 				return (ft_free_d(s), ft_free_d(t), NULL);
-// 			ft_free_tokens(token, *len);
-// 			ft_free_tokens(t, *len);
-// 			token = s;
-// 			*len++;
-// 		}
-// 		i++;
-// 	}
-// 	return (token);
-// }
-
 int	ft_sep_len(char *line, int pos)
 {
 	char	*err;
@@ -60,14 +29,6 @@ int	ft_sep_len(char *line, int pos)
 			i++;
 		while (ft_isspace(line[pos + i]))
 			i++;
-		if (pos + i < ft_strlen(line) && ft_strchr(OP_STR, line[pos + i]))
-		{
-			t = ft_strjoin(SYN_ERR, &(line[pos + i]));
-			err = ft_strjoin(t, "\'\n");
-			if (!t || !err)
-				perror("malloc : ");
-			return (write(2, err, ft_strlen(err)), free(t), free(err),-1);
-		}
 	}
 	if (pos == 0 && ft_strchr(OP_STR, line[pos]) && line[pos + 1] == line[pos])
 		return (2);

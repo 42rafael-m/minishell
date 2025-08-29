@@ -110,14 +110,12 @@ t_cli	*ft_tokens(char *line, char **envp)
 	if (!tokens)
 		return (NULL);
 	env = ft_load_env(envp);
-	cli = ft_init_node(ft_num_s_tokens(line), env);
+	cli = ft_init_node(ft_num_s_tokens(line), env, 0);
 	if (!cli)
 		return (ft_free_all(tokens, &cli, env), NULL);
 	tokens = ft_expand_tokens(tokens, &(cli->n_tokens));
 	if (!tokens)
 		return (ft_free_all(tokens, &cli, env), NULL);
-	if (tokens && tokens[0] && tokens[0][0] == '|')
-		return (ft_free_all(tokens, &cli, env), write(2, PIPE_ERR, 50), NULL);
 	len = cli->n_tokens;
 	if (!ft_parse(tokens, cli))
 		ft_free_list(&cli);

@@ -35,6 +35,8 @@ void	ft_print_list(t_cli *cli)
 			printf("r_mode %d = %d\n", node, cli->r_mode);
 		if (cli->heredoc)
 			printf("heredoc %d = %s\n", node, cli->heredoc);
+		printf("op = %d\n", cli->op);
+		printf("priority = %d\n", cli->priority);
 		while (cli->args && i < ft_doubleptr_len((void **)cli->args))
 		{
 			printf("args[%d] %d = %s\n", i, node, cli->args[i]);
@@ -51,6 +53,18 @@ void	ft_print_list(t_cli *cli)
 	}
 }
 
+void	ft_perror(char *token, char *msg)
+{
+	char	*t;
+	char	*err;
+
+	t = ft_strjoin(msg, token);
+	err = ft_strjoin(t, "'\n");
+	write(2, err, ft_strlen(t));
+	free(t);
+	free(err);
+}
+
 void	ft_free_tokens(char **tokens, int n)
 {
 	int	i;
@@ -65,7 +79,7 @@ void	ft_free_tokens(char **tokens, int n)
 		free(tokens);
 }
 
-t_cli	*ft_init_node(int len, char **env)
+t_cli	*ft_init_node(int len, char **env, int op)
 {
 	t_cli *cli;
 
@@ -73,12 +87,12 @@ t_cli	*ft_init_node(int len, char **env)
 		return (NULL);
 	cli = (t_cli *)ft_calloc(1, sizeof(t_cli));
 	if (!cli)
-		return (ft_free_d(env), perror("malloc"), NULL);
+		return (ft_free_d(env), perror("malloc : "), NULL);
 	cli->cmd = NULL;
 	cli->args = NULL;
 	cli->env = ft_load_env(env);
 	if (env && !cli->env)
-		perror("malloc: ");
+		perror("malloc : ");
 	cli->infile = NULL;
 	cli->outfile = NULL;
 	cli->heredoc = NULL;
@@ -86,6 +100,8 @@ t_cli	*ft_init_node(int len, char **env)
 	cli->next = NULL;
 	cli->r_mode = WRITE;
 	cli->n_tokens = len;
+	cli->priority = 1;
+	cli->op = op;
 	return (cli);
 }
 

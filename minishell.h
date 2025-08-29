@@ -36,10 +36,13 @@
 # define SEP_STR " \n\t<>|&()"
 # define SEP_STR2 " \n\t<>|\"\'"
 # define OP_STR "&|()"
+# define PIPE 1
+# define AND 2
+# define OR 3
 # define IFS " \t\n"
 # define REDIR_S "<>"
 # define QUOTES "\"\'"
-# define NO_VAL_VAR " !\"#$%&'()*+,-./:;<=>?@[]^`{|}~ "
+# define NO_VAL_VAR " !\"#$%&'()*+,-./:;<=>@[]^`{|}~ "
 # define ERR_OPEN_Q "minishell: syntax error: quotes not closed\n"
 # define ESC_CHARS1 "\\\"\?$"
 # define PIPE_ERR "minishell: syntax error near unexpected token `|'\n"
@@ -49,6 +52,7 @@
 # define CMD_ERR ": command not found\n"
 # define HERE_PIPE_ERR "minishell: syntax error: unexpected end of file\nexit\n"
 # define SYN_ERR "minishell: syntax error near unexpected token `"
+
 extern volatile sig_atomic_t	g_sigint_received;
 
 typedef struct s_cli
@@ -65,6 +69,7 @@ typedef struct s_cli
 	int				n_tokens;
 	int				status;
 	int				priority;
+	int				op;
 }	t_cli;
 
 char	**ft_token_sep(char *line);
@@ -100,15 +105,17 @@ int		ft_infile(char *token, t_cli *cli);
 int		ft_outfile(char *token, t_cli *cli);
 int		ft_cmd(char	*token, t_cli *cli);
 int		ft_args(char *token, t_cli *cli, int pos);
-void	ft_no_cmd_error(char *cmd);
+// void	ft_no_cmd_error(char *cmd);
 void	ft_set_sig(int option);
 void	ft_sig_parent(int signal);
 void	ft_free_list(t_cli **cli);
 void	ft_here_error(char *delim);
 void	ft_free_tokens(char **tokens, int n);
+void	ft_perror(char *token, char *msg);
 t_cli	*ft_tokens(char *line, char **env);
 t_cli	*ft_parse(char **tokens, t_cli *cli);
-t_cli	*ft_init_node(int len, char **envp);
+t_cli	*ft_init_node(int len, char **envp, int op);
+t_cli	*ft_parse_op(char *token, t_cli *cli);
 void	ft_print_list(t_cli *cli);
 
 #endif
