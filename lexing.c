@@ -118,8 +118,11 @@ t_cli	*ft_tokens(char *line, char **envp)
 		return (ft_free_all(tokens, &cli, env), NULL);
 	len = cli->n_tokens;
 	if (!ft_parse(tokens, cli))
+	{
 		ft_free_list(&cli);
-	ft_free_tokens(tokens, len);
-	ft_free_d(env);
-	return (cli);
+		ft_free_tokens(tokens, len);
+		ft_free_d(env);
+		return (NULL);
+	}
+	return (ft_free_d(env), ft_free_tokens(tokens, len), cli);
 }

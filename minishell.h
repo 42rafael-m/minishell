@@ -25,6 +25,7 @@
 # include <dirent.h>
 # include <signal.h>
 # include <sys/wait.h>
+#include <sys/ioctl.h>
 
 # define HERE_PIPE 3
 # define HERE_DOC 2

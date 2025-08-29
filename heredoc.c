@@ -126,13 +126,13 @@ int	ft_heredoc(char *token, t_cli *cli)
 		if (!line || !ft_strncmp(line, delim, ft_strlen(line)))
 			break ;
 		if (g_sigint_received)
-			return (free(line), free(delim), write(2, "sig received in hd\n", 20), g_sigint_received = 0, -1);
+			return (free(line), free(delim), write(2, "sig received in hd\n", 20), -1);
 		t = ft_strjoin(cli->heredoc, line);
 		free(cli->heredoc);
 		cli->heredoc = ft_strjoin(t, "\n");
 		free(t);
 	}
-	ft_set_sig(PARENT);
+	rl_done = 0;
 	if (!line)
 		ft_here_error(delim);
 	cli->heredoc = ft_expand_heredoc(option, cli);

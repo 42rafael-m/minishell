@@ -125,8 +125,9 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 			ft_append(token[i], cli);
 		else if (token[i] && !ft_strncmp(token[i], "<<", 2))
 		{
-			if (ft_heredoc(token[i], cli) == 0)
-				return (perror("hd_error"), NULL);
+			if (ft_heredoc(token[i], cli) <= 0)
+				return (perror("hd_error"), ft_set_sig(PARENT), NULL);
+			ft_set_sig(PARENT);
 		}
 		else if (token[i] && token[i][0] == '<')
 			ft_infile(token[i], cli);

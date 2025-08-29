@@ -125,5 +125,6 @@ int	ft_exec_shell(char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	ft_set_sig(PARENT);
+	rl_catch_signals = 0;
 	return (ft_exec_shell(envp));
 }
