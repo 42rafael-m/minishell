@@ -170,6 +170,7 @@ char	*ft_trim_spaces(char *line)
 {
 	int		i;
 	int		j;
+	char	sep;
 	char	*trimmed;
 
 	i = 0;
@@ -185,10 +186,10 @@ char	*ft_trim_spaces(char *line)
 			i++;
 		if (i < ft_strlen(line) && ft_strchr(QUOTES, line[i]))
 		{
-			if (ft_quoted_len(line + i, line[i]) < 0)
-				return (NULL);
-			i += ft_quoted_len(line + i, line[i]);
-			continue ;
+			sep = line[i];
+			trimmed[j++] = line[i++];
+			while (i < ft_strlen(line) && line[i] != sep)
+				trimmed[j++] = line[i++];
 		}
 		if (i < ft_strlen(line))
 			trimmed[j++] = line[i++];
