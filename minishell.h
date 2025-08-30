@@ -90,7 +90,7 @@ char	*ft_expand_line(char *line);
 char	*ft_trim_delim(char *token, int *option);
 char	*ft_expand_heredoc(int option, t_cli *cli);
 char    *ft_cmd_path(char *env_path, char *cmd);
-char	*ft_heredoc_pipe(char *line);
+char	*ft_heredoc_op(char *line, char op);
 int		ft_sep_len(char *line, int pos);
 int		ft_num_quoted(char *line);
 int		ft_quoted_len(char *line, char quote);

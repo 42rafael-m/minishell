@@ -21,7 +21,6 @@ t_cli	*ft_parse_op(char *token, t_cli *cli)
 	op = 0;
 	if (!token || !cli)
 		return (perror("parse op !token || !cli"), NULL);
-	// printf("token[0] = '%c'\n",  token[0]);
 	if (token[0] == '|' && token[1] == '|')
 		op = OR;
 	else if (token[0] == '|' )
@@ -30,6 +29,7 @@ t_cli	*ft_parse_op(char *token, t_cli *cli)
 		op = AND;
 	else
 		return (perror("invalid token parse_op"), NULL);
+	cli->op = op;
 	next_cli = ft_init_node(cli->n_tokens, cli->env, op);
 	if (!next_cli)
 		return (perror("malloc : "), NULL);

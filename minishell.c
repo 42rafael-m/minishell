@@ -14,112 +14,108 @@
 
 volatile sig_atomic_t	g_sigint_received = 0;
 
-char	*get_pwd(char *cwd)
-{
-	char	*home;
-	char	*pwd;
-	char	*t;
+// char	*get_pwd(char *cwd)
+// {
+// 	char	*home;
+// 	char	*pwd;
+// 	char	*t;
 
-	if (!cwd)
-		return (NULL);
-	home = ft_strtrim(getenv("HOME"), "HOME=");
-	if (!home)
-		return (NULL);
-	if (!ft_strncmp(home, cwd, ft_strlen(home)))
-	{
-		t = ft_strtrim(cwd, home);
-		pwd = ft_strjoin("~/", t);
-		return (free(home), free(t), pwd);
-	}
-	pwd = ft_strdup(cwd);
-	return (free(home), pwd);
-}
+// 	if (!cwd)
+// 		return (NULL);
+// 	home = ft_strtrim(getenv("HOME"), "HOME=");
+// 	if (!home)
+// 		return (NULL);
+// 	if (!ft_strncmp(home, cwd, ft_strlen(home)))
+// 	{
+// 		t = ft_strtrim(cwd, home);
+// 		pwd = ft_strjoin("~/", t);
+// 		return (free(home), free(t), pwd);
+// 	}
+// 	pwd = ft_strdup(cwd);
+// 	return (free(home), pwd);
+// }
 
-char	*get_hostname(void)
-{
-	char	*r;
-	char	*buffer;
-	char	*t;
-	int		fd;
+// char	*get_hostname(void)
+// {
+// 	char	*r;
+// 	char	*buffer;
+// 	char	*t;
+// 	int		fd;
 
-	r = NULL;
-	fd = open("/etc/hostname", O_RDONLY);
-	buffer = ft_calloc(2, sizeof(char));
-	if (fd == -1 || ! buffer)
-		return (free(buffer), NULL);
-	read(fd, buffer, 1);
-	while (buffer[0] != '\n' && buffer[0] != EOF)
-	{
-		t = r;
-		r = ft_strjoin(r, buffer);
-		read(fd, buffer, 1);
-		free(t);
-	}
-	return (free(buffer), close(fd), r);
-}
+// 	r = NULL;
+// 	fd = open("/etc/hostname", O_RDONLY);
+// 	buffer = ft_calloc(2, sizeof(char));
+// 	if (fd == -1 || ! buffer)
+// 		return (free(buffer), NULL);
+// 	read(fd, buffer, 1);
+// 	while (buffer[0] != '\n' && buffer[0] != EOF)
+// 	{
+// 		t = r;
+// 		r = ft_strjoin(r, buffer);
+// 		read(fd, buffer, 1);
+// 		free(t);
+// 	}
+// 	return (free(buffer), close(fd), r);
+// }
 
-char	*ft_prompt(char **envp)
-{
-	char	*user;
-	char	*pwd;
-	char	*prompt;
-	char	*t;
+// char	*ft_prompt(char **envp)
+// {
+// 	char	*user;
+// 	char	*pwd;
+// 	char	*prompt;
+// 	char	*t;
 
-	if (!envp)
-		return (NULL);
-	user = ft_strtrim(getenv("USER"), "USER=");
-	t = (char *)ft_calloc(4096, sizeof(char));
-	if (!t || ! user)
-		return (perror("malloc: "), NULL);
-	pwd = get_pwd(getcwd(t, 4096));
-	free(t);
-	prompt = ft_strjoin(user, "@");
-	free(user);
-	user = get_hostname();
-	t = ft_strjoin(prompt, user);
-	free(user);
-	free(prompt);
-	prompt = ft_strjoin(t, ":");
-	free(t);
-	t = ft_strjoin(prompt, pwd);
-	free(prompt);
-	prompt = ft_strjoin(t, "$ ");
-	return (free(t), free(pwd), prompt);
-}
+// 	if (!envp)
+// 		return (NULL);
+// 	user = ft_strtrim(getenv("USER"), "USER=");
+// 	t = (char *)ft_calloc(4096, sizeof(char));
+// 	if (!t || ! user)
+// 		return (perror("malloc: "), NULL);
+// 	pwd = get_pwd(getcwd(t, 4096));
+// 	free(t);
+// 	prompt = ft_strjoin(user, "@");
+// 	free(user);
+// 	user = get_hostname();
+// 	t = ft_strjoin(prompt, user);
+// 	free(user);
+// 	free(prompt);
+// 	prompt = ft_strjoin(t, ":");
+// 	free(t);
+// 	t = ft_strjoin(prompt, pwd);
+// 	free(prompt);
+// 	prompt = ft_strjoin(t, "$ ");
+// 	return (free(t), free(pwd), prompt);
+// }
 
 int	ft_exec_shell(char **envp)
 {
 	char	*cl;
 	char	**tokens;
-	char	*prompt;
 	t_cli	*cli;
 
-	prompt = NULL;
 	cl = NULL;
 	tokens = NULL;
 	while (1)
 	{
 		free(cl);
-		free(prompt);
-		prompt = ft_prompt(envp);
-		cl = readline(prompt);
+		cl = readline("\033[1;32mminishell\033[0m$ ");
 		if (!cl)
-			return (free(prompt), rl_clear_history(), write(1, "exit\n", 5), 0);
+			return (rl_clear_history(), write(1, "exit\n", 5), 0);
 		if (g_sigint_received || ft_strlen(cl) <= 0)
 		{
 			g_sigint_received = 0;
 			continue ;
 		}
-		if (cl[ft_strlen(cl) - 1] == '|')
-			cl = ft_heredoc_pipe(cl);
+		if (ft_strchr(OP_STR, cl[ft_strlen(cl) - 1]))
+			cl = ft_heredoc_op(cl, cl[ft_strlen(cl) - 1]);
 		if (!cl)
-			return (free(cl), free(prompt), rl_clear_history(), 2);
+			return (free(cl), rl_clear_history(), 2);
 		cli = ft_tokens(cl, envp);	
 		ft_print_list(cli);
 		ft_free_list(&cli);
 		add_history(cl);
 	}
-	return (free(prompt), free(cl), rl_clear_history(), 0);
+	return (free(cl), rl_clear_history(), 0);
 }
 
 int	main(int argc, char **argv, char **envp)

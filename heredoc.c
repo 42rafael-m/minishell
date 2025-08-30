@@ -69,7 +69,7 @@ void	ft_here_error(char *delim)
 	return ;
 }
 
-char	*ft_heredoc_pipe(char *line)
+char	*ft_heredoc_op(char *line, char op)
 {
 	char	*new_line;
 	char	*t;
@@ -93,7 +93,7 @@ char	*ft_heredoc_pipe(char *line)
 		free(line);
 		line = ft_strjoin(t, "\n");
 		free(t);
-		if (line[ft_strlen(line) - 2] == '|')
+		if (ft_strchr(OP_STR, line[ft_strlen(line) - 2]))
 			continue ;
 		break ;
 	}

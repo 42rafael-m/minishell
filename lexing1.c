@@ -59,7 +59,7 @@ int	ft_token_len(char *line)
 			continue ;
 		}
 		if (ft_strchr(SEP_STR, line[i]) && i != 0)
-			return (i + 1);
+			return (i);
 		if (ft_strchr(SEP_STR, line[i]) && i == 0)
 			return (ft_sep_len(line + i, i));			
 		i++;
