@@ -53,7 +53,7 @@ char	*ft_itoa(int n)
 	while (nbr > 9)
 	{
 		result[len] = (nbr % 10) + 48;
-		nbr = nbr / 1;
+		nbr = nbr / 10;
 		len --;
 	}
 	result[len] = nbr + 48;

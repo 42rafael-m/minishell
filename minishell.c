@@ -86,6 +86,70 @@ volatile sig_atomic_t	g_sigint_received = 0;
 // 	prompt = ft_strjoin(t, "$ ");
 // 	return (free(t), free(pwd), prompt);
 // }
+char	*ft_here_prnts(char *line)
+{
+	char	*new_line;
+	char	*t;
+	int		i;
+	int	end;
+
+	if (!line)
+		return (NULL);
+	new_line = NULL;
+	end = 0;
+	ft_set_sig(HERE_DOC);
+	while (1)
+	{
+		i = 0;
+		free(new_line);
+		new_line = readline("> ");
+		if (!new_line)
+			return (free(line), line = NULL, write(2, UNEX_EOF, 49), ft_set_sig(PARENT), NULL);
+		while (new_line && ft_isspace(new_line[i]))
+			i++;
+		if (!new_line[i] || new_line[i] == '\n')
+			continue ;
+		if (ft_strchr(new_line, ')'))
+			end = 1;
+		t = ft_strjoin(line, new_line);
+		free(line);
+		line = t;
+		if (end)
+			break ;
+	}
+	return (free(new_line), ft_set_sig(PARENT), line);
+}
+
+char	*ft_check_prnts(char *line)
+{
+	int		i;
+	int		len;
+	int		prnts;
+
+	if (!line)
+		return (NULL);
+	i = 0;
+	prnts = 0;
+	while (i < ft_strlen(line))
+	{
+		if (ft_strchr(QUOTES, line[i]))
+		{
+			len = ft_quoted_len(line + i, line[i]);
+			if (len < 0)
+				return (free(line), NULL);
+			i += len;	
+		}
+		if (line[i] == '(')
+			prnts = 1;
+		if (prnts && line[i] == ')')
+			prnts = 0;
+		i++;
+	}
+	if (prnts)
+		line = ft_here_prnts(line);
+	return (line);
+}
+
 
 int	ft_exec_shell(char **envp)
 {
@@ -106,10 +170,12 @@ int	ft_exec_shell(char **envp)
 			g_sigint_received = 0;
 			continue ;
 		}
-		if (ft_strchr(OP_STR, cl[ft_strlen(cl) - 1]))
+		if (ft_strchr(OP_STR2, cl[ft_strlen(cl) - 1]))
 			cl = ft_heredoc_op(cl, cl[ft_strlen(cl) - 1]);
+		cl = ft_check_prnts(cl);
 		if (!cl)
 			return (free(cl), rl_clear_history(), 2);
+		printf("cl = %s\n", cl);
 		cli = ft_tokens(cl, envp);	
 		ft_print_list(cli);
 		ft_free_list(&cli);

@@ -81,6 +81,11 @@ int	ft_num_s_tokens(char *line)
 	line_len = ft_strlen(line);
 	while (i < line_len)
 	{
+		if (ft_isspace(line[i]) && (ft_isspace(line[i + 1]) || !line[i + 1]))
+		{
+			i++;
+			continue ;
+		}
 		len = ft_token_len(line + i);
 		if (len < 0)
 			return (-1);

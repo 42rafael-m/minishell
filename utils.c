@@ -170,12 +170,10 @@ char	*ft_trim_spaces(char *line)
 {
 	int		i;
 	int		j;
-	char	sep;
 	char	*trimmed;
 
 	i = 0;
 	j = 0;
-	sep = '\0';
 	if (ft_trim_s_len(line) <= 0)
 		return (NULL);
 	trimmed = ft_calloc(ft_trim_s_len(line) + 1, sizeof(char));
@@ -183,16 +181,17 @@ char	*ft_trim_spaces(char *line)
 		i++;
 	while (trimmed && line && i < ft_strlen(line))
 	{
-		while (!sep && ft_isspace(line[i]) && (ft_isspace(line[i + 1]) || !line[i + 1]))
+		while (ft_isspace(line[i]) && (ft_isspace(line[i + 1]) || !line[i + 1]))
 			i++;
-		if (ft_strchr(QUOTES, line[i]))
+		if (i < ft_strlen(line) && ft_strchr(QUOTES, line[i]))
 		{
-			if (sep == '\0')
-				sep = line[i];
-			else if (line[i] == sep)
-				sep = '\0';
+			if (ft_quoted_len(line + i, line[i]) < 0)
+				return (NULL);
+			i += ft_quoted_len(line + i, line[i]);
+			continue ;
 		}
-		trimmed[j++] = line[i++];
+		if (i < ft_strlen(line))
+			trimmed[j++] = line[i++];
 	}
 	return (trimmed);
 }

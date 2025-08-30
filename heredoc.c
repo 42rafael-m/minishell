@@ -59,10 +59,15 @@ void	ft_here_error(char *delim)
 	char	*t;
 	char	*error_msg;
 
-	if (!delim)
-		return ;
+	// if (!delim)
+	// 	return ;
 	t = ft_strjoin(HERE_ERR, delim);
 	error_msg = ft_strjoin(t, "')\n");
+	if (!error_msg)
+	{
+		perror("malloc : ");
+		return ;
+	}
 	write(2, error_msg, ft_strlen(error_msg));
 	free(error_msg);
 	free(t);
@@ -91,9 +96,8 @@ char	*ft_heredoc_op(char *line, char op)
 			continue ;
 		t = ft_strjoin(line, new_line);
 		free(line);
-		line = ft_strjoin(t, "\n");
-		free(t);
-		if (ft_strchr(OP_STR, line[ft_strlen(line) - 2]))
+		line = t;
+		if (ft_strchr(OP_STR2, line[ft_strlen(line) - 1]))
 			continue ;
 		break ;
 	}
@@ -126,7 +130,7 @@ int	ft_heredoc(char *token, t_cli *cli)
 		if (!line || !ft_strncmp(line, delim, ft_strlen(line)))
 			break ;
 		if (g_sigint_received)
-			return (free(line), free(delim), write(2, "sig received in hd\n", 20), -1);
+			return (free(line), free(delim), write(2, "sig received in hd\n", 20), ft_set_sig(PARENT), -1);
 		t = ft_strjoin(cli->heredoc, line);
 		free(cli->heredoc);
 		cli->heredoc = ft_strjoin(t, "\n");
@@ -136,6 +140,6 @@ int	ft_heredoc(char *token, t_cli *cli)
 	if (!line)
 		ft_here_error(delim);
 	cli->heredoc = ft_expand_heredoc(option, cli);
-	printf("hd = %s\n", cli->heredoc);
-	return (free(line), free(delim), 1);
+	// printf("hd = %s\n", cli->heredoc);
+	return (free(line), free(delim), ft_set_sig(PARENT), 1);
 }

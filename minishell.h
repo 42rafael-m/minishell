@@ -25,7 +25,7 @@
 # include <dirent.h>
 # include <signal.h>
 # include <sys/wait.h>
-#include <sys/ioctl.h>
+# include <sys/ioctl.h>
 
 # define HERE_PIPE 3
 # define HERE_DOC 2
@@ -37,6 +37,8 @@
 # define SEP_STR " \n\t<>|&()"
 # define SEP_STR2 " \n\t<>|\"\'"
 # define OP_STR "&|()"
+# define OP_STR2 "&|"
+# define PRNTS "()"
 # define PIPE 1
 # define AND 2
 # define OR 3
@@ -53,6 +55,7 @@
 # define CMD_ERR ": command not found\n"
 # define HERE_PIPE_ERR "minishell: syntax error: unexpected end of file\nexit\n"
 # define SYN_ERR "minishell: syntax error near unexpected token `"
+# define UNEX_EOF "minishell: syntax error: unexpected end of file\n"
 
 extern volatile sig_atomic_t	g_sigint_received;
 
@@ -91,6 +94,8 @@ char	*ft_trim_delim(char *token, int *option);
 char	*ft_expand_heredoc(int option, t_cli *cli);
 char    *ft_cmd_path(char *env_path, char *cmd);
 char	*ft_heredoc_op(char *line, char op);
+char	*ft_check_prnts(char *line);
+char	*ft_here_prnts(char *line);
 int		ft_sep_len(char *line, int pos);
 int		ft_num_quoted(char *line);
 int		ft_quoted_len(char *line, char quote);
@@ -118,5 +123,6 @@ t_cli	*ft_parse(char **tokens, t_cli *cli);
 t_cli	*ft_init_node(int len, char **envp, int op);
 t_cli	*ft_parse_op(char *token, t_cli *cli);
 void	ft_print_list(t_cli *cli);
+char	*ft_trim_spaces(char *line);
 
 #endif

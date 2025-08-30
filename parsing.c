@@ -121,13 +121,13 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 	i = 0;
 	while (i < cli->n_tokens)
 	{
+		// printf("token[%d] = %s\n", i, token[i]);
 		if (token[i] && !ft_strncmp(token[i], ">>", 2))
 			ft_append(token[i], cli);
 		else if (token[i] && !ft_strncmp(token[i], "<<", 2))
 		{
 			if (ft_heredoc(token[i], cli) <= 0)
-				return (perror("hd_error"), ft_set_sig(PARENT), NULL);
-			ft_set_sig(PARENT);
+				return (perror("hd_error"), NULL);
 		}
 		else if (token[i] && token[i][0] == '<')
 			ft_infile(token[i], cli);
@@ -138,13 +138,15 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 			ft_cmd(token[i], cli);
 			ft_args(token[i], cli, ft_doubleptr_len((void **)cli->args));
 		}
-		else if (token[i] && ft_strchr(OP_STR, token[i][0]))
+		else if (token[i] && ft_strchr(OP_STR2, token[i][0]))
 		{
 			cli->next = ft_parse_op(token[i], cli);
 			if (!cli->next)
 				return (perror("!cli->next"), NULL);
 			cli = cli->next;
 		}
+		else if (token[i] && ft_strchr(PRNTS, token[i][0]))
+			;
 		else
 			ft_args(token[i], cli, ft_doubleptr_len((void **)cli->args));
 		i++;
