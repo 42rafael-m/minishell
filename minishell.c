@@ -97,14 +97,15 @@ char	*ft_here_prnts(char *line)
 		return (NULL);
 	new_line = NULL;
 	end = 0;
-	ft_set_sig(HERE_DOC);
 	while (1)
 	{
 		i = 0;
 		free(new_line);
 		new_line = readline("> ");
+		if (g_sigint_received)
+			return (free(new_line), g_sigint_received = 0, line);
 		if (!new_line)
-			return (free(line), line = NULL, write(2, UNEX_EOF, 49), ft_set_sig(PARENT), NULL);
+			return (free(line), line = NULL, write(2, UNEX_EOF, 49), NULL);
 		while (new_line && ft_isspace(new_line[i]))
 			i++;
 		if (!new_line[i] || new_line[i] == '\n')
@@ -117,7 +118,7 @@ char	*ft_here_prnts(char *line)
 		if (end)
 			break ;
 	}
-	return (free(new_line), ft_set_sig(PARENT), line);
+	return (free(new_line), line);
 }
 
 char	*ft_check_prnts(char *line)
@@ -165,18 +166,20 @@ int	ft_exec_shell(char **envp)
 		cl = readline("\033[1;32mminishell\033[0m$ ");
 		if (!cl)
 			return (rl_clear_history(), write(1, "exit\n", 5), 0);
-		if (g_sigint_received || ft_strlen(cl) <= 0)
+		if (ft_strlen(cl) <= 0)
+			continue ;
+		if (!g_sigint_received && ft_strchr(OP_STR2, cl[ft_strlen(cl) - 1]))
+			cl = ft_heredoc_op(cl, cl[ft_strlen(cl) - 1]);
+		cl = ft_check_prnts(cl);
+		if (!cl && !g_sigint_received)
+			return (free(cl), rl_clear_history(), 2);
+		add_history(cl);
+		if (g_sigint_received)
 		{
 			g_sigint_received = 0;
 			continue ;
 		}
-		if (ft_strchr(OP_STR2, cl[ft_strlen(cl) - 1]))
-			cl = ft_heredoc_op(cl, cl[ft_strlen(cl) - 1]);
-		cl = ft_check_prnts(cl);
-		if (!cl)
-			return (free(cl), rl_clear_history(), 2);
 		printf("cl = %s\n", cl);
-		add_history(cl);
 		cli = ft_tokens(cl, envp);	
 		ft_print_list(cli);
 		ft_free_list(&cli);
@@ -186,6 +189,8 @@ int	ft_exec_shell(char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
+	extern int rl_catch_signals;
+	
 	ft_set_sig(PARENT);
 	rl_catch_signals = 0;
 	return (ft_exec_shell(envp));

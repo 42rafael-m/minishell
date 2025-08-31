@@ -30,7 +30,7 @@ t_cli	*ft_parse_op(char *token, t_cli *cli)
 	else
 		return (perror("invalid token parse_op"), NULL);
 	cli->op = op;
-	next_cli = ft_init_node(cli->n_tokens, cli->env, op);
+	next_cli = ft_init_node(cli->n_tokens, cli->env, 0);
 	if (!next_cli)
 		return (perror("malloc : "), NULL);
 	return (next_cli);

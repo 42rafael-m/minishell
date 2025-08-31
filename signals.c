@@ -23,13 +23,6 @@ void    ft_set_sig(int option)
 		sa.sa_handler = SIG_IGN;
         sigaction(SIGQUIT, &sa, NULL);
     }
-    if (option == HERE_DOC)
-    {
-        sa.sa_handler = ft_sig_int;
-        sigaction(SIGINT, &sa, NULL);
-        sa.sa_handler = SIG_IGN;
-        sigaction(SIGQUIT, &sa, NULL);
-    }
     if (option == CHILD)
     {
         sa.sa_handler = SIG_DFL;

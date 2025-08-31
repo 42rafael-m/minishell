@@ -88,6 +88,8 @@ char	*ft_heredoc_op(char *line, char op)
 		i = 0;
 		free(new_line);
 		new_line = readline("> ");
+		if (g_sigint_received)
+			return (free(new_line), line);
 		if (!new_line)
 			return (free(line), line = NULL, write(2, HERE_PIPE_ERR, 53), NULL);
 		while (new_line && ft_isspace(new_line[i]))
@@ -122,15 +124,14 @@ int	ft_heredoc(char *token, t_cli *cli)
 		return (0);
 	line = NULL;
 	option = 0;
-	ft_set_sig(HERE_DOC);
 	while (1)
 	{
 		free(line);
 		line = readline("> ");
+		if (g_sigint_received)
+			return (free(line), free(delim), write(2, "sig received in hd\n", 20), ft_set_sig(PARENT), g_sigint_received = 0, -1);
 		if (!line || !ft_strncmp(line, delim, ft_strlen(line)))
 			break ;
-		if (g_sigint_received)
-			return (free(line), free(delim), write(2, "sig received in hd\n", 20), ft_set_sig(PARENT), -1);
 		t = ft_strjoin(cli->heredoc, line);
 		free(cli->heredoc);
 		cli->heredoc = ft_strjoin(t, "\n");
@@ -141,5 +142,5 @@ int	ft_heredoc(char *token, t_cli *cli)
 		ft_here_error(delim);
 	cli->heredoc = ft_expand_heredoc(option, cli);
 	// printf("hd = %s\n", cli->heredoc);
-	return (free(line), free(delim), ft_set_sig(PARENT), 1);
+	return (free(line), free(delim), 1);
 }

@@ -61,11 +61,8 @@ char	*ft_expand_var(char	*line, int start, int end)
 
 	if (!line)
 		return (NULL);
-	printf("start = %d, line[start] = '%c', end = %d, line[end] = '%c'\n", start, line[start], end, line[end]);
 	if (end > ft_strlen(line))
 		return (ft_strndup(line, end));
-	if (line[start + 1] == '?')
-		return (ft_strndup(line, end + 1));
 	s = ft_strndup(line + start, end);
 	t = ft_strtrim(s, NO_VAL_VAR);
 	if (!s || !t)
