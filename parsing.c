@@ -121,7 +121,7 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 	i = 0;
 	while (i < cli->n_tokens)
 	{
-		printf("token[%d] = %s\n", i, token[i]);
+		// printf("token[%d] = %s\n", i, token[i]);
 		if (token[i] && !ft_strncmp(token[i], ">>", 2))
 			ft_append(token[i], cli);
 		else if (token[i] && !ft_strncmp(token[i], "<<", 2))

@@ -176,10 +176,10 @@ int	ft_exec_shell(char **envp)
 		if (!cl)
 			return (free(cl), rl_clear_history(), 2);
 		printf("cl = %s\n", cl);
+		add_history(cl);
 		cli = ft_tokens(cl, envp);	
 		ft_print_list(cli);
 		ft_free_list(&cli);
-		add_history(cl);
 	}
 	return (free(cl), rl_clear_history(), 0);
 }

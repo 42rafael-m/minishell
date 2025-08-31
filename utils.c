@@ -175,8 +175,6 @@ char	*ft_trim_spaces(char *line)
 
 	i = 0;
 	j = 0;
-	if (ft_trim_s_len(line) <= 0)
-		return (NULL);
 	trimmed = ft_calloc(ft_trim_s_len(line) + 1, sizeof(char));
 	while (line && ft_isspace(line[i]))
 		i++;
