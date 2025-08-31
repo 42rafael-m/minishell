@@ -100,7 +100,7 @@ char	*ft_expand_line(char *line)
 			i += (ft_heredoc_len(line + i) - 1);
 		}
 		if (i < ft_strlen(line) && line[i] == '$' && line[i + 1] && !ft_strchr(NO_VAL_VAR,
-				line[i + 1]))
+				line[i + 1]) && line[i + 1] != '?')
 		{
 			t = ft_expand_var(line, i, ft_var_len(line + i));
 			if (line != t)
