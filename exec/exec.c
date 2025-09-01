@@ -32,9 +32,7 @@ int execute_command(t_cli *cmd)
     pid_t pid;
 
     if (!cmd || !cmd->cmd)
-    {
         return (-1);
-    }
     ft_set_sig(IGNORE);
     pid = fork();
     if (pid == 0)
@@ -42,6 +40,7 @@ int execute_command(t_cli *cmd)
         ft_set_sig(CHILD);
         execve(cmd->cmd, cmd->args, cmd->env);
         perror("execve");
+        ft_free_node(cmd);
         exit(127);
     }
     else if (pid > 0)
@@ -84,7 +83,6 @@ int execute_builtin(t_cli *cmd)
 {
     if (!cmd || !cmd->cmd)
         return (1);
-
     if (!ft_strcmp(cmd->cmd, "pwd"))
         return (ft_pwd(cmd->args));
     else if (!ft_strcmp(cmd->cmd, "cd"))

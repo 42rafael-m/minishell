@@ -135,6 +135,27 @@ void	ft_free_list(t_cli **cli)
 	return ;
 }
 
+void	ft_free_node(t_cli *cli)
+{
+	if (!cli)
+		return ;
+	free(cli->cmd);
+	cli->cmd = NULL;
+	free(cli->heredoc);
+	cli->heredoc = NULL;
+	free(cli->infile);
+	cli->infile = NULL;
+	free(cli->outfile);
+	cli->outfile = NULL;
+	ft_free_d(cli->env);
+	cli->env = NULL;
+	ft_free_d(cli->args);
+	cli->args = NULL;
+	free(cli);
+	cli = NULL;
+	return ;
+}
+
 int ft_trim_s_len(char *line)
 {
 	int		i;

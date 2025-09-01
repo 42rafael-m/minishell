@@ -132,6 +132,7 @@ int		ft_args(char *token, t_cli *cli, int pos);
 void	ft_set_sig(int option);
 void	ft_sig_parent(int signal);
 void	ft_free_list(t_cli **cli);
+void	ft_free_node(t_cli *cli);
 void	ft_here_error(char *delim);
 void	ft_free_tokens(char **tokens, int n);
 void	ft_perror(char *token, char *msg);
