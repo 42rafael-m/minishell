@@ -1,15 +1,18 @@
-#include "minishell.h"
+#include "../minishell.h"
 
-void    ft_sig_int(int signal)
+void    ft_sig_int_parent(int signal)
 {
 	char nl;
 
 	nl = '\n';
     g_sigint_received = 1;
 	if (signal == SIGINT)
-		write(1, "^C", 2);
-    ioctl(STDIN_FILENO, TIOCSTI, &nl);
+	{
+        write(1, "^C", 2);
+        ioctl(STDIN_FILENO, TIOCSTI, &nl);
+    }
 }
+
 
 void    ft_set_sig(int option)
 {
@@ -18,7 +21,7 @@ void    ft_set_sig(int option)
     ft_memset(&sa, 0, sizeof(sa));
     if (option == PARENT)
     {
-        sa.sa_handler = ft_sig_int;
+        sa.sa_handler = ft_sig_int_parent;
         sigaction(SIGINT, &sa, NULL);
 		sa.sa_handler = SIG_IGN;
         sigaction(SIGQUIT, &sa, NULL);
@@ -29,5 +32,11 @@ void    ft_set_sig(int option)
         sigaction(SIGINT, &sa, NULL);
         sigaction(SIGQUIT, &sa, NULL);
 	}
+    if (option == IGNORE)
+    {
+        sa.sa_handler = SIG_IGN;
+        sigaction(SIGINT, &sa, NULL);
+        sigaction(SIGQUIT, &sa, NULL);
+    }
 	return ;
 }

@@ -166,8 +166,6 @@ int	ft_exec_shell(char **envp)
 		cl = readline("\033[1;32mminishell\033[0m$ ");
 		if (!cl)
 			return (rl_clear_history(), write(1, "exit\n", 5), 0);
-		if (ft_strlen(cl) <= 0)
-			continue ;
 		if (!g_sigint_received && ft_strchr(OP_STR2, cl[ft_strlen(cl) - 1]))
 			cl = ft_heredoc_op(cl, cl[ft_strlen(cl) - 1]);
 		cl = ft_check_prnts(cl);
@@ -182,6 +180,7 @@ int	ft_exec_shell(char **envp)
 		printf("cl = %s\n", cl);
 		cli = ft_tokens(cl, envp);	
 		ft_print_list(cli);
+		ft_execute(cli);
 		ft_free_list(&cli);
 	}
 	return (free(cl), rl_clear_history(), 0);

@@ -26,9 +26,9 @@
 # include <signal.h>
 # include <sys/wait.h>
 # include <sys/ioctl.h>
+# include <stdbool.h>
 
-# define HERE_PIPE 3
-# define HERE_DOC 2
+# define IGNORE 2
 # define PARENT 1
 # define CHILD 0
 # define READ 2
@@ -67,15 +67,23 @@ typedef struct s_cli
 	char			*outfile;
 	char			*heredoc;
 	int				is_builtin;
-	struct s_cli	*next;
 	int				r_mode;
 	char			**env;
 	int				n_tokens;
 	int				status;
 	int				priority;
+	int				max_priority;
 	int				op;
+	struct s_cli	*next;
 }	t_cli;
 
+typedef	struct s_shenv
+{
+	char	*var;
+	struct s_shenv	*next;
+}	t_shenv;
+
+bool 	has_pipes_or_redirs(t_cli *cli);
 char	**ft_token_sep(char *line);
 char	**ft_insert_s_tokens(char **tokens);
 char	**ft_load_env(char **envp);
@@ -96,6 +104,15 @@ char    *ft_cmd_path(char *env_path, char *cmd);
 char	*ft_heredoc_op(char *line, char op);
 char	*ft_check_prnts(char *line);
 char	*ft_here_prnts(char *line);
+int 	ft_pwd(char **args);
+int 	ft_echo(char **args);
+int 	ft_env(char **env);
+int 	ft_exit(void);
+int 	ft_cd(char **args, char ***env);
+int 	execute_command(t_cli *cmd);
+int 	execute_builtin(t_cli *cmd);
+int 	ft_execute(t_cli *cli);
+int 	execute_pipeline(t_cli *cli);
 int		ft_sep_len(char *line, int pos);
 int		ft_num_quoted(char *line);
 int		ft_quoted_len(char *line, char quote);
