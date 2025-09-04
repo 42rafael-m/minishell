@@ -27,7 +27,10 @@
 # include <sys/wait.h>
 # include <sys/ioctl.h>
 # include <stdbool.h>
+# include <errno.h>
 
+# define HERE_PIPE 3
+# define HERE_DOC 2
 # define IGNORE 2
 # define PARENT 1
 # define CHILD 0
@@ -56,6 +59,10 @@
 # define HERE_PIPE_ERR "minishell: syntax error: unexpected end of file\nexit\n"
 # define SYN_ERR "minishell: syntax error near unexpected token `"
 # define UNEX_EOF "minishell: syntax error: unexpected end of file\n"
+# define MAX_CMDS 64
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 extern volatile sig_atomic_t	g_sigint_received;
 
@@ -66,13 +73,13 @@ typedef struct s_cli
 	char			*infile;
 	char			*outfile;
 	char			*heredoc;
+	int				heredoc_fd;
 	int				is_builtin;
 	int				r_mode;
 	char			**env;
 	int				n_tokens;
 	int				status;
-	int				priority;
-	int				max_priority;
+	int				group;
 	int				op;
 	struct s_cli	*next;
 }	t_cli;

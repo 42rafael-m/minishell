@@ -109,6 +109,7 @@ int	ft_args(char *token, t_cli *cli, int pos)
 t_cli	*ft_parse(char	**token, t_cli *cli)
 {
 	int		i;
+	int		group;
 
 	if (!token || !cli)
 		return (NULL);
@@ -119,6 +120,7 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 	// 	i++;
 	// }
 	i = 0;
+	group = 1; 
 	while (i < cli->n_tokens)
 	{
 		// printf("token[%d] = %s\n", i, token[i]);
@@ -133,11 +135,6 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 			ft_infile(token[i], cli);
 		else if (token[i] && token[i][0] == '>')
 			ft_outfile(token[i], cli);
-		else if (token[i] && !cli->cmd)
-		{
-			ft_cmd(token[i], cli);
-			ft_args(token[i], cli, ft_doubleptr_len((void **)cli->args));
-		}
 		else if (token[i] && ft_strchr(OP_STR2, token[i][0]))
 		{
 			cli->next = ft_parse_op(token[i], cli);
@@ -146,7 +143,13 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 			cli = cli->next;
 		}
 		else if (token[i] && ft_strchr(PRNTS, token[i][0]))
-			;
+			group++;
+		else if (token[i] && !cli->cmd)
+		{
+			ft_cmd(token[i], cli);
+			ft_args(token[i], cli, ft_doubleptr_len((void **)cli->args));
+			cli->group = group;
+		}
 		else
 			ft_args(token[i], cli, ft_doubleptr_len((void **)cli->args));
 		i++;

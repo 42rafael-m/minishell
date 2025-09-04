@@ -36,7 +36,7 @@ void	ft_print_list(t_cli *cli)
 		if (cli->heredoc)
 			printf("heredoc %d = %s\n", node, cli->heredoc);
 		printf("op = %d\n", cli->op);
-		printf("priority = %d\n", cli->priority);
+		printf("group = %d\n", cli->group);
 		while (cli->args && i < ft_doubleptr_len((void **)cli->args))
 		{
 			printf("args[%d] %d = %s\n", i, node, cli->args[i]);
@@ -96,11 +96,12 @@ t_cli	*ft_init_node(int len, char **env, int op)
 	cli->infile = NULL;
 	cli->outfile = NULL;
 	cli->heredoc = NULL;
+	cli->heredoc_fd = -1;
 	cli->is_builtin = 0;
 	cli->next = NULL;
 	cli->r_mode = WRITE;
 	cli->n_tokens = len;
-	cli->priority = 1;
+	cli->group = 1;
 	cli->op = op;
 	return (cli);
 }

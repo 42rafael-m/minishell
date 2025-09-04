@@ -3,14 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dogs <dogs@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jmateo-v <jmateo-v@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 10:21:28 by dogs              #+#    #+#             */
-/*   Updated: 2025/08/28 11:42:35 by dogs             ###   ########.fr       */
+/*   Updated: 2025/09/01 18:26:07 by jmateo-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int ft_prepare_heredoc_fd(t_cli *cli)
+{
+    int pipefd[2];
+    if (!cli->heredoc)
+        return (-1);
+    if (pipe(pipefd) == -1)
+    {
+        perror("pipe");
+        return (-1);
+    }
+    write(pipefd[1], cli->heredoc, ft_strlen(cli->heredoc));
+    close(pipefd[1]);
+    return (pipefd[0]);
+}
+int ft_prepare_all_heredocs(t_cli *cli)
+{
+    t_cli *current;
+
+    current = cli;
+    while (current)
+    {
+        if (current->heredoc)
+        {
+            current->heredoc_fd = ft_prepare_heredoc_fd(current);
+            if (current->heredoc_fd == -1)
+            {
+                return(-1);
+            }
+        }
+        current = current->next;
+    }
+    return (0);
+}
+
+
 
 int execute_pipeline(t_cli *cli)
 {
@@ -24,11 +60,22 @@ int execute_pipeline(t_cli *cli)
     int fd_out;
     int status;
     int last_status;
-    
+    pid_t last_pid;
+    pid_t wpid;
+    pid_t child_pids[MAX_CMDS];
+    int child_count;
+    int remaining;
+    bool sigint_sent = false;
+
     last_status = 0;
     current = cli;
     prev_pipe = -1;
+    last_pid = -1;
+    child_count = 0;
     ft_set_sig(IGNORE);
+    if (ft_prepare_all_heredocs(cli) == -1)
+        return (1);
+    current = cli;
     while (current)
     {
         has_next = (current->next != NULL);
@@ -48,7 +95,13 @@ int execute_pipeline(t_cli *cli)
         }
         else if (pid == 0)
         {
-            if (current->infile)
+            ft_set_sig(CHILD);
+            if (current->heredoc_fd != -1)
+            {
+                dup2(current->heredoc_fd, STDIN_FILENO);
+                close(current->heredoc_fd);
+            }
+            else if (current->infile)
             {
                 fd_in = open(current->infile, O_RDONLY);
                 if (fd_in < 0)
@@ -91,29 +144,67 @@ int execute_pipeline(t_cli *cli)
                 close(prev_pipe);
             if (has_next)
                 close(pipe_fd[0]);
-            ft_set_sig(CHILD);
+            if (current->is_builtin)
+                exit(execute_builtin(current));
             execve(current->cmd, current->args, current->env);
             perror("execve");
             exit(127);
         }
         else
         {
+            child_pids[child_count++] = pid;
             if (prev_pipe != -1)
                 close(prev_pipe);
+            if (current->heredoc_fd != -1)
+                close(current->heredoc_fd);
             if (has_next)
             {
                 close(pipe_fd[1]);
                 prev_pipe = pipe_fd[0];
             }
             else
-                prev_pipe = -1;         
+            {
+                prev_pipe = -1;
+                last_pid = pid;
+            }         
         }
         current = current->next;
     }
-    if (g_sigint_received)
-        g_sigint_received = 0;
-    while(wait(&status) > 0)
-        last_status = status;
+    ft_set_sig(IGNORE);
+    remaining = child_count;
+    while (remaining > 0)
+    {
+        wpid = waitpid(-1, &status, 0);
+        
+        if (wpid == -1)
+        {
+            if(errno == EINTR)
+                continue;
+            else
+                break;
+        }
+        remaining--;
+        if(wpid == last_pid)
+            last_status = status;
+        if(g_sigint_received && !sigint_sent)
+        {
+            int i = 0;
+            while ( i < child_count)
+            {
+                kill(child_pids[i], SIGINT);
+                i++;
+            }
+            sigint_sent = true;
+        }
+    }
     ft_set_sig(PARENT);
-    return (WEXITSTATUS(last_status));
+    if(WIFEXITED(last_status))
+        return (WEXITSTATUS(last_status));
+    else if (WIFSIGNALED(last_status))
+    {
+        printf("\n");
+        return (128 + WTERMSIG(last_status));
+    }
+    else
+        return (1);
 }
