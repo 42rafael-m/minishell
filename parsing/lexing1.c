@@ -12,6 +12,34 @@
 
 #include "../minishell.h"
 
+int	ft_check_errors(char **token, int len)
+{
+	int	i;
+
+	if (!token || !token[0])
+		return (1);
+	if (ft_strchr(OP_STR2, token[0][0]))
+		return (ft_perror(token[i], SYN_ERR), 1);
+	i = 0;
+	while (i < len - 1)
+	{
+		if (ft_check_prnts(token[i]))
+			return (1);
+		if (ft_strchr(OP_STR2, token[i][0]) && (token[i + 1] && ft_strchr(OP_STR2, token[i + 1][0])))
+			return (ft_perror(token[i + 1], SYN_ERR), 1);
+		if (token[i][0] == ')' && (token[i + 1] && !ft_strchr(OP_STR, token[i + 1][0])))
+			return (ft_perror(token[i + 1], SYN_ERR), 1);
+		if (token[i][0] == '(' && i > 0 && (!ft_strchr(OP_STR, token[i - 1][0])))
+			return (ft_perror(token[i + 1], SYN_ERR), 1);
+		if (token[i][0] == '(' && token[i + 1] && token[i + 1][0] == ')')
+			return (write(2, "minishell : syntax error near unexpected token `)'\n", 51), 1);
+		if (ft_strchr(REDIR_S, token[i][0]) && token[i + 1] && ft_strchr(REDIR_S, token[i + 1][0]))
+			return (ft_perror(token[i + 1], SYN_ERR), 1);
+		i++;
+	}
+	return (0);
+}
+
 int	ft_sep_len(char *line, int pos)
 {
 	char	*err;
@@ -53,8 +81,8 @@ int	ft_token_len(char *line)
 	{
 		if (ft_strchr(QUOTES, line[i]))
 		{
-			if (ft_quoted_len(line + i, line[i]) < 0)
-				return (-2);
+			if (ft_quoted_len(line + i, line[i]) <= 0)
+				return (-1);
 			i = (ft_quoted_len(line + i, line[i]) + i);
 			continue ;
 		}
@@ -87,7 +115,7 @@ int	ft_num_s_tokens(char *line)
 			continue ;
 		}
 		len = ft_token_len(line + i);
-		if (len < 0)
+		if (len <= 0)
 			return (-1);
 		i += len;
 		num_token++;
@@ -105,7 +133,7 @@ char	**ft_token_sep(char *line)
 	if (!line)
 		return (NULL);
 	len = ft_num_s_tokens(line);
-	if (len < 0)
+	if (len <= 0)
 		return (free(line), NULL);
 	tokens = (char **)ft_calloc(len + 1, sizeof(char *));
 	if (!tokens)

@@ -60,7 +60,7 @@ void	ft_perror(char *token, char *msg)
 
 	t = ft_strjoin(msg, token);
 	err = ft_strjoin(t, "'\n");
-	write(2, err, ft_strlen(t));
+	write(2, err, ft_strlen(err));
 	free(t);
 	free(err);
 }
@@ -196,8 +196,11 @@ char	*ft_trim_spaces(char *line)
 	char	*trimmed;
 
 	i = 0;
+	j = ft_trim_s_len(line);
+	if (j < 0)
+		return (NULL);
+	trimmed = ft_calloc(j + 1, sizeof(char));
 	j = 0;
-	trimmed = ft_calloc(ft_trim_s_len(line) + 1, sizeof(char));
 	while (line && ft_isspace(line[i]))
 		i++;
 	while (trimmed && line && i < ft_strlen(line))

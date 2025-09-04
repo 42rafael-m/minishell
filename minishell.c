@@ -121,14 +121,14 @@ char	*ft_here_prnts(char *line)
 	return (free(new_line), line);
 }
 
-char	*ft_check_prnts(char *line)
+int	ft_check_prnts(char *line)
 {
 	int		i;
 	int		len;
 	int		prnts;
 
 	if (!line)
-		return (NULL);
+		return (-1);
 	i = 0;
 	prnts = 0;
 	while (i < ft_strlen(line))
@@ -137,18 +137,18 @@ char	*ft_check_prnts(char *line)
 		{
 			len = ft_quoted_len(line + i, line[i]);
 			if (len < 0)
-				return (free(line), NULL);
+				return (free(line), line = NULL, -2);
 			i += len;	
 		}
 		if (line[i] == '(')
-			prnts = 1;
-		if (prnts && line[i] == ')')
-			prnts = 0;
+			prnts++;
+		if (line[i] == ')')
+			prnts--;
 		i++;
 	}
 	if (prnts)
-		line = ft_here_prnts(line);
-	return (line);
+		write(2, "minishell : extra parenthesis\n", 30);
+	return (prnts);
 }
 
 
@@ -157,18 +157,19 @@ int	ft_exec_shell(char **envp)
 	char	*cl;
 	char	**tokens;
 	t_cli	*cli;
+	int		status;
 
 	cl = NULL;
 	tokens = NULL;
+	status = 0;
 	while (1)
 	{
 		free(cl);
 		cl = readline("\033[1;32mminishell\033[0m$ ");
 		if (!cl)
 			return (rl_clear_history(), write(1, "exit\n", 5), 0);
-		if (!g_sigint_received && ft_strchr(OP_STR2, cl[ft_strlen(cl) - 1]))
+		if (!g_sigint_received && ft_strlen(cl) > 0 && ft_strchr(OP_STR2, cl[ft_strlen(cl) - 1]))
 			cl = ft_heredoc_op(cl, cl[ft_strlen(cl) - 1]);
-		cl = ft_check_prnts(cl);
 		if (!cl && !g_sigint_received)
 			return (free(cl), rl_clear_history(), 2);
 		add_history(cl);
@@ -177,8 +178,13 @@ int	ft_exec_shell(char **envp)
 			g_sigint_received = 0;
 			continue ;
 		}
-		printf("cl = %s\n", cl);
-		cli = ft_tokens(cl, envp);	
+		cli = ft_tokens(cl, envp);
+		if (!cli)
+		{
+			status = 2;
+			continue ;
+		}
+		cli->status = 0;
 		ft_print_list(cli);
 		ft_execute(cli);
 		ft_free_list(&cli);

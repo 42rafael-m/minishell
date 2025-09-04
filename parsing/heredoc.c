@@ -23,15 +23,15 @@ int	ft_heredoc_len(char *line)
 		i++;
 	while (line[i] && ft_isspace(line[i]))
 		i++;
-	if (ft_strchr(QUOTES, line[i]))
+	while (i < ft_strlen(line) && line[i])
 	{
-		len = ft_quoted_len(line + i, line[i]);
-		if (len < 0)
-			return (-1);
-		i += len;
-	}
-	while (line [i])
-	{		
+		if (i < ft_strlen(line) && ft_strchr(QUOTES, line[i]))
+		{
+			len = ft_quoted_len(line + i, line[i]);
+			if (len <= 0)
+				return (-1);
+			i += len;
+		}	
 		if (ft_strchr(SEP_STR, line [i]))
 			return (i);
 		i++;

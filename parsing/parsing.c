@@ -158,7 +158,6 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 		else
 			ft_args(token[i], cli, ft_doubleptr_len((void **)cli->args));
 		i++;
-		printf("group = %d\n", group);
 	}
 	return (cli);
 }

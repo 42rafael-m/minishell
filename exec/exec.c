@@ -15,6 +15,7 @@
 int ft_execute(t_cli *cli)
 {
     int last_status;
+
     last_status = 0; 
     if (!cli || !cli->cmd)
         return (127); 
@@ -24,7 +25,7 @@ int ft_execute(t_cli *cli)
         last_status = execute_builtin(cli);
     else
         last_status = execute_command(cli);
-    return last_status;
+    return (last_status);
 }
 int execute_command(t_cli *cmd)
 {
@@ -41,6 +42,7 @@ int execute_command(t_cli *cmd)
         ft_set_sig(CHILD);
         execve(cmd->cmd, cmd->args, cmd->env);
         perror("execve");
+        ft_free_list(&cmd);
         exit(127);
     }
     else if (pid > 0)

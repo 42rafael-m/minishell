@@ -64,6 +64,8 @@ char	*ft_escape_quotes(char *line)
 		return (NULL);
 	i = 0;
 	s = ft_strdup(line);
+	if (ft_strchr(QUOTES, line[0]) && line[1] == line[0])
+		return ((char *)ft_calloc(2, 1));
 	while (i < ft_strlen(s))
 	{
 		if (ft_strchr(QUOTES, s[i]))
@@ -110,12 +112,16 @@ t_cli	*ft_tokens(char *line, char **envp)
 	if (!tokens)
 		return (NULL);
 	env = ft_load_env(envp);
+	printf("num_s_t = %d\n", ft_num_s_tokens(line));
 	cli = ft_init_node(ft_num_s_tokens(line), env, 0);
 	if (!cli)
 		return (ft_free_all(tokens, &cli, env), NULL);
 	tokens = ft_expand_tokens(tokens, &(cli->n_tokens));
 	if (!tokens)
 		return (ft_free_all(tokens, &cli, env), NULL);
+	printf("n_tokens = %d\n", cli->n_tokens);
+	if (ft_check_errors(tokens, cli->n_tokens))
+		return (NULL);
 	len = cli->n_tokens;
 	if (!ft_parse(tokens, cli))
 	{
