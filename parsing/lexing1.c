@@ -25,16 +25,18 @@ int	ft_check_errors(char **token, int len)
 	{
 		if (ft_check_prnts(token[i]))
 			return (1);
-		if (ft_strchr(OP_STR2, token[i][0]) && (token[i + 1] && ft_strchr(OP_STR2, token[i + 1][0])))
+		else if (ft_strchr(OP_STR2, token[i][0]) && (token[i + 1] && ft_strchr(OP_STR2, token[i + 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
-		if (token[i][0] == ')' && (token[i + 1] && !ft_strchr(OP_STR, token[i + 1][0])))
+		else if (token[i][0] == ')' && (token[i + 1] && !ft_strchr(OP_STR, token[i + 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
-		if (token[i][0] == '(' && i > 0 && (!ft_strchr(OP_STR, token[i - 1][0])))
+		else if (token[i][0] == '(' && i > 0 && (!ft_strchr(OP_STR, token[i - 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
-		if (token[i][0] == '(' && token[i + 1] && token[i + 1][0] == ')')
+		else if (token[i][0] == '(' && token[i + 1] && token[i + 1][0] == ')')
 			return (write(2, "minishell : syntax error near unexpected token `)'\n", 51), 1);
-		if (ft_strchr(REDIR_S, token[i][0]) && token[i + 1] && ft_strchr(REDIR_S, token[i + 1][0]))
+		else if (ft_strchr(REDIR_S, token[i][0]) && token[i + 1] && ft_strchr(REDIR_S, token[i + 1][0]))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
+		else if (ft_strchr(OP_STR, token[i][0]) && ! token[i + 1])
+			return (ft_perror(token[i], SYN_ERR), 1);
 		i++;
 	}
 	return (0);

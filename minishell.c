@@ -168,8 +168,6 @@ int	ft_exec_shell(char **envp)
 		cl = readline("\033[1;32mminishell\033[0m$ ");
 		if (!cl)
 			return (rl_clear_history(), write(1, "exit\n", 5), 0);
-		if (!g_sigint_received && ft_strlen(cl) > 0 && ft_strchr(OP_STR2, cl[ft_strlen(cl) - 1]))
-			cl = ft_heredoc_op(cl, cl[ft_strlen(cl) - 1]);
 		if (!cl && !g_sigint_received)
 			return (free(cl), rl_clear_history(), 2);
 		add_history(cl);
