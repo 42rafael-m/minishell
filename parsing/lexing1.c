@@ -30,7 +30,7 @@ int	ft_sep_len(char *line, int pos)
 		while (ft_isspace(line[pos + i]))
 			i++;
 	}
-	if (pos == 0 && ft_strchr(OP_STR, line[pos]) && line[pos + 1] == line[pos])
+	if (pos == 0 && ft_strchr(OP_STR2, line[pos]) && line[pos + 1] == line[pos])
 		return (2);
 	if (pos == 0 && ft_strchr(OP_STR, line[pos]))
 		return (1);
