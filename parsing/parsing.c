@@ -145,7 +145,10 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 		else if (token[i] && token[i][0] == '(')
 			group++;
 		else if (token[i] && token[i][0] == ')')
+		{
 			group--;
+			cli->op = 0;
+		}
 		else if (token[i] && !cli->cmd)
 		{
 			ft_cmd(token[i], cli);
