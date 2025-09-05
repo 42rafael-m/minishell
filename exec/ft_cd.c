@@ -115,6 +115,7 @@ int ft_cd(char **args, char ***env)
     {
         ft_setenv(env, "PWD", cwd);
     }
-    
+    ft_free_d(*env);
+    *env = NULL;
     return (0);
 }

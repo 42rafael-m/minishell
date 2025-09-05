@@ -15,18 +15,14 @@
 int ft_execute(t_cli *cli)
 {
     int last_status;
-    char    **env;
 
     last_status = 0; 
     if (!cli || !cli->cmd)
         return (127);
-    env = ft_getshenv(cli->env);
-    if (!env && cli->env)
-        return (2);
     if (has_pipes_or_redirs(cli))
         last_status = execute_pipeline(cli);
     else if (cli->is_builtin)
-        last_status = execute_builtin(cli, env);
+        last_status = execute_builtin(cli);
     else
         last_status = execute_command(cli);
     return (last_status);
@@ -38,14 +34,14 @@ int execute_command(t_cli *cmd)
 
     if (!cmd || !cmd->cmd)
         return (-1);
-    env = ft_getshenv(cmd->env);
-    if (cmd->env && !env)
-        return (2);
     ft_set_sig(IGNORE);
     pid = fork();
     if (pid == 0)
     {
         ft_set_sig(CHILD);
+        env = ft_getshenv(cmd->env);
+        if (!env && cmd->env)
+            exit(2);
         execve(cmd->cmd, cmd->args, env);
         perror("execve");
         ft_free_list(&cmd);
@@ -86,15 +82,21 @@ bool has_pipes_or_redirs(t_cli *cli)
     return (false);
 }
 
-int execute_builtin(t_cli *cmd, char **env)
+int execute_builtin(t_cli *cmd)
 {
+    char    **env;
+
     if (!cmd || !cmd->cmd)
         return (1);
-
     if (!ft_strcmp(cmd->cmd, "pwd"))
         return (ft_pwd(cmd->args));
     else if (!ft_strcmp(cmd->cmd, "cd"))
+    {
+        env = ft_getshenv(cmd->env);
+        if (!env && cmd->env)
+            return (2);
         return (ft_cd(cmd->args, &env));
+    }
     else if (!ft_strcmp(cmd->cmd, "echo"))
         return (ft_echo(cmd->args));
     else if (!ft_strcmp(cmd->cmd, "export"))
@@ -102,7 +104,12 @@ int execute_builtin(t_cli *cmd, char **env)
     else if (!ft_strcmp(cmd->cmd, "unset"))
         printf("NOT IMPLEMENTED\n");
     else if (!ft_strcmp(cmd->cmd, "env"))
+    {
+        env = ft_getshenv(cmd->env);
+        if (!env && cmd->env)
+            return (2);
         return (ft_env(env));
+    }
     else if (!ft_strcmp(cmd->cmd, "exit"))
         return (ft_exit());
     return (1);

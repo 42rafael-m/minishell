@@ -149,9 +149,10 @@ int execute_pipeline(t_cli *cli)
             if (cli->env && !env)
                 exit(2);
             if (current->is_builtin)
-                exit(execute_builtin(current, env));
+                exit(execute_builtin(current));
             execve(current->cmd, current->args, env);
             perror("execve");
+            ft_free_d(env);
             exit(127);
         }
         else

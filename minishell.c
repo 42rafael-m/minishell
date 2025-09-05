@@ -150,7 +150,8 @@ int	ft_check_prnts(char *line)
 		write(2, "minishell : extra parenthesis\n", 30);
 	return (prnts);
 }
-void	ft_reset_list(t_cli *cli)
+
+void	ft_reset_list(t_cli *cli, char **tokens)
 {
 	t_cli	*next;
 	t_cli	*node;
@@ -158,7 +159,8 @@ void	ft_reset_list(t_cli *cli)
 	if (!cli)
 		return ;
 	node = cli;
-	while (node)
+	ft_free_tokens(tokens, cli->n_tokens);
+	while (node->next)
 		node = node->next;
 	cli->status = node->status;
 	next = cli->next;
@@ -182,11 +184,9 @@ void	ft_reset_list(t_cli *cli)
 int	ft_exec_shell(t_shenv *env, t_cli	*cli)
 {
 	char	*cl;
-	int		status;
 	char	**tokens;
 
 	cl = NULL;
-	status = 0;
 	while (1)
 	{
 		free(cl);
@@ -198,7 +198,7 @@ int	ft_exec_shell(t_shenv *env, t_cli	*cli)
 		if (g_sig_rec)
 		{
 			g_sig_rec = 0;
-			status = 130;
+			cli->status = 130;
 			continue ;
 		}
 		add_history(cl);
@@ -211,8 +211,9 @@ int	ft_exec_shell(t_shenv *env, t_cli	*cli)
 		ft_print_list(cli);
 		cli->status = ft_parse(tokens, cli);
 		cli->status = ft_execute(cli);
+		ft_reset_list(cli, tokens);
 	}
-	return (free(cl), rl_clear_history(), status);
+	return (free(cl), rl_clear_history(), cli->status);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -227,8 +228,9 @@ int	main(int argc, char **argv, char **envp)
 	env = ft_load_env(envp);
 	cli = ft_init_node(1, env, 0);
 	if (!cli)
-		return (ft_free_env(env), 2);
+		return (ft_free_env(&env), 2);
 	status = ft_exec_shell(env, cli);
 	ft_free_list(&cli);
+	ft_free_env(&env);
 	return (status);
 }
