@@ -44,7 +44,6 @@ int execute_command(t_cli *cmd)
             exit(2);
         execve(cmd->cmd, cmd->args, env);
         perror("execve");
-        ft_free_list(&cmd);
         exit(127);
     }
     else if (pid > 0)

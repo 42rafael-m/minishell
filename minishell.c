@@ -165,6 +165,7 @@ void	ft_reset_list(t_cli *cli, char **tokens)
 	cli->status = node->status;
 	next = cli->next;
 	ft_free_list(&next);
+	cli->next = NULL;
 	free(cli->cmd);
 	cli->cmd = NULL;
 	free(cli->heredoc);
@@ -198,6 +199,7 @@ int	ft_exec_shell(t_shenv *env, t_cli	*cli)
 		if (g_sig_rec)
 		{
 			g_sig_rec = 0;
+			ft_reset_list(cli, tokens);
 			cli->status = 130;
 			continue ;
 		}
@@ -208,9 +210,9 @@ int	ft_exec_shell(t_shenv *env, t_cli	*cli)
 			cli->status = 2;
 			continue ;
 		}
-		ft_print_list(cli);
 		cli->status = ft_parse(tokens, cli);
 		cli->status = ft_execute(cli);
+		printf("status = %d\n", cli->status);
 		ft_reset_list(cli, tokens);
 	}
 	return (free(cl), rl_clear_history(), cli->status);

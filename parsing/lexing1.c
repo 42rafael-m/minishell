@@ -23,6 +23,7 @@ int	ft_check_errors(char **token, int len)
 	i = 0;
 	while (i < len - 1)
 	{
+		ft_perror(token[i], NULL);
 		if (ft_strchr(OP_STR2, token[i][0]) && (token[i + 1] && ft_strchr(OP_STR2, token[i + 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
 		else if (token[i][0] == ')' && (token[i + 1] && !ft_strchr(OP_STR, token[i + 1][0])))
@@ -35,8 +36,8 @@ int	ft_check_errors(char **token, int len)
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
 		else if (ft_strchr(OP_STR, token[i][0]) && ! token[i + 1])
 			return (ft_perror(token[i], SYN_ERR), 1);
-		else if (token[i] && ft_strchr(REDIR_S, token[i][0]) && ! token[i + 1])
-			return (ft_perror(ft_strdup("newline"), SYN_ERR), 1);
+		else if (token[i] && ft_strchr(REDIR_S, token[i][0]) && (!token[i][1] || ft_strchr(REDIR_S, token[i][1]) && !token[i][2]))
+			return (ft_perror("newline", SYN_ERR), 1);
 		i++;
 	}
 	return (0);

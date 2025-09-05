@@ -103,6 +103,7 @@ t_cli	*ft_init_node(int len, t_shenv *env, int op)
 	cli->n_tokens = len;
 	cli->group = 1;
 	cli->op = op;
+	cli->status = 0;
 	return (cli);
 }
 

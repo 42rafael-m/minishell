@@ -93,8 +93,6 @@ void	ft_free_all(char **token, t_cli **cli)
 		ft_free_tokens(token, (*cli)->n_tokens);
 	else if (token)
 		ft_free_d(token);
-	if (cli && *cli)
-		ft_free_list(cli);
 }
 
 char	**ft_tokens(char *line, t_shenv *env, t_cli *cli)

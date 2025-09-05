@@ -114,7 +114,7 @@ int	ft_parse(char	**token, t_cli *cli)
 	if (!token || !cli)
 		return (2);
 	i = 0;
-	group = 1; 
+	group = 1;
 	while (i < cli->n_tokens)
 	{
 		if (token[i] && !ft_strncmp(token[i], ">>", 2))
