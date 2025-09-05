@@ -87,7 +87,7 @@ char	*ft_escape_quotes(char *line)
 	return (s);
 }
 
-void	ft_free_all(char **token, t_cli **cli, char **env)
+void	ft_free_all(char **token, t_cli **cli)
 {
 	if (token && cli && *cli)
 		ft_free_tokens(token, (*cli)->n_tokens);
@@ -95,40 +95,26 @@ void	ft_free_all(char **token, t_cli **cli, char **env)
 		ft_free_d(token);
 	if (cli && *cli)
 		ft_free_list(cli);
-	if (env)
-		ft_free_d(env);	
 }
 
-t_cli	*ft_tokens(char *line, char **envp)
+char	**ft_tokens(char *line, t_shenv *env, t_cli *cli)
 {
 	int		len;
 	char	**tokens;
-	char	**env;
-	t_cli	*cli;
 
 	if (!line)
 		return (NULL);
+	if (ft_check_prnts(line))
+		return (NULL);
+	cli->n_tokens = ft_num_s_tokens(line);
 	tokens = ft_token_sep(ft_trim_spaces(line));
 	if (!tokens)
 		return (NULL);
-	env = ft_load_env(envp);
-	printf("num_s_t = %d\n", ft_num_s_tokens(line));
-	cli = ft_init_node(ft_num_s_tokens(line), env, 0);
-	if (!cli)
-		return (ft_free_all(tokens, &cli, env), NULL);
 	tokens = ft_expand_tokens(tokens, &(cli->n_tokens));
 	if (!tokens)
-		return (ft_free_all(tokens, &cli, env), NULL);
-	printf("n_tokens = %d\n", cli->n_tokens);
+		return (ft_free_all(tokens, &cli), NULL);
 	if (ft_check_errors(tokens, cli->n_tokens))
-		return (NULL);
+		return (ft_free_all(tokens, &cli), NULL);
 	len = cli->n_tokens;
-	if (!ft_parse(tokens, cli))
-	{
-		ft_free_list(&cli);
-		ft_free_tokens(tokens, len);
-		ft_free_d(env);
-		return (NULL);
-	}
-	return (ft_free_d(env), ft_free_tokens(tokens, len), cli);
+	return (tokens);
 }

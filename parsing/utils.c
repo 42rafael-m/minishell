@@ -79,7 +79,7 @@ void	ft_free_tokens(char **tokens, int n)
 		free(tokens);
 }
 
-t_cli	*ft_init_node(int len, char **env, int op)
+t_cli	*ft_init_node(int len, t_shenv *env, int op)
 {
 	t_cli *cli;
 
@@ -87,10 +87,10 @@ t_cli	*ft_init_node(int len, char **env, int op)
 		return (NULL);
 	cli = (t_cli *)ft_calloc(1, sizeof(t_cli));
 	if (!cli)
-		return (ft_free_d(env), perror("malloc : "), NULL);
+		return (perror("malloc : "), NULL);
 	cli->cmd = NULL;
 	cli->args = NULL;
-	cli->env = ft_load_env(env);
+	cli->env = env;
 	if (env && !cli->env)
 		perror("malloc : ");
 	cli->infile = NULL;
@@ -104,6 +104,25 @@ t_cli	*ft_init_node(int len, char **env, int op)
 	cli->group = 1;
 	cli->op = op;
 	return (cli);
+}
+
+void	ft_free_env(t_shenv **env)
+{
+	t_shenv *node;
+	t_shenv *next;
+
+	if (!env || !*env)
+		return ;
+	node = *env;
+	while (node)
+	{
+		next = node ->next;
+		free(node->var);
+		free(node);
+		node = next;
+	}
+	free(env);
+	env = NULL;
 }
 
 void	ft_free_list(t_cli **cli)
@@ -125,8 +144,6 @@ void	ft_free_list(t_cli **cli)
 		node->infile = NULL;
 		free(node->outfile);
 		node->outfile = NULL;
-		ft_free_d(node->env);
-		node->env = NULL;
 		ft_free_d(node->args);
 		node->args = NULL;
 		free(node);
@@ -148,8 +165,6 @@ void	ft_free_node(t_cli *cli)
 	cli->infile = NULL;
 	free(cli->outfile);
 	cli->outfile = NULL;
-	ft_free_d(cli->env);
-	cli->env = NULL;
 	ft_free_d(cli->args);
 	cli->args = NULL;
 	free(cli);

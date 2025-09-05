@@ -29,18 +29,20 @@ int ft_execute(t_cli *cli)
 }
 int execute_command(t_cli *cmd)
 {
-    pid_t pid;
+    pid_t   pid;
+    char    **env;
 
     if (!cmd || !cmd->cmd)
-    {
         return (-1);
-    }
+    env = ft_getshenv(cmd->env);
+    if (cmd->env && !env)
+        return (2);
     ft_set_sig(IGNORE);
     pid = fork();
     if (pid == 0)
     {
         ft_set_sig(CHILD);
-        execve(cmd->cmd, cmd->args, cmd->env);
+        execve(cmd->cmd, cmd->args, env);
         perror("execve");
         ft_free_list(&cmd);
         exit(127);

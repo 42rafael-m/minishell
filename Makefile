@@ -1,9 +1,18 @@
 NAME = minishell
 LIBFT_A = libft/libft.a
-SRC = minishell.c parsing/lexing.c parsing/lexing1.c parsing/utils.c\
-	parsing/parsing.c parsing/parsing1.c parsing/expansion.c\
-	parsing/heredoc.c parsing/variables.c parsing/signals.c\
-	exec/builtins.c exec/exec.c exec/exec_pipe.c\
+SRC = minishell.c\
+	parsing/lexing.c\
+	parsing/lexing1.c\
+	parsing/utils.c\
+	parsing/parsing.c\
+	parsing/parsing1.c\
+	parsing/expansion.c\
+	parsing/heredoc.c\
+	parsing/signals.c\
+	parsing/shenv.c\
+	exec/builtins.c\
+	exec/exec.c\
+	exec/exec_pipe.c\
 	exec/ft_cd.c
 
 OBJ = $(SRC:.c=.o)

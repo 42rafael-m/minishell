@@ -5,7 +5,7 @@ void    ft_sig_int_parent(int signal)
 	char nl;
 
 	nl = '\n';
-    g_sigint_received = 1;
+    g_sig_rec = 1;
 	if (signal == SIGINT)
 	{
         write(1, "^C", 2);
@@ -23,7 +23,7 @@ void    ft_set_sig(int option)
     {
         sa.sa_handler = ft_sig_int_parent;
         sigaction(SIGINT, &sa, NULL);
-		sa.sa_handler = SIG_IGN;
+		// sa.sa_handler = SIG_IGN;
         sigaction(SIGQUIT, &sa, NULL);
     }
     if (option == CHILD)

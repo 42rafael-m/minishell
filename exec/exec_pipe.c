@@ -66,6 +66,7 @@ int execute_pipeline(t_cli *cli)
     int child_count;
     int remaining;
     bool sigint_sent = false;
+    char    **env;
 
     last_status = 0;
     current = cli;
@@ -144,6 +145,9 @@ int execute_pipeline(t_cli *cli)
                 close(prev_pipe);
             if (has_next)
                 close(pipe_fd[0]);
+            env = ft_getshenv(current->env);
+            if (cli->env && !env)
+                exit(2);
             if (current->is_builtin)
                 exit(execute_builtin(current));
             execve(current->cmd, current->args, current->env);
@@ -186,7 +190,7 @@ int execute_pipeline(t_cli *cli)
         remaining--;
         if(wpid == last_pid)
             last_status = status;
-        if(g_sigint_received && !sigint_sent)
+        if(g_sig_rec && !sigint_sent)
         {
             int i = 0;
             while ( i < child_count)

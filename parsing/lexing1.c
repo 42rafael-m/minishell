@@ -23,20 +23,20 @@ int	ft_check_errors(char **token, int len)
 	i = 0;
 	while (i < len - 1)
 	{
-		if (ft_check_prnts(token[i]))
-			return (1);
-		else if (ft_strchr(OP_STR2, token[i][0]) && (token[i + 1] && ft_strchr(OP_STR2, token[i + 1][0])))
+		if (ft_strchr(OP_STR2, token[i][0]) && (token[i + 1] && ft_strchr(OP_STR2, token[i + 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
 		else if (token[i][0] == ')' && (token[i + 1] && !ft_strchr(OP_STR, token[i + 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
 		else if (token[i][0] == '(' && i > 0 && (!ft_strchr(OP_STR, token[i - 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
 		else if (token[i][0] == '(' && token[i + 1] && token[i + 1][0] == ')')
-			return (write(2, "minishell : syntax error near unexpected token `)'\n", 51), 1);
+			return (ft_perror(token[i + 1], SYN_ERR), 1);
 		else if (ft_strchr(REDIR_S, token[i][0]) && token[i + 1] && ft_strchr(REDIR_S, token[i + 1][0]))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
 		else if (ft_strchr(OP_STR, token[i][0]) && ! token[i + 1])
 			return (ft_perror(token[i], SYN_ERR), 1);
+		else if (token[i] && ft_strchr(REDIR_S, token[i][0]) && ! token[i + 1])
+			return (ft_perror(ft_strdup("newline"), SYN_ERR), 1);
 		i++;
 	}
 	return (0);
@@ -139,7 +139,7 @@ char	**ft_token_sep(char *line)
 		return (free(line), NULL);
 	tokens = (char **)ft_calloc(len + 1, sizeof(char *));
 	if (!tokens)
-		return (free(line), perror("malloc : "), NULL);
+		return (free(line), perror("minishell: malloc : "), NULL);
 	i = 0;
 	j = 0;
 	while (tokens && i < ft_strlen(line))

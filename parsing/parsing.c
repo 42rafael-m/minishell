@@ -106,30 +106,23 @@ int	ft_args(char *token, t_cli *cli, int pos)
 	return (1);
 }
 
-t_cli	*ft_parse(char	**token, t_cli *cli)
+int	ft_parse(char	**token, t_cli *cli)
 {
 	int		i;
 	int		group;
 
 	if (!token || !cli)
-		return (NULL);
-	// i = 0;
-	// while (i < ft_doubleptr_len((void **)token))
-	// {
-	// 	printf("token[%d] = %s\n", i, token[i]);
-	// 	i++;
-	// }
+		return (2);
 	i = 0;
 	group = 1; 
 	while (i < cli->n_tokens)
 	{
-		printf("token[%d] = %s\n", i, token[i]);
 		if (token[i] && !ft_strncmp(token[i], ">>", 2))
 			ft_append(token[i], cli);
 		else if (token[i] && !ft_strncmp(token[i], "<<", 2))
 		{
 			if (ft_heredoc(token[i], cli) <= 0)
-				return (perror("hd_error"), NULL);
+				return (perror("hd_error"), 2);
 		}
 		else if (token[i] && token[i][0] == '<')
 			ft_infile(token[i], cli);
@@ -139,7 +132,7 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 		{
 			cli->next = ft_parse_op(token[i], cli);
 			if (!cli->next)
-				return (perror("!cli->next"), NULL);
+				return (perror("!cli->next"), 2);
 			cli = cli->next;
 		}
 		else if (token[i] && token[i][0] == '(')
@@ -159,5 +152,5 @@ t_cli	*ft_parse(char	**token, t_cli *cli)
 			ft_args(token[i], cli, ft_doubleptr_len((void **)cli->args));
 		i++;
 	}
-	return (cli);
+	return (0);
 }
