@@ -106,25 +106,6 @@ t_cli	*ft_init_node(int len, t_shenv *env, int op)
 	return (cli);
 }
 
-void	ft_free_env(t_shenv **env)
-{
-	t_shenv *node;
-	t_shenv *next;
-
-	if (!env || !*env)
-		return ;
-	node = *env;
-	while (node)
-	{
-		next = node ->next;
-		free(node->var);
-		free(node);
-		node = next;
-	}
-	free(env);
-	env = NULL;
-}
-
 void	ft_free_list(t_cli **cli)
 {
 	t_cli		*node;

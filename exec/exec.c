@@ -15,14 +15,18 @@
 int ft_execute(t_cli *cli)
 {
     int last_status;
+    char    **env;
 
     last_status = 0; 
     if (!cli || !cli->cmd)
-        return (127); 
+        return (127);
+    env = ft_getshenv(cli->env);
+    if (!env && cli->env)
+        return (2);
     if (has_pipes_or_redirs(cli))
         last_status = execute_pipeline(cli);
     else if (cli->is_builtin)
-        last_status = execute_builtin(cli);
+        last_status = execute_builtin(cli, env);
     else
         last_status = execute_command(cli);
     return (last_status);
@@ -82,7 +86,7 @@ bool has_pipes_or_redirs(t_cli *cli)
     return (false);
 }
 
-int execute_builtin(t_cli *cmd)
+int execute_builtin(t_cli *cmd, char **env)
 {
     if (!cmd || !cmd->cmd)
         return (1);
@@ -90,7 +94,7 @@ int execute_builtin(t_cli *cmd)
     if (!ft_strcmp(cmd->cmd, "pwd"))
         return (ft_pwd(cmd->args));
     else if (!ft_strcmp(cmd->cmd, "cd"))
-        return (ft_cd(cmd->args, &cmd->env));
+        return (ft_cd(cmd->args, &env));
     else if (!ft_strcmp(cmd->cmd, "echo"))
         return (ft_echo(cmd->args));
     else if (!ft_strcmp(cmd->cmd, "export"))
@@ -98,7 +102,7 @@ int execute_builtin(t_cli *cmd)
     else if (!ft_strcmp(cmd->cmd, "unset"))
         printf("NOT IMPLEMENTED\n");
     else if (!ft_strcmp(cmd->cmd, "env"))
-        return (ft_env(cmd->env));
+        return (ft_env(env));
     else if (!ft_strcmp(cmd->cmd, "exit"))
         return (ft_exit());
     return (1);

@@ -120,7 +120,7 @@ int 	ft_env(char **env);
 int 	ft_exit(void);
 int 	ft_cd(char **args, char ***env);
 int 	execute_command(t_cli *cmd);
-int 	execute_builtin(t_cli *cmd);
+int 	execute_builtin(t_cli *cmd, char **env);
 int 	ft_execute(t_cli *cli);
 int 	execute_pipeline(t_cli *cli);
 int		ft_sep_len(char *line, int pos);

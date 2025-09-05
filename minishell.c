@@ -217,17 +217,17 @@ int	ft_exec_shell(t_shenv *env, t_cli	*cli)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_shenv	*env;
-	extern int rl_catch_signals;
-	t_cli	*cli;
-	int	status;
+	t_shenv		*env;
+	extern int 	rl_catch_signals;
+	t_cli		*cli;
+	int			status;
 	
 	ft_set_sig(PARENT);
 	rl_catch_signals = 0;
 	env = ft_load_env(envp);
-	cli = ft_init_node(0, env, 0);
+	cli = ft_init_node(1, env, 0);
 	if (!cli)
-		return (free(env), 2);
+		return (ft_free_env(env), 2);
 	status = ft_exec_shell(env, cli);
 	ft_free_list(&cli);
 	return (status);
