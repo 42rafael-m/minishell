@@ -92,8 +92,6 @@ char	*ft_cmd_path(char *env_path, char *cmd)
 
 int	ft_cmd(char	*token, t_cli *cli)
 {
-	char	*trimmed;
-	
 	if (!token)
 		return (0);
 	if (!ft_strcmp(token, "echo") || !ft_strcmp(token, "ls")
@@ -101,15 +99,11 @@ int	ft_cmd(char	*token, t_cli *cli)
 	|| !ft_strcmp(token, "export") || !ft_strcmp(token, "unset")
 	|| !ft_strcmp(token, "env") || !ft_strcmp(token, "exit"))
 		return (cli->is_builtin = 1, cli->cmd = ft_strdup(token), 1);
-	if (ft_strchr(QUOTES, token[0]))
-		trimmed = ft_strndup(token + 1, ft_strlen(token) - 1);
+	if (token && ft_strchr(token, '/'))
+		cli->cmd = ft_strdup(token);
 	else
-		trimmed = ft_strdup(token);
-	if (trimmed && ft_strchr(trimmed, '/'))
-		cli->cmd = ft_strdup(trimmed);
-	else
-		cli->cmd = ft_cmd_path(getenv("PATH"), trimmed);
+		cli->cmd = ft_cmd_path(getenv("PATH"), token);
 	if (!cli->cmd)
 		cli->cmd = ft_strdup(token);
-	return (free(trimmed), trimmed = NULL, 1);
+	return (1);
 }

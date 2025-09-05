@@ -82,7 +82,7 @@ int	ft_token_len(char *line)
 		return (ft_heredoc_len(line + i));
 	while (i < len)
 	{
-		if (ft_strchr(QUOTES, line[i]))
+		if (ft_strchr(QUOTES, line[i]) && (i == 0 || (i > 0 && line[i - 1] != '\\')))
 		{
 			if (ft_quoted_len(line + i, line[i]) <= 0)
 				return (-1);

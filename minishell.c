@@ -133,7 +133,7 @@ int	ft_check_prnts(char *line)
 	prnts = 0;
 	while (i < ft_strlen(line))
 	{
-		if (ft_strchr(QUOTES, line[i]))
+		if (ft_strchr(QUOTES, line[i]) && (i == 0 || (i > 0 && line[i - 1] != '\\')))
 		{
 			len = ft_quoted_len(line + i, line[i]);
 			if (len < 0)

@@ -16,13 +16,12 @@ int	ft_quoted_len(char *line, char quote)
 {
 	int	i;
 
-	printf("line = %s\n", line);
 	if (!line)
 		return (0);
 	i = 1;
 	while (line[i])
 	{
-		if (line[i] == quote)
+		if (line[i] == quote && (i == 0 || (i > 0 && line[i - 1] != '\\')))
 			return (i + 1);
 		i++;
 	}
@@ -54,6 +53,18 @@ char	*ft_escaped_line(char *line, int start, int end)
 	return (s = NULL, escaped = NULL, t);
 }
 
+char *ft_esc_line(char *line, int i, int len)
+{
+	char	*esc_line;
+
+	esc_line = ft_escaped_line(line, i, len);
+	free(line);
+	line = esc_line;
+	if (line != esc_line)
+		free(esc_line);
+	return (esc_line);
+}
+
 char	*ft_escape_quotes(char *line)
 {
 	int		i;
@@ -69,13 +80,14 @@ char	*ft_escape_quotes(char *line)
 		return ((char *)ft_calloc(2, 1));
 	while (i < ft_strlen(s))
 	{
-		if (ft_strchr(QUOTES, s[i]))
+		if (ft_strchr(QUOTES, s[i]) && (i == 0 || (i > 0 && line[i - 1] != '\\')))
 		{
 			if (s[i + 1] == s[i])
 				return (free(s), NULL);
 			len = ft_quoted_len(s + i,  s[i]);
 			if (len <= 0)
 				return (free(s), NULL);
+			// esc_line = ft_esc_line(s, i , i + len);
 			esc_line = ft_escaped_line(s, i, i + len);
 			free(s);
 			s = esc_line;
@@ -88,14 +100,6 @@ char	*ft_escape_quotes(char *line)
 	return (s);
 }
 
-void	ft_free_all(char **token, t_cli **cli)
-{
-	if (token && cli && *cli)
-		ft_free_tokens(token, (*cli)->n_tokens);
-	else if (token)
-		ft_free_d(token);
-}
-
 char	**ft_tokens(char *line, t_shenv *env, t_cli *cli)
 {
 	int		len;
@@ -104,16 +108,16 @@ char	**ft_tokens(char *line, t_shenv *env, t_cli *cli)
 	if (!line)
 		return (NULL);
 	if (ft_check_prnts(line))
-		return ( NULL);
+		return (printf("prnts error\n"), NULL);
 	cli->n_tokens = ft_num_s_tokens(line);
 	tokens = ft_token_sep(ft_trim_spaces(line));
 	if (!tokens)
 		return (NULL);
 	tokens = ft_expand_tokens(tokens, &(cli->n_tokens));
 	if (!tokens)
-		return (ft_free_all(tokens, &cli), NULL);
+		return (ft_free_tokens(tokens, cli->n_tokens), NULL);
 	if (ft_check_errors(tokens, cli->n_tokens))
-		return (ft_free_all(tokens, &cli), NULL);
+		return (ft_free_tokens(tokens, cli->n_tokens), NULL);
 	len = cli->n_tokens;
 	return (tokens);
 }

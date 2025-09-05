@@ -24,11 +24,11 @@ char	*ft_trim_delim(char *token, int *option)
 		i++;
 	while (ft_isspace(token[i]))
 		i++;
-	if (ft_strchr(QUOTES, token[i]))
+	if (ft_strchr(QUOTES, token[i]) && (i == 0 || (i > 0 && token[i - 1] != '\\')))
 	{
 		if (token[i] == '\"')
 			*option = 1;
-		delim = ft_escape_quotes(token + i + 1);
+		delim = ft_escape_quotes(token + i);
 	}
 	else
 		delim = ft_strdup(token + i);
@@ -88,7 +88,7 @@ char	*ft_expand_line(char *line)
 	i = 0;
 	while (line && i < ft_strlen(line))
 	{
-		if (line[i] == '\'')
+		if (line[i] == '\'' && i > 0 && line[i - 1] != '\\')
 			i += (ft_quoted_len(line + i, '\'') + 1);
 		if (i < ft_strlen(line) && line[i] == '<' && line[i + 1] == '<')
 		{
@@ -121,7 +121,10 @@ char	**ft_expand_tokens(char **tokens, int *len)
 	while (tokens[i])
 	{
 		t = ft_expand_line(tokens[i]);
-		tokens[i] = ft_escape_quotes(t);
+		if (t && t[0] == '<' && t[1] == '<')
+			tokens[i] = ft_strdup(t);
+		else
+			tokens[i] = ft_escape_quotes(t);
 		free(t);
 		i++;
 	}

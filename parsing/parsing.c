@@ -25,7 +25,7 @@ int	ft_append(char *token, t_cli *cli)
 		i++;
 	while (ft_isspace(token[i]))
 		i++;
-	if (ft_strchr(QUOTES, token[i]))
+	if (ft_strchr(QUOTES, token[i]) && (i == 0 || (i > 0 && token[i - 1] != '\\')))
 		cli->outfile = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
 	else
 		cli->outfile = ft_strdup(token + i);
@@ -47,7 +47,7 @@ int	ft_outfile(char *token, t_cli *cli)
 		i++;
 	while (ft_isspace(token[i]))
 		i++;
-	if (ft_strchr(QUOTES, token[i]))
+	if (ft_strchr(QUOTES, token[i]) && (i == 0 || (i > 0 && token[i - 1] != '\\')))
 		cli->outfile = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
 	else
 		cli->outfile = ft_strdup(token + i);
@@ -70,7 +70,7 @@ int	ft_infile(char *token, t_cli *cli)
 		i++;
 	while (ft_isspace(token[i]))
 		i++;
-	if (ft_strchr(QUOTES, token[i]))
+	if (ft_strchr(QUOTES, token[i]) && (i == 0 || (i > 0 && token[i - 1] != '\\')))
 		cli->infile = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
 	else
 		cli->infile = ft_strdup(token + i);
