@@ -137,8 +137,8 @@ int	ft_check_prnts(char *line)
 		{
 			len = ft_quoted_len(line + i, line[i]);
 			if (len < 0)
-				return (free(line), line = NULL, -2);
-			i += len;	
+				return (-1);
+			i += (len - 1);
 		}
 		if (line[i] == '(')
 			prnts++;
@@ -156,8 +156,6 @@ void	ft_reset_list(t_cli *cli, char **tokens)
 	t_cli	*next;
 	t_cli	*node;
 
-	if (!cli)
-		return ;
 	node = cli;
 	ft_free_tokens(tokens, cli->n_tokens);
 	while (node->next)
@@ -182,7 +180,15 @@ void	ft_reset_list(t_cli *cli, char **tokens)
 	cli->op = 0;
 }
 
-int	ft_exec_shell(t_shenv *env, t_cli	*cli)
+int	ft_reset_signal(t_cli *cli)
+{
+	g_sig_rec = 0;
+	ft_reset_list(cli, NULL);
+	cli->status = 130;
+	return (1);
+}
+
+int	ft_exec_shell(t_shenv *env, t_cli *cli)
 {
 	char	*cl;
 	char	**tokens;
@@ -191,18 +197,12 @@ int	ft_exec_shell(t_shenv *env, t_cli	*cli)
 	while (1)
 	{
 		free(cl);
+		printf("status = %d\n", cli->status);
 		cl = readline("\033[1;32mminishell\033[0m$ ");
 		if (!cl)
 			return (rl_clear_history(), write(1, "exit\n", 5), 0);
-		if (!cl && !g_sig_rec)
-			return (free(cl), rl_clear_history(), 2);
-		if (g_sig_rec)
-		{
-			g_sig_rec = 0;
-			ft_reset_list(cli, tokens);
-			cli->status = 130;
+		if (g_sig_rec && ft_reset_signal(cli))
 			continue ;
-		}
 		add_history(cl);
 		tokens = ft_tokens(cl, env, cli);
 		if (!tokens)
@@ -212,7 +212,6 @@ int	ft_exec_shell(t_shenv *env, t_cli	*cli)
 		}
 		cli->status = ft_parse(tokens, cli);
 		cli->status = ft_execute(cli);
-		printf("status = %d\n", cli->status);
 		ft_reset_list(cli, tokens);
 	}
 	return (free(cl), rl_clear_history(), cli->status);

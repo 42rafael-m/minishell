@@ -28,7 +28,7 @@ char	*ft_trim_delim(char *token, int *option)
 	{
 		if (token[i] == '\"')
 			*option = 1;
-		delim = ft_strndup(token + i + 1, ft_strlen(token) - i - 2);
+		delim = ft_escape_quotes(token + i + 1);
 	}
 	else
 		delim = ft_strdup(token + i);
@@ -113,13 +113,10 @@ char	*ft_expand_line(char *line)
 char	**ft_expand_tokens(char **tokens, int *len)
 {
 	char	*t;
-	// char	**piped;
 	int		i;
 
 	if (!tokens)
 		return (NULL);
-	i = 0;
-	// piped = ft_lex_pipe(tokens, len);
 	i = 0;
 	while (tokens[i])
 	{

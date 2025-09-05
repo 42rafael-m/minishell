@@ -51,7 +51,7 @@ int	ft_sep_len(char *line, int pos)
 
 	if (!line || pos < 0)
 		return (-1);
-	if (ft_isspace(line[pos]) || ft_strchr(REDIR_S, line[pos]))
+	if (ft_isspace(line[pos]) || (ft_strchr(REDIR_S, line[pos])))
 		return (pos);
 	if (ft_strchr(OP_STR, line[pos]))
 	{

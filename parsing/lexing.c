@@ -16,6 +16,7 @@ int	ft_quoted_len(char *line, char quote)
 {
 	int	i;
 
+	printf("line = %s\n", line);
 	if (!line)
 		return (0);
 	i = 1;
@@ -103,7 +104,7 @@ char	**ft_tokens(char *line, t_shenv *env, t_cli *cli)
 	if (!line)
 		return (NULL);
 	if (ft_check_prnts(line))
-		return (NULL);
+		return ( NULL);
 	cli->n_tokens = ft_num_s_tokens(line);
 	tokens = ft_token_sep(ft_trim_spaces(line));
 	if (!tokens)
