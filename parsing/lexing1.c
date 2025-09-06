@@ -12,32 +12,47 @@
 
 #include "../minishell.h"
 
+int	ft_check_redirs(char **token, int i)
+{
+	char	*s;
+
+	if (token[i] && ft_strchr(REDIR_S, token[i][0]) && (!token[i][1] || (token[i][1] == token[i][0] && !token[i][2])))
+	{
+		printf("token[i + 1] = %s\n", token[i + 1]);
+		if (!token[i + 1])
+			return (ft_perror("newline", SYN_ERR), 1);
+		s = ft_strndup(token[i], 3);
+		printf("s = %s\n", s);
+		ft_perror(s, SYN_ERR);
+		free(s);
+		return (1);
+	}
+	return (0);
+}
+
 int	ft_check_errors(char **token, int len)
 {
 	int	i;
 
-	if (!token || !token[0])
+	if (!token)
 		return (1);
-	if (ft_strchr(OP_STR2, token[0][0]))
-		return (ft_perror(token[i], SYN_ERR), 1);
+	if (token[0] && ft_strchr(OP_STR2, token[0][0]))
+		return (ft_perror(token[0], SYN_ERR), 1);
 	i = 0;
 	while (i < len - 1)
 	{
-		ft_perror(token[i], NULL);
-		if (ft_strchr(OP_STR2, token[i][0]) && (token[i + 1] && ft_strchr(OP_STR2, token[i + 1][0])))
+		if (token[i] && ft_strchr(OP_STR2, token[i][0]) && (token[i + 1] && ft_strchr(OP_STR2, token[i + 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
-		else if (token[i][0] == ')' && (token[i + 1] && !ft_strchr(OP_STR, token[i + 1][0])))
+		else if (token[i] && token[i][0] == ')' && (token[i + 1] && !ft_strchr(OP_STR, token[i + 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
-		else if (token[i][0] == '(' && i > 0 && (!ft_strchr(OP_STR, token[i - 1][0])))
+		else if (token[i] && token[i][0] == '(' && i > 0 && (!ft_strchr(OP_STR, token[i - 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
-		else if (token[i][0] == '(' && token[i + 1] && token[i + 1][0] == ')')
+		else if (token[i] && token[i][0] == '(' && token[i + 1] && token[i + 1][0] == ')')
 			return (ft_perror(token[i + 1], SYN_ERR), 1);
-		else if (ft_strchr(REDIR_S, token[i][0]) && token[i + 1] && ft_strchr(REDIR_S, token[i + 1][0]))
-			return (ft_perror(token[i + 1], SYN_ERR), 1);
-		else if (ft_strchr(OP_STR, token[i][0]) && ! token[i + 1])
+		else if (token[i] && ft_strchr(OP_STR, token[i][0]) && ! token[i + 1])
 			return (ft_perror(token[i], SYN_ERR), 1);
-		else if (token[i] && ft_strchr(REDIR_S, token[i][0]) && (!token[i][1] || ft_strchr(REDIR_S, token[i][1]) && !token[i][2]))
-			return (ft_perror("newline", SYN_ERR), 1);
+		else if (token[i] && ft_check_redirs(token, i))
+			return (1);
 		i++;
 	}
 	return (0);
@@ -53,14 +68,6 @@ int	ft_sep_len(char *line, int pos)
 		return (-1);
 	if (ft_isspace(line[pos]) || (ft_strchr(REDIR_S, line[pos])))
 		return (pos);
-	if (ft_strchr(OP_STR, line[pos]))
-	{
-		i = 1;
-		if (line[pos + i] == line[pos])
-			i++;
-		while (ft_isspace(line[pos + i]))
-			i++;
-	}
 	if (pos == 0 && ft_strchr(OP_STR2, line[pos]) && line[pos + 1] == line[pos])
 		return (2);
 	if (pos == 0 && ft_strchr(OP_STR, line[pos]))
@@ -72,8 +79,6 @@ int	ft_token_len(char *line)
 	int	i;
 	int	len;
 
-	if (!line)
-		return (0);
 	i = 0;
 	len = ft_strlen(line);
 	while (i < len && ft_isspace(line[i]))

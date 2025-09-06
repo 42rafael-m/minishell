@@ -124,7 +124,7 @@ static int	ft_read_heredoc(t_cli *cli, int *option, char *delim)
 		free(line);
 		line = readline("> ");
 		if (g_sig_rec)
-			return (free(line), free(delim), 130);
+			return (free(line), free(delim), cli->status = 130, 130);
 		if (!line || !ft_strncmp(line, delim, ft_strlen(line)))
 			break ;
 		t = ft_strjoin(cli->heredoc, line);
@@ -136,7 +136,7 @@ static int	ft_read_heredoc(t_cli *cli, int *option, char *delim)
 		ft_here_error(delim);
 	cli->heredoc = ft_expand_heredoc(option, cli);
 	if (!cli->heredoc)
-		return (2);
+		return (cli->status = 2, 2);
 	return (free(line), free(delim), 0);
 }
 
@@ -151,7 +151,7 @@ int	ft_heredoc(char *token, t_cli *cli)
 	ft_free_prev(cli);
 	delim = ft_trim_delim(token, &option);
 	if (!delim)
-		return (2);
+		return (cli->status = 2, 2);
 	option = 0;
 	status = ft_read_heredoc(cli, &option, delim);
 	if (status == 130)

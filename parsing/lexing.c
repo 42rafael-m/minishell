@@ -62,7 +62,7 @@ char *ft_esc_line(char *line, int i, int len)
 	line = esc_line;
 	if (line != esc_line)
 		free(esc_line);
-	return (esc_line);
+	return (line);
 }
 
 char	*ft_escape_quotes(char *line)
@@ -77,7 +77,7 @@ char	*ft_escape_quotes(char *line)
 	i = 0;
 	s = ft_strdup(line);
 	if (ft_strchr(QUOTES, line[0]) && line[1] == line[0])
-		return ((char *)ft_calloc(2, 1));
+		return (free(s), NULL);
 	while (i < ft_strlen(s))
 	{
 		if (ft_strchr(QUOTES, s[i]) && (i == 0 || (i > 0 && line[i - 1] != '\\')))
@@ -87,12 +87,7 @@ char	*ft_escape_quotes(char *line)
 			len = ft_quoted_len(s + i,  s[i]);
 			if (len <= 0)
 				return (free(s), NULL);
-			// esc_line = ft_esc_line(s, i , i + len);
-			esc_line = ft_escaped_line(s, i, i + len);
-			free(s);
-			s = esc_line;
-			if (s != esc_line)
-				free(esc_line);
+			s = ft_esc_line(s, i , i + len);
 			i += (len - 3);
 		}
 		i++;

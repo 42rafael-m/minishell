@@ -79,36 +79,33 @@ int	ft_infile(char *token, t_cli *cli)
 	return (1);
 }
 
-int	ft_args(char *token, t_cli *cli, int pos)
+int	ft_parse_token(char *token, t_cli *cli, int *group)
 {
-	char	**t;
-
-	if (!token || !cli)
-		return (0);
-	if (!cli->args)
+	if (token && token[0] == '<')
+		ft_infile(token, cli);
+	else if (token && token[0] == '>')
+		ft_outfile(token, cli);
+	else if (token && token[0] == '(')
+		*group++;
+	else if (token && token[0] == ')')
 	{
-		cli->args = (char **)ft_calloc(2, sizeof(char *));
-		if (!cli->args)
-			return (perror("malloc"), 0);
-		cli->args[1] = NULL;
-		cli->args[0] = ft_strdup(token);
-		if (!cli->args[0])
-			return (perror("malloc"), 0);
+		*group--;
+		cli->op = 0;
+	}
+	else if (token && !cli->cmd)
+	{
+		ft_cmd(token, cli);
+		ft_args(token, cli, ft_doubleptr_len((void **)cli->args));
+		cli->group = *group;
 	}
 	else
-	{
-		t = (char **)ft_add_ptr((void *)cli->args, (char *)token, pos);
-		if (!t)
-			return (perror("malloc"), 0);
-		ft_free_d(cli->args);
-		cli->args = t;
-	}
-	return (1);
+		ft_args(token, cli, ft_doubleptr_len((void **)cli->args));
 }
 
-int	ft_parse(char	**token, t_cli *cli)
+int	ft_parse(char **token, t_cli *cli)
 {
 	int		i;
+	int		status;
 	int		group;
 
 	if (!token || !cli)
@@ -120,36 +117,16 @@ int	ft_parse(char	**token, t_cli *cli)
 		if (token[i] && !ft_strncmp(token[i], ">>", 2))
 			ft_append(token[i], cli);
 		else if (token[i] && !ft_strncmp(token[i], "<<", 2))
-		{
-			if (ft_heredoc(token[i], cli) <= 0)
-				return (perror("hd_error"), 2);
-		}
-		else if (token[i] && token[i][0] == '<')
-			ft_infile(token[i], cli);
-		else if (token[i] && token[i][0] == '>')
-			ft_outfile(token[i], cli);
+			if (ft_heredoc(token[i], cli) == 130)
+				return (130);
 		else if (token[i] && ft_strchr(OP_STR2, token[i][0]))
 		{
 			cli->next = ft_parse_op(token[i], cli);
 			if (!cli->next)
-				return (perror("!cli->next"), 2);
+				return (2);
 			cli = cli->next;
 		}
-		else if (token[i] && token[i][0] == '(')
-			group++;
-		else if (token[i] && token[i][0] == ')')
-		{
-			group--;
-			cli->op = 0;
-		}
-		else if (token[i] && !cli->cmd)
-		{
-			ft_cmd(token[i], cli);
-			ft_args(token[i], cli, ft_doubleptr_len((void **)cli->args));
-			cli->group = group;
-		}
-		else
-			ft_args(token[i], cli, ft_doubleptr_len((void **)cli->args));
+		ft_parse_token(token[i], cli, &group);
 		i++;
 	}
 	return (0);

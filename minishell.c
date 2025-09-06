@@ -172,7 +172,7 @@ void	ft_reset_list(t_cli *cli, char **tokens)
 	cli->infile = NULL;
 	free(cli->outfile);
 	cli->outfile = NULL;
-	ft_free_d(cli->args);
+	ft_free_tokens(cli->args, cli->n_tokens - 1);
 	cli->args = NULL;
 	cli->is_builtin = 0;
 	cli->r_mode = 0;

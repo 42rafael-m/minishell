@@ -86,7 +86,7 @@ int execute_builtin(t_cli *cmd)
     char    **env;
 
     if (!cmd || !cmd->cmd)
-        return (1);
+        return (printf("!cmd"), 1);
     if (!ft_strcmp(cmd->cmd, "pwd"))
         return (ft_pwd(cmd->args));
     else if (!ft_strcmp(cmd->cmd, "cd"))
@@ -111,7 +111,7 @@ int execute_builtin(t_cli *cmd)
     }
     else if (!ft_strcmp(cmd->cmd, "exit"))
         return (ft_exit());
-    return (1);
+    return (printf("bi\n"), 1);
 }
 
 
