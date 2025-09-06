@@ -151,13 +151,12 @@ int	ft_check_prnts(char *line)
 	return (prnts);
 }
 
-void	ft_reset_list(t_cli *cli, char **tokens)
+void	ft_reset_list(t_cli *cli)
 {
 	t_cli	*next;
 	t_cli	*node;
 
 	node = cli;
-	ft_free_tokens(tokens, cli->n_tokens);
 	while (node->next)
 		node = node->next;
 	cli->status = node->status;
@@ -183,12 +182,12 @@ void	ft_reset_list(t_cli *cli, char **tokens)
 int	ft_reset_signal(t_cli *cli)
 {
 	g_sig_rec = 0;
-	ft_reset_list(cli, NULL);
+	ft_reset_list(cli);
 	cli->status = 130;
 	return (1);
 }
 
-int	ft_exec_shell(t_shenv *env, t_cli *cli)
+int	ft_read_line(t_shenv *env, t_cli *cli)
 {
 	char	*cl;
 	char	**tokens;
@@ -212,7 +211,7 @@ int	ft_exec_shell(t_shenv *env, t_cli *cli)
 		}
 		cli->status = ft_parse(tokens, cli);
 		cli->status = ft_execute(cli);
-		ft_reset_list(cli, tokens);
+		ft_reset_list(cli);
 	}
 	return (free(cl), rl_clear_history(), cli->status);
 }
@@ -230,7 +229,7 @@ int	main(int argc, char **argv, char **envp)
 	cli = ft_init_node(1, env, 0);
 	if (!cli)
 		return (ft_free_env(&env), 2);
-	status = ft_exec_shell(env, cli);
+	status = ft_read_line(env, cli);
 	ft_free_list(&cli);
 	ft_free_env(&env);
 	return (status);

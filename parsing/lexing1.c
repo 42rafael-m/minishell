@@ -39,7 +39,7 @@ int	ft_check_errors(char **token, int len)
 	if (token[0] && ft_strchr(OP_STR2, token[0][0]))
 		return (ft_perror(token[0], SYN_ERR), 1);
 	i = 0;
-	while (i < len - 1)
+	while (i < len)
 	{
 		if (token[i] && ft_strchr(OP_STR2, token[i][0]) && (token[i + 1] && ft_strchr(OP_STR2, token[i + 1][0])))
 			return (ft_perror(token[i + 1], SYN_ERR), 1);

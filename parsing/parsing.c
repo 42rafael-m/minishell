@@ -105,6 +105,7 @@ int	ft_parse_token(char *token, t_cli *cli, int *group)
 int	ft_parse(char **token, t_cli *cli)
 {
 	int		i;
+	int		len;
 	int		status;
 	int		group;
 
@@ -112,13 +113,17 @@ int	ft_parse(char **token, t_cli *cli)
 		return (2);
 	i = 0;
 	group = 1;
-	while (i < cli->n_tokens)
+	len = cli->n_tokens;
+	cli->n_tokens = 1;
+	while (i < len)
 	{
 		if (token[i] && !ft_strncmp(token[i], ">>", 2))
 			ft_append(token[i], cli);
 		else if (token[i] && !ft_strncmp(token[i], "<<", 2))
+		{
 			if (ft_heredoc(token[i], cli) == 130)
 				return (130);
+		}
 		else if (token[i] && ft_strchr(OP_STR2, token[i][0]))
 		{
 			cli->next = ft_parse_op(token[i], cli);
@@ -126,8 +131,9 @@ int	ft_parse(char **token, t_cli *cli)
 				return (2);
 			cli = cli->next;
 		}
-		ft_parse_token(token[i], cli, &group);
+		else
+			ft_parse_token(token[i], cli, &group);
 		i++;
 	}
-	return (0);
+	return (ft_free_tokens(token, len), 0);
 }

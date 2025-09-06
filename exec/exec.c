@@ -18,7 +18,7 @@ int ft_execute(t_cli *cli)
 
     last_status = 0; 
     if (!cli || !cli->cmd)
-        return (127);
+        return (perror("!cmd"), 127);
     if (has_pipes_or_redirs(cli))
         last_status = execute_pipeline(cli);
     else if (cli->is_builtin)
@@ -111,7 +111,7 @@ int execute_builtin(t_cli *cmd)
     }
     else if (!ft_strcmp(cmd->cmd, "exit"))
         return (ft_exit());
-    return (printf("bi\n"), 1);
+    return (1);
 }
 
 

@@ -36,6 +36,7 @@ int     ft_args(char *token, t_cli *cli, int pos)
                 ft_free_d(cli->args);
                 cli->args = t;
         }
+		cli->n_tokens++;
         return (1);
 }
 
