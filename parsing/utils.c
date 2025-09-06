@@ -158,23 +158,17 @@ int ft_trim_s_len(char *line)
 {
 	int		i;
 	int		len;
-	char	sep;
 
 	i = 0;
 	len = 0;
-	sep = '\0';
-	while (line && ft_isspace(line[i]))
-		i++;
 	while (line && i < ft_strlen(line))
 	{
 		if (ft_strchr(QUOTES, line[i]) && (i == 0 || (i > 0 && line[i - 1] != '\\')))
 		{
-			sep = line[i];
-			if (ft_quoted_len(line + i, sep)  <= 0)
+			if (ft_quoted_len(line + i, line[i])  <= 0)
 				return (-1);
-			len += ft_quoted_len(line + i, sep);
-			i += ft_quoted_len(line + i, sep);
-			sep = '\0';
+			len += ft_quoted_len(line + i, line[i]);
+			i += ft_quoted_len(line + i, line[i]);
 			continue ;
 		}
 		while (ft_isspace(line[i]) && (( i + 1) >= ft_strlen(line) || ft_isspace(line[i + 1])))
@@ -193,13 +187,10 @@ char	*ft_trim_spaces(char *line)
 	char	*trimmed;
 
 	i = 0;
-	j = ft_trim_s_len(line);
-	if (j < 0)
+	if (ft_trim_s_len(line) < 0)
 		return (NULL);
-	trimmed = ft_calloc(j + 1, sizeof(char));
+	trimmed = ft_calloc(ft_trim_s_len(line) + 1, sizeof(char));
 	j = 0;
-	while (line && ft_isspace(line[i]))
-		i++;
 	while (trimmed && line && i < ft_strlen(line))
 	{
 		while (ft_isspace(line[i]) && (ft_isspace(line[i + 1]) || !line[i + 1]))
