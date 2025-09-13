@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-
-int	ft_x()
-{
-
-}
+#include "../minishell.h"
 
 int	ft_match_wildcard(char *token, char *wildcard)
 {
@@ -49,15 +43,4 @@ int	ft_match_wildcard(char *token, char *wildcard)
     while (wildcard[j] == '*')
 		j++;
     return (wildcard[j] == '\0');
-}
-
-int	main(int argc, char **argv)
-{
-	(void)argc;
-	int n = 0;
-	n = ft_match_wildcard(argv[1], argv[2]);
-	if (n)
-		printf("Matches wildcard\n");
-	else
-		printf("No wildcard\n");
 }
