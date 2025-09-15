@@ -1,63 +1,29 @@
 #include <stdio.h>
 #include <string.h>
-
-int	ft_x()
-{
-
-}
-
-int	ft_match_wildcard(char *token, char *wildcard)
-{
-	size_t	i;
-	size_t	j;
-	size_t	i_anchor;
-	size_t	j_after_asterisk;
-
-    if (!token || !wildcard || (token[0] == '.' && wildcard[0] != '.'))
-		return (0);
-    i = 0;
-	j = 0;
-	i_anchor = 0;
-	j_after_asterisk = 0;
-    while (token[i])
-    {
-        if (wildcard[j] == '*')
-        {
-			while (wildcard[j] == '*')
-				j++;
-			if (!wildcard[j])
-				return (1);
-			j_after_asterisk = j;
-			i_anchor = i;
-			continue;
-        }
-        if (wildcard[j] == token[i])
-        {
-			i++;
-			j++;
-			continue;
-		}
-        if (j_after_asterisk)
-        {
-			i_anchor++;
-			i = i_anchor;
-			j = j_after_asterisk;
-			continue;
-		}
-		return (0);
-    }
-    while (wildcard[j] == '*')
-		j++;
-    return (wildcard[j] == '\0');
-}
+#include <dirent.h>
+#include <stdlib.h>
 
 int	main(int argc, char **argv)
 {
+	DIR				*dir_stream;
+	struct dirent	*dir;
 	(void)argc;
-	int n = 0;
-	n = ft_match_wildcard(argv[1], argv[2]);
-	if (n)
-		printf("Matches wildcard\n");
-	else
-		printf("No wildcard\n");
+	dir_stream = NULL;
+	dir_stream = opendir(argv[1]);
+	if (!dir_stream)
+    {
+        perror("opendir");
+        return (1);
+    }
+	dir = readdir(dir_stream);
+	if (dir)
+		printf("dir->d_name = %s\n", dir->d_name);
+	while (dir)
+	{
+		dir = readdir(dir_stream);
+		if (dir)
+			printf("dir->d_name = %s\n", dir->d_name);
+	}
+	if (dir_stream)
+		closedir(dir_stream);
 }

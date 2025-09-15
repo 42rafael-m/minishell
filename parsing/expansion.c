@@ -114,12 +114,21 @@ char	**ft_expand_tokens(char **tokens, int *len)
 {
 	char	*t;
 	int		i;
+	int		wc_len;
 
 	if (!tokens)
 		return (NULL);
 	i = 0;
 	while (tokens[i])
 	{
+		wc_len = 0;
+		if (ft_strchr(tokens[i], '*') && !ft_strchr(QUOTES, tokens[i][0]))
+		{
+			tokens = ft_expand_wildcard(tokens, tokens[i], i, &wc_len);
+			i = i + wc_len;
+			*len = *len +  wc_len - 1;
+			continue ;
+		}
 		t = ft_expand_line(tokens[i]);
 		if (t && t[0] == '<' && t[1] == '<')
 			tokens[i] = ft_strdup(t);
@@ -128,5 +137,6 @@ char	**ft_expand_tokens(char **tokens, int *len)
 		free(t);
 		i++;
 	}
+	i = 0;
 	return (tokens);
 }

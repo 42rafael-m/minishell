@@ -10,7 +10,7 @@ SRC = minishell.c\
 	parsing/heredoc.c\
 	parsing/signals.c\
 	parsing/shenv.c\
-	parsing\wildcards.c
+	parsing/wildcards.c\
 	exec/builtins.c\
 	exec/exec.c\
 	exec/exec_pipe.c\

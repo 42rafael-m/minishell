@@ -91,6 +91,7 @@ typedef struct s_cli
 }	t_cli;
 
 bool 	has_pipes_or_redirs(t_cli *cli);
+char	**ft_expand_wildcard(char **token, char *wildcard, int pos, int *wc_len);
 char	**ft_token_sep(char *line);
 char	**ft_insert_s_tokens(char **tokens);
 char	**ft_lex_pipe(char **token, int *len);
@@ -109,6 +110,7 @@ char	*ft_expand_line(char *line);
 char	*ft_trim_delim(char *token, int *option);
 char	*ft_expand_heredoc(int option, t_cli *cli);
 char    *ft_cmd_path(char *env_path, char *cmd);
+int		ft_match_wildcard(char *str, char *wildcard);
 int		ft_parse(char **tokens, t_cli *cli);
 int		ft_check_prnts(char *line);
 int		ft_check_errors(char **token, int len);

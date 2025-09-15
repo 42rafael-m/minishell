@@ -134,7 +134,7 @@ static int	ft_read_heredoc(t_cli *cli, int *option, char *delim)
 	}
 	if (!line)
 		ft_here_error(delim);
-	cli->heredoc = ft_expand_heredoc(option, cli);
+	cli->heredoc = ft_expand_heredoc(*option, cli);
 	if (!cli->heredoc)
 		return (cli->status = 2, 2);
 	return (free(line), free(delim), 0);
