@@ -31,7 +31,7 @@ int ft_echo(char **args)
     int new_line;
 
     i = 1;
-    new_line = 1;  
+    new_line = 1;
     while (args[i])
     {
         if (args[i] && ft_strcmp(args[i], "-n") == 0)
