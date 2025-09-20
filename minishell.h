@@ -6,7 +6,7 @@
 /*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:19:26 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/09/20 13:15:33 by rms35            ###   ########.fr       */
+/*   Updated: 2025/09/20 20:14:35 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int 	ft_env(char **env);
 int 	ft_exit(void);
 int 	ft_cd(char **args, t_shenv **env);
 int		ft_setenv(t_shenv **env, const char *key, const char *value);
-int 	execute_command(t_cli *cmd);
+int 	execute_command(t_cli *cli);
 int 	execute_builtin(t_cli *cmd);
 int 	ft_execute(t_cli *cli);
 int 	execute_pipeline(t_cli *cli);

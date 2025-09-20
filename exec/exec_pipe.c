@@ -6,7 +6,7 @@
 /*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 10:21:28 by dogs              #+#    #+#             */
-/*   Updated: 2025/09/20 15:50:56 by rms35            ###   ########.fr       */
+/*   Updated: 2025/09/20 20:20:07 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,17 +98,28 @@ void    setup_child(t_cli *cmd, int prev_pipe, int *pipe_fd)
         close(pipe_fd[0]);
 }
 
-void    exec_command(t_cli *cmd)
+void    exec_command(t_cli **cli)
 {
     char **env;
+    int status;
+    t_cli   *cmd;
 
+    cmd = *cli;
     env = ft_getshenv(*(cmd->env));
     if (cmd -> env && !env)
         exit(2);
     if (cmd->is_builtin)
-        exit(execute_builtin(cmd));
+    {
+        status = execute_builtin(cmd);
+        ft_free_env(cmd->env);
+        ft_free_list(cli);
+        ft_free_d(env);
+        exit(status);
+    }
     execve(cmd->cmd, cmd->args, env);
     perror("execve");
+    ft_free_env(cmd->env);
+    ft_free_list(cli);
     ft_free_d(env);
     exit(127);
 }
@@ -198,7 +209,7 @@ int execute_pipeline(t_cli *cli)
                 setup_child(current, prev_pipe, pipe_fd);
             else
                 setup_child(current, prev_pipe, NULL);
-            exec_command(current);
+            exec_command(&current);
         }
         child_pids[child_count++] = pid;
         if (prev_pipe != 1)
