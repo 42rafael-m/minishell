@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:18:45 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/04 15:47:32 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/09/20 12:36:25 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,18 @@ int	ft_quoted_len(char *line, char quote)
 	i = 1;
 	while (line[i])
 	{
-		if (line[i] == quote && (i == 0 || (i > 0 && line[i - 1] != '\\')))
-			return (i + 1);
+		if (line[i] == quote)
+		{
+			if(quote == '\'')
+				return (i + 1);
+			else if (quote == '\"')
+			{
+				if (line[i - 1] != '\\')
+					return (i + 1);
+			}
+		}
 		i++;
 	}
-	write(2, ERR_OPEN_Q, 43);
 	return (-1);
 }
 
@@ -56,13 +63,27 @@ char	*ft_escaped_line(char *line, int start, int end)
 char *ft_esc_line(char *line, int i, int len)
 {
 	char	*esc_line;
+	char	*t;
 
+	if (ft_strchr(QUOTES, line[i]) && line[i] == line[i + 1])
+	{
+		t = ft_strndup(line, i);
+		if (i > 0 && !t)
+			return (perror("malloc1 : "), NULL);
+		if (!line[i + 2])
+			return (t);
+		esc_line = ft_strjoin(t, line + i + 2);
+		if (esc_line != t)
+		{
+			free(t);
+			t = NULL;
+		}
+		if (!esc_line)
+			return (perror("malloc : "), NULL);
+		return (esc_line);
+	}
 	esc_line = ft_escaped_line(line, i, len);
-	free(line);
-	line = esc_line;
-	if (line != esc_line)
-		free(esc_line);
-	return (line);
+	return (esc_line);
 }
 
 char	*ft_escape_quotes(char *line)
@@ -76,19 +97,20 @@ char	*ft_escape_quotes(char *line)
 		return (NULL);
 	i = 0;
 	s = ft_strdup(line);
-	if (ft_strchr(QUOTES, line[0]) && line[1] == line[0])
-		return (free(s), NULL);
 	while (i < ft_strlen(s))
 	{
 		if (ft_strchr(QUOTES, s[i]) && (i == 0 || (i > 0 && line[i - 1] != '\\')))
 		{
-			if (s[i + 1] == s[i])
-				return (free(s), NULL);
 			len = ft_quoted_len(s + i,  s[i]);
-			if (len <= 0)
+			if (len < 0)
 				return (free(s), NULL);
-			s = ft_esc_line(s, i , i + len);
-			i += (len - 3);
+			esc_line = ft_esc_line(s, i , i + len);
+			if (!esc_line)
+				return (free(s), NULL);
+			i += (len - 2);
+			free(s);
+			s = esc_line;
+			continue ;
 		}
 		i++;
 	}
