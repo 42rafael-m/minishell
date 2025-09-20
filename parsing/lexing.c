@@ -6,7 +6,7 @@
 /*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:18:45 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/09/20 12:36:25 by rms35            ###   ########.fr       */
+/*   Updated: 2025/09/20 15:43:11 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ char	*ft_escape_quotes(char *line)
 
 char	**ft_tokens(char *line, t_shenv *env, t_cli *cli)
 {
-	int		len;
 	char	**tokens;
 
 	if (!line)
@@ -130,11 +129,10 @@ char	**ft_tokens(char *line, t_shenv *env, t_cli *cli)
 	tokens = ft_token_sep(ft_trim_spaces(line));
 	if (!tokens)
 		return (NULL);
-	tokens = ft_expand_tokens(tokens, &(cli->n_tokens));
+	tokens = ft_expand_tokens(tokens, &(cli->n_tokens), cli);
 	if (!tokens)
 		return (ft_free_tokens(tokens, cli->n_tokens), NULL);
 	if (ft_check_errors(tokens, cli->n_tokens))
 		return (ft_free_tokens(tokens, cli->n_tokens), NULL);
-	len = cli->n_tokens;
 	return (tokens);
 }

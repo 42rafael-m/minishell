@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:19:54 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/18 15:17:33 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/09/20 13:40:36 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	ft_free_tokens(char **tokens, int n)
 		free(tokens);
 }
 
-t_cli	*ft_init_node(int len, t_shenv *env, int op)
+t_cli	*ft_init_node(int len, t_shenv **env, int op)
 {
 	t_cli *cli;
 
@@ -104,6 +104,7 @@ t_cli	*ft_init_node(int len, t_shenv *env, int op)
 	cli->group = 1;
 	cli->op = op;
 	cli->status = 0;
+	cli->last_status = 0;
 	return (cli);
 }
 

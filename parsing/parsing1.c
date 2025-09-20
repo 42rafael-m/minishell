@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:10:00 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/21 17:08:22 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/09/20 13:30:03 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	ft_cmd(char	*token, t_cli *cli)
 {
 	if (!token)
 		return (0);
-	if (!ft_strcmp(token, "echo") || !ft_strcmp(token, "ls")
+	if (!ft_strcmp(token, "echo")
 	|| !ft_strcmp(token, "cd") || !ft_strcmp(token, "pwd")
 	|| !ft_strcmp(token, "export") || !ft_strcmp(token, "unset")
 	|| !ft_strcmp(token, "env") || !ft_strcmp(token, "exit"))

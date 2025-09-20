@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dogs <dogs@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jmateo-v <jmateo-v@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 10:48:38 by dogs              #+#    #+#             */
-/*   Updated: 2025/08/28 11:02:17 by dogs             ###   ########.fr       */
+/*   Updated: 2025/09/19 10:59:24 by jmateo-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int ft_echo(char **args)
     int new_line;
 
     i = 1;
-    new_line = 1;
+    new_line = 1;  
     while (args[i])
     {
         if (args[i] && ft_strcmp(args[i], "-n") == 0)

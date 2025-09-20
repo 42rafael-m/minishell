@@ -6,22 +6,22 @@
 /*   By: jmateo-v <jmateo-v@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:52:27 by dogs              #+#    #+#             */
-/*   Updated: 2025/09/01 18:04:10 by jmateo-v         ###   ########.fr       */
+/*   Updated: 2025/09/19 11:28:23 by jmateo-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char *ft_getenv(char **env, const char *key)
+char *ft_getenv(t_shenv *env, const char *key)
 {
     int len;
 
-    len = strlen(key);
-    while (*env)
+    len = ft_strlen(key);
+    while (env)
     {
-        if (!strncmp(*env, key, len) && (*env)[len] == '=')
-            return(*env + len + 1);
-        env++;
+        if (!ft_strncmp(env->var, key, len) && env->var[len] == '=')
+            return(env->var + len + 1);
+        env = env->next;
     }
     return NULL;
 }
@@ -33,16 +33,15 @@ static int env_len(char **env)
         i++;
     return i;
 }
-int ft_setenv(char ***envp, const char *key, const char *value)
+int ft_setenv(t_shenv **env, const char *key, const char *value)
 {
-    int i;
+    t_shenv *node;
     char *new_var;
     int key_len;
-    int size;
-    char **new_env;
+    t_shenv *new_node;
 
-    if (!envp || !key || !value)
-        return (1);
+    node = *env;
+    new_node = NULL;
     key_len = ft_strlen(key);
     new_var = malloc(key_len + ft_strlen(value) + 2);
     if (!new_var)
@@ -50,52 +49,36 @@ int ft_setenv(char ***envp, const char *key, const char *value)
     ft_strcpy(new_var, key);
     new_var[key_len] = '=';
     ft_strcpy(new_var + key_len + 1, value);
-    i = 0;
-    while((*envp)[i])
+    while(node)
     {
-        if (!ft_strncmp((*envp)[i], key, key_len) && (*envp)[i][key_len] == '=')
+        if(!ft_strncmp(node->var, key, key_len) && node->var[key_len] == '=')
         {
-            free((*envp)[i]);
-            (*envp)[i] = new_var;
+            free (node->var);
+            node->var = new_var;
             return (0);
         }
-        i++;
+        node = node->next;
     }
-    size = env_len(*envp);
-    new_env = malloc(sizeof(char *) * (size + 2));
-    if (!new_env)
-        return(free(new_var), perror("malloc"), 1);
-    i = 0;
-    while (i < size)
-    {
-        new_env[i] = ft_strdup((*envp)[i]);
-        if (!new_env[i])
-            return (free(new_var), perror("malloc"), 1);
-        i++;
-    }
-    new_env[i++] = new_var;
-    new_env[i] = NULL;
-    free(*envp);
-    *envp = new_env;
-
-    return(0);
-    
+    new_node = ft_calloc(1, sizeof(t_shenv));
+    if (!new_node)
+        return (free(new_var), perror("malloc"), 1);
+    new_node->var = new_var;
+    new_node->next = *env;
+    *env = new_node;
+    return (0);
 }
 
-int ft_cd(char **args, char ***env)
+int ft_cd(char **args, t_shenv **env)
 {
     char cwd[PATH_MAX];
     char *target;
 
     target = NULL;
     if (!getcwd(cwd, sizeof(cwd)))
-    {
-        perror("cd: getcwd");
-        return (1);
-    }
+        return(perror("cd: getcwd"), 1);
     if (!args[1] || !args[1][0])
         target = ft_getenv(*env, "HOME");
-    else if (strcmp(args[1], "-") == 0)
+    else if (ft_strcmp(args[1], "-") == 0)
         target = ft_getenv(*env, "OLDPWD");
     else
         target = args[1];
@@ -112,10 +95,6 @@ int ft_cd(char **args, char ***env)
     }
     ft_setenv(env, "OLDPWD", cwd);
     if (getcwd(cwd, sizeof(cwd)))
-    {
         ft_setenv(env, "PWD", cwd);
-    }
-    ft_free_d(*env);
-    *env = NULL;
     return (0);
 }

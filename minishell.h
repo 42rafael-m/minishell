@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:19:26 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/04 15:44:23 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/09/20 13:15:33 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,10 @@ typedef struct s_cli
 	int				heredoc_fd;
 	int				is_builtin;
 	int				r_mode;
-	t_shenv			*env;
+	t_shenv			**env;
 	int				n_tokens;
 	int				status;
+	int				last_status;
 	int				group;
 	int				op;
 	struct s_cli	*next;
@@ -95,21 +96,25 @@ char	**ft_expand_wildcard(char **token, int pos, int *wc_len);
 char	**ft_token_sep(char *line);
 char	**ft_insert_s_tokens(char **tokens);
 char	**ft_lex_pipe(char **token, int *len);
-char	**ft_expand_tokens(char **tokens, int *len);
+char	**ft_expand_tokens(char **tokens, int *len, t_cli *cli);
 char	**ft_tokens(char *line, t_shenv *env, t_cli *cli);
 char	**ft_getshenv(t_shenv *env);
 char	*ft_prompt(char **envp);
 char	*get_hostname(void);
 char	*get_pwd(char *cwd);
-char	*ft_expand_line(char *token);
+char	*ft_expand_line(char *token, t_cli *cli);
 char	*ft_expand_var(char	*token, int start, int end);
 char	*ft_get_var(char *var_call, char **envp);
 char	*ft_escaped_line(char *line, int start, int end);
 char	*ft_escape_quotes(char *line);
-char	*ft_expand_line(char *line);
 char	*ft_trim_delim(char *token, int *option);
 char	*ft_expand_heredoc(int option, t_cli *cli);
 char    *ft_cmd_path(char *env_path, char *cmd);
+char 	*ft_getenv(t_shenv *env, const char *key);
+char	*ft_expand_exit_status(int status, char *line, int i);
+int 	ft_export(char **args, t_shenv **env);
+int 	ft_unset(char **args, t_shenv **env);
+int 	ft_unsetenv(t_shenv **env, const char *key);
 int		ft_init_var(size_t *i, size_t *j, size_t *i_a, size_t *j_after);
 int		ft_equal(size_t *j, size_t *i);
 int		ft_j_s(size_t *j_s, size_t *i_a, size_t *i, size_t *j);
@@ -121,7 +126,8 @@ int 	ft_pwd(char **args);
 int 	ft_echo(char **args);
 int 	ft_env(char **env);
 int 	ft_exit(void);
-int 	ft_cd(char **args, char ***env);
+int 	ft_cd(char **args, t_shenv **env);
+int		ft_setenv(t_shenv **env, const char *key, const char *value);
 int 	execute_command(t_cli *cmd);
 int 	execute_builtin(t_cli *cmd);
 int 	ft_execute(t_cli *cli);
@@ -130,7 +136,7 @@ int		ft_sep_len(char *line, int pos);
 int		ft_num_quoted(char *line);
 int		ft_quoted_len(char *line, char quote);
 int		ft_token_len(char *line);
-int		ft_read_line(t_shenv *env, t_cli *cli);
+int		ft_read_line(t_shenv **env, t_cli *cli);
 int		ft_num_s_tokens(char *line);
 int		ft_var_len(char	*var);
 int 	ft_trim_s_len(char *line);
@@ -151,7 +157,7 @@ void	ft_free_tokens(char **tokens, int n);
 void	ft_perror(char *token, char *msg);
 void	ft_free_env(t_shenv **env);
 void	ft_reset_list(t_cli *cli);
-t_cli	*ft_init_node(int len, t_shenv *envp, int op);
+t_cli	*ft_init_node(int len, t_shenv **envp, int op);
 t_cli	*ft_parse_op(char *token, t_cli *cli);
 t_shenv	*ft_load_env(char **envp);
 void	ft_print_list(t_cli *cli);

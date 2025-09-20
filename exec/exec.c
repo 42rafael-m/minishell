@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmateo-v <jmateo-v@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 13:37:18 by jmateo-v          #+#    #+#             */
-/*   Updated: 2025/09/01 18:20:41 by jmateo-v         ###   ########.fr       */
+/*   Updated: 2025/09/20 14:16:34 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,13 @@ int execute_command(t_cli *cmd)
     if (pid == 0)
     {
         ft_set_sig(CHILD);
-        env = ft_getshenv(cmd->env);
+        env = ft_getshenv(*(cmd->env));
         if (!env && cmd->env)
             exit(2);
         execve(cmd->cmd, cmd->args, env);
+        ft_free_env(cmd->env);
+        ft_free_d(env);
+        ft_free_list(&cmd);
         perror("execve");
         exit(127);
     }
@@ -90,23 +93,18 @@ int execute_builtin(t_cli *cmd)
     if (!ft_strcmp(cmd->cmd, "pwd"))
         return (ft_pwd(cmd->args));
     else if (!ft_strcmp(cmd->cmd, "cd"))
-    {
-        env = ft_getshenv(cmd->env);
-        if (!env && cmd->env)
-            return (2);
-        return (ft_cd(cmd->args, &env));
-    }
+        return (ft_cd(cmd->args, cmd->env));
     else if (!ft_strcmp(cmd->cmd, "echo"))
         return (ft_echo(cmd->args));
     else if (!ft_strcmp(cmd->cmd, "export"))
-        printf("NOT IMPLEMENTED\n");
+        return(ft_export(cmd->args,  cmd->env));
     else if (!ft_strcmp(cmd->cmd, "unset"))
-        printf("NOT IMPLEMENTED\n");
+        return(ft_unset(cmd->args, cmd->env));
     else if (!ft_strcmp(cmd->cmd, "env"))
     {
-        env = ft_getshenv(cmd->env);
+        env = ft_getshenv(*(cmd->env));
         if (!env && cmd->env)
-            return (2);
+            return (ft_putstr_fd("minishell: env: failed to retrieve environment\n", 2), 1);
         return (ft_env(env));
     }
     else if (!ft_strcmp(cmd->cmd, "exit"))

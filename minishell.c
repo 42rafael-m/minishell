@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:19:16 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/08/04 15:53:48 by rafael-m         ###   ########.fr       */
+/*   Updated: 2025/09/20 17:43:13 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,15 +154,20 @@ int	ft_check_prnts(char *line)
 void	ft_reset_list(t_cli *cli)
 {
 	t_cli	*next;
-	t_cli	*node;
+	t_cli	*last;
 
-	node = cli;
-	while (node->next)
-		node = node->next;
-	cli->status = node->status;
+	if (!cli)
+		return ;
+	last = cli;
+	while (last->next)
+		last = last->next;
+	cli->status = last->status;
 	next = cli->next;
-	ft_free_list(&next);
-	cli->next = NULL;
+	if (next)
+	{
+		ft_free_list(&next);
+		cli->next = NULL;
+	}
 	free(cli->cmd);
 	cli->cmd = NULL;
 	free(cli->heredoc);
@@ -183,11 +188,11 @@ int	ft_reset_signal(t_cli *cli)
 {
 	g_sig_rec = 0;
 	ft_reset_list(cli);
-	cli->status = 130;
+	cli->last_status = 130;
 	return (1);
 }
 
-int	ft_read_line(t_shenv *env, t_cli *cli)
+int	ft_read_line(t_shenv **env, t_cli *cli)
 {
 	char	*cl;
 	char	**tokens;
@@ -196,24 +201,25 @@ int	ft_read_line(t_shenv *env, t_cli *cli)
 	while (1)
 	{
 		free(cl);
-		printf("status = %d\n", cli->status);
+		printf("status = %d\n", cli->last_status);
 		cl = readline("\033[1;32mminishell\033[0m$ ");
 		if (!cl)
 			return (rl_clear_history(), write(1, "exit\n", 5), 0);
 		if (g_sig_rec && ft_reset_signal(cli))
 			continue ;
 		add_history(cl);
-		tokens = ft_tokens(cl, env, cli);
+		tokens = ft_tokens(cl, *env, cli);
 		if (!tokens)
 		{
-			cli->status = 2;
+			cli->last_status = 2;
 			continue ;
 		}
 		cli->status = ft_parse(tokens, cli);
 		cli->status = ft_execute(cli);
+		cli->last_status = cli->status;
 		ft_reset_list(cli);
 	}
-	return (free(cl), rl_clear_history(), cli->status);
+	return (free(cl), rl_clear_history(), cli->last_status);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -226,10 +232,10 @@ int	main(int argc, char **argv, char **envp)
 	ft_set_sig(PARENT);
 	rl_catch_signals = 0;
 	env = ft_load_env(envp);
-	cli = ft_init_node(1, env, 0);
+	cli = ft_init_node(1, &env, 0);
 	if (!cli)
 		return (ft_free_env(&env), 2);
-	status = ft_read_line(env, cli);
+	status = ft_read_line(&env, cli);
 	ft_free_list(&cli);
 	ft_free_env(&env);
 	return (status);
