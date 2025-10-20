@@ -6,7 +6,7 @@
 /*   By: rms35 <rms35@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:19:26 by rafael-m          #+#    #+#             */
-/*   Updated: 2025/09/20 20:14:35 by rms35            ###   ########.fr       */
+/*   Updated: 2025/10/13 21:27:22 by rms35            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@
 # define UNEX_EOF "minishell: syntax error: unexpected end of file\n"
 # define MAX_CMDS 64
 # ifndef PATH_MAX
-#  define PATH_MAX 4096
+# define PATH_MAX 4096
 # endif
 
 extern volatile sig_atomic_t	g_sig_rec;
